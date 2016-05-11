@@ -1,10 +1,7 @@
 package org.kpull.apitestsuites.factory;
 
 import org.apache.commons.lang.StringUtils;
-import org.kpull.apitestsuites.core.ApiCall;
-import org.kpull.apitestsuites.core.ApiEnvironment;
-import org.kpull.apitestsuites.core.ApiRequest;
-import org.kpull.apitestsuites.core.ApiSuite;
+import org.kpull.apitestsuites.core.*;
 import org.raml.model.Action;
 import org.raml.model.ActionType;
 import org.raml.model.Raml;
@@ -47,9 +44,8 @@ public class RamlApiSuiteFactory {
             resourceContent.getActions().entrySet().forEach(action -> {
                 ActionType actionType = action.getKey();
                 Action actionContent = action.getValue();
-
                 String name = actionType.name() + " " + resourceContent.getRelativeUri();
-                ApiCall apiCall = new ApiCall(name, StringUtils.defaultString(actionContent.getDescription()), new ApiRequest(actionType.name(), resourceContent.getUri(), Collections.emptyList(), "application/json", "", queryParams));
+                ApiCall apiCall = new ApiCall(name, StringUtils.defaultString(actionContent.getDescription()), new ApiRequest(actionType.name(), resourceContent.getUri(), Collections.emptyList(), "application/json", "", Collections.emptyList()), new ApiResponse(Collections.emptyList(), "", ""), "");
                 apiCalls.add(apiCall);
             });
         });

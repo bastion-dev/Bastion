@@ -10,11 +10,15 @@ public class ApiCall {
     private String name;
     private String description;
     private ApiRequest request;
+    private ApiResponse response;
+    private String postCallScript;
 
-    public ApiCall(String name, String description, ApiRequest request) {
+    public ApiCall(String name, String description, ApiRequest request, ApiResponse response, String postCallScript) {
         setName(name);
         setDescription(description);
         setRequest(request);
+        setResponse(response);
+        setPostCallScript(postCallScript);
     }
 
     public String getName() {
@@ -42,5 +46,23 @@ public class ApiCall {
     public void setRequest(ApiRequest request) {
         Objects.requireNonNull(request);
         this.request = request;
+    }
+
+    public ApiResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(ApiResponse response) {
+        Objects.requireNonNull(response);
+        this.response = response;
+    }
+
+    public String getPostCallScript() {
+        return postCallScript;
+    }
+
+    public void setPostCallScript(String postCallScript) {
+        Objects.requireNonNull(postCallScript);
+        this.postCallScript = postCallScript;
     }
 }

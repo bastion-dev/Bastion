@@ -1,6 +1,9 @@
 package org.kpull.apitestsuites.core;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -54,6 +57,12 @@ public class ApiEnvironment implements Map<String, String> {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
         return delegate.put(key, value);
+    }
+
+    public String putObject(String key, Object value) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(value);
+        return delegate.put(key, value.toString());
     }
 
     @Override
