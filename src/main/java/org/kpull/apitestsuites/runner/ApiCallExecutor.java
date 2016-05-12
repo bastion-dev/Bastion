@@ -78,6 +78,21 @@ public class ApiCallExecutor {
             case "GET":
                 httpRequest = Unirest.get(environment.process(request.getUrl()));
                 break;
+            case "PUT":
+                httpRequest = Unirest.put(environment.process(request.getUrl()));
+                break;
+            case "DELETE":
+                httpRequest = Unirest.delete(environment.process(request.getUrl()));
+                break;
+            case "OPTIONS":
+                httpRequest = Unirest.options(environment.process(request.getUrl()));
+                break;
+            case "HEAD":
+                httpRequest = Unirest.head(environment.process(request.getUrl()));
+                break;
+            case "PATCH":
+                httpRequest = Unirest.patch(environment.process(request.getUrl()));
+                break;
         }
         return httpRequest;
     }
