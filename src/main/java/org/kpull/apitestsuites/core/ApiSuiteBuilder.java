@@ -58,7 +58,7 @@ public class ApiSuiteBuilder {
         private String name = "";
         private String description = "";
         private ApiRequest request = new ApiRequest("", "", Collections.emptyList(), "", "", Collections.emptyList());
-        private ApiResponse response = new ApiResponse(Collections.emptyList(), "", "");
+        private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
         private String postCallScript = "";
 
         private ApiCallBuilder() {
@@ -153,10 +153,17 @@ public class ApiSuiteBuilder {
 
         public class ApiResponseBuilder {
             private List<ApiHeader> headers = new LinkedList<>();
+            private int statusCode = 0;
             private String type = "";
             private String body = "";
 
             private ApiResponseBuilder() {
+            }
+
+            public ApiResponseBuilder statusCode(int statusCode) {
+                Objects.requireNonNull(statusCode);
+                this.statusCode = statusCode;
+                return this;
             }
 
             public ApiResponseBuilder type(String type) {
@@ -179,7 +186,7 @@ public class ApiSuiteBuilder {
             }
 
             public ApiCallBuilder done() {
-                response = new ApiResponse(headers, type, body);
+                response = new ApiResponse(headers, 0, type, body);
                 return ApiCallBuilder.this;
             }
         }

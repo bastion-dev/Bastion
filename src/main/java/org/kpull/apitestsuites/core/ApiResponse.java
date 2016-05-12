@@ -10,11 +10,13 @@ import java.util.Objects;
 public class ApiResponse {
 
     private List<ApiHeader> headers;
+    private int statusCode;
     private String type;
     private String body;
 
-    public ApiResponse(List<ApiHeader> headers, String type, String body) {
+    public ApiResponse(List<ApiHeader> headers, int statusCode, String type, String body) {
         setHeaders(headers);
+        setStatusCode(statusCode);
         setType(type);
         setBody(body);
     }
@@ -26,6 +28,14 @@ public class ApiResponse {
     public void setHeaders(List<ApiHeader> headers) {
         Objects.requireNonNull(headers);
         this.headers = new LinkedList<>(headers);
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getType() {

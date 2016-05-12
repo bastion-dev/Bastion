@@ -52,7 +52,7 @@ public class ApiCallExecutor {
             });
             HttpResponse<JsonNode> httpResponse = httpRequest.asJson();
             ApiResponse response = new ApiResponse(httpResponse.getHeaders().entrySet().stream().flatMap(header -> header.getValue().stream().map(value -> new ApiHeader(header.getKey(), value))).collect(Collectors.toList()),
-                    "application/json", httpResponse.getBody().toString());
+                    httpResponse.getStatus(), "application/json", httpResponse.getBody().toString());
             apiCallToExecute.setResponse(response);
             if (!Strings.isNullOrEmpty(apiCallToExecute.getPostCallScript())) {
                 Binding binding = new Binding();

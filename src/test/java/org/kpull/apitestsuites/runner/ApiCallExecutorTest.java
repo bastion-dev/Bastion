@@ -1,5 +1,6 @@
 package org.kpull.apitestsuites.runner;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.kpull.apitestsuites.core.ApiCall;
 import org.kpull.apitestsuites.core.ApiSuite;
@@ -42,6 +43,7 @@ public class ApiCallExecutorTest {
         ApiCall apiCallToExecute = apiSuite.getApiCall().get(0);
         ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute);
         executor.execute();
+        assertThat(apiCallToExecute.getResponse().getStatusCode()).isEqualTo(HttpStatus.SC_OK);
         assertThat(apiCallToExecute.getResponse().getBody()).isNotEmpty();
         assertThat(apiSuite.getEnvironment()).contains(entry("lat", "51.51"));
     }
