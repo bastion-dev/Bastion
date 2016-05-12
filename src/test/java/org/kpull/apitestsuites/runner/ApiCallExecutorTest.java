@@ -1,10 +1,12 @@
 package org.kpull.apitestsuites.runner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.kpull.apitestsuites.core.ApiCall;
 import org.kpull.apitestsuites.core.ApiSuite;
 import org.kpull.apitestsuites.core.ApiSuiteBuilder;
+import org.kpull.apitestsuites.support.WeatherModel;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.data.MapEntry.entry;
@@ -31,7 +33,11 @@ public class ApiCallExecutorTest {
                         .queryParam("q", "London")
                         .queryParam("APPID", "{{APPID}}")
                         .done()
-                    .postCallScript("environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));")
+                    .responseModel(WeatherModel.class)
+                    .postCallScript(
+                            "environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));" +
+                            "System.out.println(model);"
+                    )
                     .done()
                 .build();
         // @formatter:on
@@ -41,7 +47,7 @@ public class ApiCallExecutorTest {
     public void execute() throws Exception {
         ApiSuite apiSuite = createApiSuite();
         ApiCall apiCallToExecute = apiSuite.getApiCall().get(0);
-        ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute);
+        ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute, new ObjectMapper());
         executor.execute();
         assertThat(apiCallToExecute.getResponse().getStatusCode()).isEqualTo(HttpStatus.SC_OK);
         assertThat(apiCallToExecute.getResponse().getBody()).isNotEmpty();

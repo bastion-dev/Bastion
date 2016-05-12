@@ -1,6 +1,7 @@
 package org.kpull.apitestsuites.core;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
@@ -11,13 +12,15 @@ public class ApiCall {
     private String description;
     private ApiRequest request;
     private ApiResponse response;
+    private Class<?> responseModel;
     private String postCallScript;
 
-    public ApiCall(String name, String description, ApiRequest request, ApiResponse response, String postCallScript) {
+    public ApiCall(String name, String description, ApiRequest request, ApiResponse response, Class<?> responseModel, String postCallScript) {
         setName(name);
         setDescription(description);
         setRequest(request);
         setResponse(response);
+        setResponseModel(responseModel);
         setPostCallScript(postCallScript);
     }
 
@@ -55,6 +58,14 @@ public class ApiCall {
     public void setResponse(ApiResponse response) {
         Objects.requireNonNull(response);
         this.response = response;
+    }
+
+    public Optional<Class<?>> getResponseModel() {
+        return Optional.ofNullable(responseModel);
+    }
+
+    public void setResponseModel(Class<?> responseModel) {
+        this.responseModel = responseModel;
     }
 
     public String getPostCallScript() {

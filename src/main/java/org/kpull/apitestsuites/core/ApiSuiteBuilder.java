@@ -59,6 +59,7 @@ public class ApiSuiteBuilder {
         private String description = "";
         private ApiRequest request = new ApiRequest("", "", Collections.emptyList(), "", "", Collections.emptyList());
         private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
+        private Class<?> responseModel = null;
         private String postCallScript = "";
 
         private ApiCallBuilder() {
@@ -82,6 +83,12 @@ public class ApiSuiteBuilder {
             return this;
         }
 
+        public ApiCallBuilder responseModel(Class<?> responseModel) {
+            Objects.requireNonNull(responseModel);
+            this.responseModel = responseModel;
+            return this;
+        }
+
         public ApiRequestBuilder request() {
             return new ApiRequestBuilder();
         }
@@ -91,7 +98,7 @@ public class ApiSuiteBuilder {
         }
 
         public ApiSuiteBuilder done() {
-            apiCalls.add(new ApiCall(name, description, request, response, postCallScript));
+            apiCalls.add(new ApiCall(name, description, request, response, responseModel, postCallScript));
             return ApiSuiteBuilder.this;
         }
 
