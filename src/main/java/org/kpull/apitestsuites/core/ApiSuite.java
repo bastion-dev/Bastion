@@ -11,17 +11,27 @@ import java.util.Objects;
  */
 public class ApiSuite {
 
+    private String name;
     private ApiEnvironment environment;
     private List<ApiCall> apiCall;
 
     public ApiSuite() {
-        environment = new ApiEnvironment();
-        apiCall = new LinkedList<>();
+        this("Empty API Suite", new ApiEnvironment(), new LinkedList<>());
     }
 
-    public ApiSuite(ApiEnvironment environment, List<ApiCall> apiCall) {
-        this.environment = environment;
-        this.apiCall = apiCall;
+    public ApiSuite(String name, ApiEnvironment environment, List<ApiCall> apiCall) {
+        setName(name);
+        setEnvironment(environment);
+        setApiCall(apiCall);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public ApiEnvironment getEnvironment() {
@@ -39,6 +49,6 @@ public class ApiSuite {
 
     public void setApiCall(List<ApiCall> apiCall) {
         Objects.requireNonNull(apiCall);
-        this.apiCall = apiCall;
+        this.apiCall = new LinkedList<>(apiCall);
     }
 }

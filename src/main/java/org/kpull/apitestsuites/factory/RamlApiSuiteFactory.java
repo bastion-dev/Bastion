@@ -50,7 +50,7 @@ public class RamlApiSuiteFactory {
             });
         });
 
-        return new ApiSuite(environment, apiCalls);
+        return new ApiSuite("Api Suite", environment, apiCalls);
     }
 
 }

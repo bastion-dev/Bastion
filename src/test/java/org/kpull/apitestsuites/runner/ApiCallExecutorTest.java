@@ -1,11 +1,9 @@
 package org.kpull.apitestsuites.runner;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.junit.Test;
-import org.kpull.apitestsuites.core.*;
-
-import java.util.Collections;
+import org.kpull.apitestsuites.core.ApiCall;
+import org.kpull.apitestsuites.core.ApiSuite;
+import org.kpull.apitestsuites.core.ApiSuiteBuilder;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.data.MapEntry.entry;
@@ -15,26 +13,27 @@ import static org.fest.assertions.data.MapEntry.entry;
  */
 public class ApiCallExecutorTest {
 
-    private ApiRequest createApiRequest() {
-        return new ApiRequest("GET", "http://api.openweathermap.org/data/2.5/weather", Collections.emptyList(),
-                "application/json", "", Lists.newArrayList(new ApiQueryParam("q", "London"), new ApiQueryParam("APPID", "{{APPID}}")));
-    }
-
-    private ApiCall createApiCall() {
-        return new ApiCall("Get London's Current Weather", "Get the current weather conditions in London, UK.", createApiRequest(),
-                createApiResponse(), "environment.putObject('dt', httpResponse.body.object.get('dt'));");
-    }
-
     private ApiSuite createApiSuite() {
-        return new ApiSuite(createEnvironment(), Lists.newArrayList(createApiCall()));
-    }
-
-    private ApiEnvironment createEnvironment() {
-        return new ApiEnvironment(Maps.newHashMap(Collections.singletonMap("APPID", System.getProperty("WeatherApiKey"))));
-    }
-
-    private ApiResponse createApiResponse() {
-        return new ApiResponse(Collections.emptyList(), "", "");
+        // @formatter:off
+        return ApiSuiteBuilder.start()
+                .name("Open Weather API")
+                .environment()
+                    .entry("APPID", System.getProperty("WeatherApiKey"))
+                    .done()
+                .call()
+                    .name("Get London's Current Weather")
+                    .description("Get the current weather conditions in London, UK.")
+                    .request()
+                        .method("GET")
+                        .url("http://api.openweathermap.org/data/2.5/weather")
+                        .type("application/json")
+                        .queryParam("q", "London")
+                        .queryParam("APPID", "{{APPID}}")
+                        .done()
+                    .postCallScript("environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));")
+                    .done()
+                .build();
+        // @formatter:on
     }
 
     @Test
@@ -44,7 +43,7 @@ public class ApiCallExecutorTest {
         ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute);
         executor.execute();
         assertThat(apiCallToExecute.getResponse().getBody()).isNotEmpty();
-        assertThat(apiSuite.getEnvironment()).contains(entry("dt", "1463001767"));
+        assertThat(apiSuite.getEnvironment()).contains(entry("lat", "51.51"));
     }
 
 }
