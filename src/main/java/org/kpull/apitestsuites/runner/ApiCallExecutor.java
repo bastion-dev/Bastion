@@ -10,7 +10,6 @@ import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import org.apache.commons.lang.StringUtils;
 import org.kpull.apitestsuites.core.*;
 
 import java.io.IOException;
@@ -60,6 +59,20 @@ public class ApiCallExecutor {
             ApiResponse response = new ApiResponse(httpResponse.getHeaders().entrySet().stream().flatMap(header -> header.getValue().stream().map(value -> new ApiHeader(header.getKey(), value))).collect(Collectors.toList()),
                     httpResponse.getStatus(), "application/json", httpResponse.getBody().toString());
             apiCallToExecute.setResponse(response);
+            Object model = apiCallToExecute.getResponseModel().map(modelClass -> {
+                try {
+                    Objects.requireNonNull(objectMapper, "Object Mapper must be set before we can deserialize to a model object");
+                    return objectMapper.reader(modelClass).readValue(httpResponse.getRawBody());
+                } catch (IOException e) {
+                    throw new IllegalStateException("Could not deserialize JSON", e);
+                }
+            }).orElse(null);
+            apiCallToExecute.getAssertions().ifPresent(assertions -> {
+                if (model == null) {
+                    throw new AssertionError("A null object was parsed from the API response");
+                }
+                assertions.assertions(environment, apiCallToExecute, httpResponse.getStatus(), model);
+            });
             if (!Strings.isNullOrEmpty(apiCallToExecute.getPostCallScript())) {
                 Binding binding = new Binding();
                 binding.setVariable("apiRequest", request);
@@ -67,17 +80,7 @@ public class ApiCallExecutor {
                 binding.setVariable("apiResponse", response);
                 binding.setVariable("httpResponse", httpResponse);
                 binding.setVariable("environment", environment);
-                apiCallToExecute.getResponseModel().ifPresent((modelClass) -> {
-                    if (StringUtils.defaultString(httpResponse.getHeaders().getFirst("content-type")).startsWith("application/json")) {
-                        try {
-                            Objects.requireNonNull(objectMapper, "Object Mapper must be set before we can deserialize to a model object");
-                            Object deserializedModel = objectMapper.reader(modelClass).readValue(httpResponse.getRawBody());
-                            binding.setVariable("model", deserializedModel);
-                        } catch (IOException e) {
-                            throw new IllegalStateException("Could not deserialize JSON", e);
-                        }
-                    }
-                });
+                binding.setVariable("model", model);
                 GroovyShell groovy = new GroovyShell(binding);
                 groovy.evaluate(apiCallToExecute.getPostCallScript());
             }

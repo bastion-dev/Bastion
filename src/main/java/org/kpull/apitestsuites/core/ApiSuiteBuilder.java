@@ -60,6 +60,7 @@ public class ApiSuiteBuilder {
         private ApiRequest request = new ApiRequest("", "", Collections.emptyList(), "", "", Collections.emptyList());
         private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
         private Class<?> responseModel = null;
+        private Assertions<?> assertions = null;
         private String postCallScript = "";
 
         private ApiCallBuilder() {
@@ -83,10 +84,10 @@ public class ApiSuiteBuilder {
             return this;
         }
 
-        public ApiCallBuilder responseModel(Class<?> responseModel) {
+        public <M> ResponseModelBuilder<M> responseModel(Class<M> responseModel) {
             Objects.requireNonNull(responseModel);
             this.responseModel = responseModel;
-            return this;
+            return new ResponseModelBuilder<>();
         }
 
         public ApiRequestBuilder request() {
@@ -98,8 +99,22 @@ public class ApiSuiteBuilder {
         }
 
         public ApiSuiteBuilder done() {
-            apiCalls.add(new ApiCall(name, description, request, response, responseModel, postCallScript));
+            apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallScript));
             return ApiSuiteBuilder.this;
+        }
+
+        public class ResponseModelBuilder<M> {
+
+            public ApiCallBuilder assertions(Assertions<M> assertions) {
+                Objects.requireNonNull(assertions);
+                ApiCallBuilder.this.assertions = assertions;
+                return ApiCallBuilder.this;
+            }
+
+            public ApiCallBuilder noAssertions() {
+                return ApiCallBuilder.this;
+            }
+
         }
 
         public class ApiRequestBuilder {

@@ -34,6 +34,9 @@ public class ApiCallExecutorTest {
                         .queryParam("APPID", "{{APPID}}")
                         .done()
                     .responseModel(WeatherModel.class)
+                        .assertions((apiEnvironment, apiCall, statusCode, model) -> {
+                            assertThat(model.getDt()).isNotEmpty();
+                        })
                     .postCallScript(
                             "environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));" +
                             "System.out.println(model);"
