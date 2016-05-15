@@ -1,22 +1,19 @@
-package org.kpull.apitestsuites.runner;
+package org.kpull.apitestsuites.junit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpStatus;
-import org.junit.Test;
-import org.kpull.apitestsuites.core.ApiCall;
-import org.kpull.apitestsuites.core.ApiSuite;
+import org.junit.runner.RunWith;
 import org.kpull.apitestsuites.core.ApiSuiteBuilder;
 import org.kpull.apitestsuites.support.WeatherModel;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.data.MapEntry.entry;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class ApiCallExecutorTest {
+@RunWith(ApiSuiteRunner.class)
+public class ApiSuiteRunnerTest {
 
-    private ApiSuite createApiSuite() {
+    @ApiSuite
+    public org.kpull.apitestsuites.core.ApiSuite createApiSuite() {
         // @formatter:off
         return ApiSuiteBuilder.start()
                 .name("Open Weather API")
@@ -42,17 +39,6 @@ public class ApiCallExecutorTest {
                     .done()
                 .build();
         // @formatter:on
-    }
-
-    @Test
-    public void execute() throws Exception {
-        ApiSuite apiSuite = createApiSuite();
-        ApiCall apiCallToExecute = apiSuite.getApiCalls().get(0);
-        ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute, new ObjectMapper());
-        executor.execute();
-        assertThat(apiCallToExecute.getResponse().getStatusCode()).isEqualTo(HttpStatus.SC_OK);
-        assertThat(apiCallToExecute.getResponse().getBody()).isNotEmpty();
-        assertThat(apiSuite.getEnvironment()).contains(entry("lat", "51.51"));
     }
 
 }

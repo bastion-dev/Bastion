@@ -30,8 +30,8 @@ public class ApiSuiteBuilderFromFileTest {
                 .build();
         // @formatter:on
 
-        assertThat(suite.getApiCall()).hasSize(1);
-        assertThat(suite.getApiCall().get(0).getRequest().getBody()).isEqualTo("{\n" +
+        assertThat(suite.getApiCalls()).hasSize(1);
+        assertThat(suite.getApiCalls().get(0).getRequest().getBody()).isEqualTo("{\n" +
                 "  \"name\":\"Kyle\",\n" +
                 "  \"country\":{\n" +
                 "    \"name\":\"Malta\",\n" +

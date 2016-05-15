@@ -13,16 +13,16 @@ public class ApiSuite {
 
     private String name;
     private ApiEnvironment environment;
-    private List<ApiCall> apiCall;
+    private List<ApiCall> apiCalls;
 
     public ApiSuite() {
         this("Empty API Suite", new ApiEnvironment(), new LinkedList<>());
     }
 
-    public ApiSuite(String name, ApiEnvironment environment, List<ApiCall> apiCall) {
+    public ApiSuite(String name, ApiEnvironment environment, List<ApiCall> apiCalls) {
         setName(name);
         setEnvironment(environment);
-        setApiCall(apiCall);
+        setApiCalls(apiCalls);
     }
 
     public String getName() {
@@ -43,12 +43,12 @@ public class ApiSuite {
         this.environment = environment;
     }
 
-    public List<ApiCall> getApiCall() {
-        return apiCall;
+    public List<ApiCall> getApiCalls() {
+        return apiCalls;
     }
 
-    public void setApiCall(List<ApiCall> apiCall) {
-        Objects.requireNonNull(apiCall);
-        this.apiCall = new LinkedList<>(apiCall);
+    public void setApiCalls(List<ApiCall> apiCalls) {
+        Objects.requireNonNull(apiCalls);
+        this.apiCalls = new LinkedList<>(apiCalls);
     }
 }
