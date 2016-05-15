@@ -1,6 +1,12 @@
 package org.kpull.apitestsuites.core;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+
+import static java.lang.String.format;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
@@ -84,6 +90,16 @@ public class ApiSuiteBuilder {
             return this;
         }
 
+        public ApiCallBuilder postCallScriptFromFile(File postCallScript) {
+            try {
+                Objects.requireNonNull(postCallScript);
+                this.postCallScript = FileUtils.readFileToString(postCallScript);
+                return this;
+            } catch (IOException e) {
+                throw new IllegalStateException(format("Cannot open file: %s", postCallScript), e);
+            }
+        }
+
         public <M> ResponseModelBuilder<M> responseModel(Class<M> responseModel) {
             Objects.requireNonNull(responseModel);
             this.responseModel = responseModel;
@@ -151,6 +167,16 @@ public class ApiSuiteBuilder {
                 Objects.requireNonNull(body);
                 this.body = body;
                 return this;
+            }
+
+            public ApiRequestBuilder bodyFromFile(File body) {
+                try {
+                    Objects.requireNonNull(body);
+                    this.body = FileUtils.readFileToString(body);
+                    return this;
+                } catch (IOException e) {
+                    throw new IllegalStateException(format("Cannot open file: %s", body), e);
+                }
             }
 
             public ApiRequestBuilder header(String name, String value) {
