@@ -31,9 +31,9 @@ public class ApiSuiteRunnerTest {
                         .queryParam("APPID", "{{APPID}}")
                         .done()
                     .responseModel(WeatherModel.class)
-                        .assertions((model, context) -> assertThat(model.getDt()).isNotEmpty())
+                        .assertions((statusCode, model, context) -> assertThat(model.getDt()).isNotEmpty())
                     .postCallScript(
-                            "environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));" +
+                            "environment.putObject('lat', jsonResponseBody.get('coord').get('lat'));" +
                             "System.out.println(model);"
                     )
                     .done()

@@ -2,6 +2,7 @@ package org.kpull.apitestsuites.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpStatus;
+import org.jglue.fluentjson.JsonBuilderFactory;
 import org.junit.Test;
 import org.kpull.apitestsuites.core.ApiCall;
 import org.kpull.apitestsuites.core.ApiSuite;
@@ -22,6 +23,8 @@ public class ApiCallExecutorTest {
                 .name("Open Weather API")
                 .environment()
                     .entry("APPID", System.getProperty("WeatherApiKey"))
+                    .entry("BIN_ID", System.getProperty("BinId"))
+                    .entry("TestEnv", "Env50")
                     .done()
                 .call()
                     .name("Get London's Current Weather")
@@ -34,18 +37,39 @@ public class ApiCallExecutorTest {
                         .queryParam("APPID", "{{APPID}}")
                         .done()
                     .responseModel(WeatherModel.class)
-                        .assertions((model, context) -> assertThat(model.getDt()).isNotEmpty())
+                        .assertions((statusCode, model, context) -> {
+                            assertThat(statusCode).isEqualTo(HttpStatus.SC_OK);
+                            assertThat(model.getDt()).isNotEmpty();
+                        })
                     .postCallScript(
-                            "environment.putObject('lat', httpResponse.body.object.get('coord').get('lat'));" +
+                            "environment.putObject('lat', jsonResponseBody.get('coord').get('lat'));" +
                             "System.out.println(model);"
                     )
+                    .done()
+                .call()
+                    .name("Post New Weather Forecast")
+                    .description("Change the weather forecast for a number of different cities around the world")
+                    .request()
+                        .method("POST")
+                        .url("http://requestb.in/{{BIN_ID}}")
+                        .type("application/json")
+                        .queryParam("BIN_ID", "{{BIN_ID}}")
+                        .bodyFromJsonObject(json -> json.add("city", "London")
+                            .add("forecast", "sunny")
+                            .addObject("country")
+                                .add("code", "GB")
+                                .add("name", "United Kingdom")
+                                .add("comment", "{{TestEnv}}")
+                                .end()
+                            .toString())
+                        .done()
                     .done()
                 .build();
         // @formatter:on
     }
 
     @Test
-    public void execute() throws Exception {
+    public void executeWeatherCall() throws Exception {
         ApiSuite apiSuite = createApiSuite();
         ApiCall apiCallToExecute = apiSuite.getApiCalls().get(0);
         ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute, new ObjectMapper());
@@ -53,6 +77,26 @@ public class ApiCallExecutorTest {
         assertThat(apiCallToExecute.getResponse().getStatusCode()).isEqualTo(HttpStatus.SC_OK);
         assertThat(apiCallToExecute.getResponse().getBody()).isNotEmpty();
         assertThat(apiSuite.getEnvironment()).contains(entry("lat", "51.51"));
+    }
+
+    @Test
+    public void executePostJsonCall() throws Exception {
+        ApiSuite apiSuite = createApiSuite();
+        ApiCall apiCallToExecute = apiSuite.getApiCalls().get(1);
+        ApiCallExecutor executor = new ApiCallExecutor(apiSuite.getEnvironment(), apiCallToExecute, new ObjectMapper());
+        executor.execute();
+        assertThat(apiCallToExecute.getRequest().getBody()).isEqualTo(JsonBuilderFactory.buildObject()
+                // @formatter:off
+                .add("city", "London")
+                .add("forecast", "sunny")
+                    .addObject("country")
+                    .add("code", "GB")
+                    .add("name", "United Kingdom")
+                    .add("comment", "{{TestEnv}}")
+                    .end()
+                .toString());
+                // @formatter:on
+        assertThat(apiCallToExecute.getResponse().getStatusCode()).isEqualTo(HttpStatus.SC_OK);
     }
 
 }

@@ -1,10 +1,14 @@
 package org.kpull.apitestsuites.core;
 
 import org.apache.commons.io.FileUtils;
+import org.jglue.fluentjson.JsonArrayBuilder;
+import org.jglue.fluentjson.JsonBuilderFactory;
+import org.jglue.fluentjson.JsonObjectBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -166,6 +170,18 @@ public class ApiSuiteBuilder {
             public ApiRequestBuilder body(String body) {
                 Objects.requireNonNull(body);
                 this.body = body;
+                return this;
+            }
+
+            public ApiRequestBuilder bodyFromJsonObject(Function<JsonObjectBuilder<?, ?>, String> jsonBuilder) {
+                Objects.requireNonNull(jsonBuilder);
+                this.body = jsonBuilder.apply(JsonBuilderFactory.buildObject());
+                return this;
+            }
+
+            public ApiRequestBuilder bodyFromJsonArray(Function<JsonArrayBuilder, String> jsonBuilder) {
+                Objects.requireNonNull(jsonBuilder);
+                this.body = jsonBuilder.apply(JsonBuilderFactory.buildArray());
                 return this;
             }
 

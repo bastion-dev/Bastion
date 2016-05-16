@@ -8,6 +8,6 @@ import org.kpull.apitestsuites.runner.ExecutionContext;
 @FunctionalInterface
 public interface Assertions<M extends Object> {
 
-    void assertions(M model, ExecutionContext context);
+    void assertions(int statusCode, M model, ExecutionContext context);
 
 }

@@ -3,13 +3,13 @@ package org.kpull.apitestsuites.runner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import org.apache.commons.lang.StringUtils;
 import org.kpull.apitestsuites.core.*;
 
 import java.io.IOException;
@@ -64,14 +64,25 @@ public class ApiCallExecutor {
             request.getQueryParams().forEach(queryParam -> {
                 httpRequest.queryString(queryParam.getName(), environment.process(queryParam.getValue()));
             });
-            HttpResponse<JsonNode> httpResponse = httpRequest.asJson();
+            HttpResponse<String> httpResponse = httpRequest.asString();
             context.setHttpResponse(httpResponse);
             ApiResponse response = createAndSaveResponse(httpResponse);
+            parseAndSaveJson(response);
             Object model = parseAndSaveModel(httpResponse);
-            performAssertions(model);
+            performAssertions(httpResponse, model);
             executePostCallScript();
         } catch (UnirestException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void parseAndSaveJson(ApiResponse response) {
+        try {
+            if (StringUtils.defaultString(response.getType()).startsWith("application/json")) {
+                context.setJsonResponseBody(objectMapper.readTree(response.getBody()));
+            }
+        } catch (IOException ioe) {
+            throw new IllegalStateException("Could not parse JSON from response (even though response content type is JSON", ioe);
         }
     }
 
@@ -84,6 +95,7 @@ public class ApiCallExecutor {
             binding.setVariable("httpRequest", context.getHttpRequest());
             binding.setVariable("apiResponse", context.getCall().getResponse());
             binding.setVariable("httpResponse", context.getHttpResponse());
+            binding.setVariable("jsonResponseBody", context.getJsonResponseBody());
             binding.setVariable("model", context.getResponseModel());
             binding.setVariable("environment", environment);
             GroovyShell groovy = new GroovyShell(binding);
@@ -91,32 +103,33 @@ public class ApiCallExecutor {
         }
     }
 
-    private void performAssertions(Object model) {
+    private void performAssertions(HttpResponse response, Object model) {
         apiCallToExecute.getAssertions().ifPresent(assertions -> {
             if (model == null) {
                 throw new AssertionError("A null object was parsed from the API response");
             }
-            assertions.assertions(model, context);
+            assertions.assertions(response.getStatus(), model, context);
         });
     }
 
-    private Object parseAndSaveModel(HttpResponse<JsonNode> httpResponse) {
+    private Object parseAndSaveModel(HttpResponse<?> httpResponse) {
         Object model = apiCallToExecute.getResponseModel().map(modelClass -> {
             try {
                 Objects.requireNonNull(objectMapper, "Object Mapper must be set before we can deserialize to a model object");
                 return objectMapper.reader(modelClass).readValue(httpResponse.getRawBody());
             } catch (IOException e) {
-                throw new IllegalStateException("Could not deserialize JSON", e);
+                return null;
             }
         }).orElse(null);
         context.setResponseModel(model);
         return model;
     }
 
-    private ApiResponse createAndSaveResponse(HttpResponse<JsonNode> httpResponse) {
+    private ApiResponse createAndSaveResponse(HttpResponse<?> httpResponse) {
         // TODO: Refine the next statement
+        String contentType = httpResponse.getHeaders().getFirst("content-type");
         ApiResponse response = new ApiResponse(httpResponse.getHeaders().entrySet().stream().flatMap(header -> header.getValue().stream().map(value -> new ApiHeader(header.getKey(), value))).collect(Collectors.toList()),
-                httpResponse.getStatus(), "application/json", httpResponse.getBody().toString());
+                httpResponse.getStatus(), contentType, httpResponse.getBody().toString());
         apiCallToExecute.setResponse(response);
         context.setResponse(response);
         return response;

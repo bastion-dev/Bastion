@@ -162,12 +162,12 @@ public class ApiEnvironment implements Map<String, String> {
 
     public String process(String source) {
         String result = source;
-        Pattern variablePattern = Pattern.compile("\\{\\{(.*?)\\}\\}");
+        Pattern variablePattern = Pattern.compile("\\{\\{([a-zA-Z0-9_]*?)\\}\\}");
         Matcher matcher = variablePattern.matcher(result);
-        while (matcher.matches()) {
+        while (matcher.find()) {
             String variableName = matcher.group(1);
             String variableValue = delegate.getOrDefault(variableName, "");
-            result = matcher.replaceAll(variableValue);      // TODO: Fix variableValues containing dollar signs ($) and backslashes
+            result = matcher.replaceFirst(variableValue);      // TODO: Fix variableValues containing dollar signs ($) and backslashes
             matcher = variablePattern.matcher(result);
         }
         return result;

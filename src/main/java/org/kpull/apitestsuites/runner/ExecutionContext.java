@@ -1,5 +1,6 @@
 package org.kpull.apitestsuites.runner;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.request.HttpRequest;
 import org.kpull.apitestsuites.core.ApiCall;
@@ -18,6 +19,7 @@ public class ExecutionContext {
     private ApiResponse response;
     private HttpRequest httpRequest;
     private HttpResponse httpResponse;
+    private JsonNode jsonResponseBody;
     private Object responseModel;
 
     public ApiEnvironment getEnvironment() {
@@ -74,5 +76,13 @@ public class ExecutionContext {
 
     void setResponseModel(Object responseModel) {
         this.responseModel = responseModel;
+    }
+
+    public JsonNode getJsonResponseBody() {
+        return jsonResponseBody;
+    }
+
+    void setJsonResponseBody(JsonNode jsonResponseBody) {
+        this.jsonResponseBody = jsonResponseBody;
     }
 }
