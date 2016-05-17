@@ -14,16 +14,16 @@ public class ApiCall {
     private ApiResponse response;
     private Class<?> responseModel;
     private Assertions<?> assertions;
-    private String postCallScript;
+    private PostCallExecution postCallExecution;
 
-    public ApiCall(String name, String description, ApiRequest request, ApiResponse response, Class<?> responseModel, Assertions<?> assertions, String postCallScript) {
+    public ApiCall(String name, String description, ApiRequest request, ApiResponse response, Class<?> responseModel, Assertions<?> assertions, PostCallExecution postCallExecution) {
         setName(name);
         setDescription(description);
         setRequest(request);
         setResponse(response);
         setResponseModel(responseModel);
         setAssertions(assertions);
-        setPostCallScript(postCallScript);
+        setPostCallExecution(postCallExecution);
     }
 
     public String getName() {
@@ -78,12 +78,11 @@ public class ApiCall {
         this.responseModel = responseModel;
     }
 
-    public String getPostCallScript() {
-        return postCallScript;
+    public PostCallExecution getPostCallExecution() {
+        return postCallExecution;
     }
 
-    public void setPostCallScript(String postCallScript) {
-        Objects.requireNonNull(postCallScript);
-        this.postCallScript = postCallScript;
+    public void setPostCallExecution(final PostCallExecution postCallExecution) {
+        this.postCallExecution = postCallExecution;
     }
 }

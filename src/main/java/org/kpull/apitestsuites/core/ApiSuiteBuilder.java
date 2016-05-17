@@ -71,7 +71,7 @@ public class ApiSuiteBuilder {
         private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
         private Class<?> responseModel = null;
         private Assertions<?> assertions = null;
-        private String postCallScript = "";
+        private PostCallExecution postCallExecution = null;
 
         private ApiCallBuilder() {
         }
@@ -88,16 +88,22 @@ public class ApiSuiteBuilder {
             return this;
         }
 
-        public ApiCallBuilder postCallScript(String postCallScript) {
-            Objects.requireNonNull(postCallScript);
-            this.postCallScript = postCallScript;
+        public ApiCallBuilder postCallExecution(final PostCallExecution postCallExecution) {
+            Objects.requireNonNull(postCallExecution);
+            this.postCallExecution = postCallExecution;
+            return this;
+        }
+
+        public ApiCallBuilder postCallScript(final String groovyScript) {
+            Objects.requireNonNull(groovyScript);
+            this.postCallExecution = new GroovyScriptPostCallExecution(groovyScript);
             return this;
         }
 
         public ApiCallBuilder postCallScriptFromFile(File postCallScript) {
             try {
                 Objects.requireNonNull(postCallScript);
-                this.postCallScript = FileUtils.readFileToString(postCallScript);
+                this.postCallExecution = new GroovyScriptPostCallExecution(FileUtils.readFileToString(postCallScript));
                 return this;
             } catch (IOException e) {
                 throw new IllegalStateException(format("Cannot open file: %s", postCallScript), e);
@@ -119,7 +125,7 @@ public class ApiSuiteBuilder {
         }
 
         public ApiSuiteBuilder done() {
-            apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallScript));
+            apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallExecution));
             return ApiSuiteBuilder.this;
         }
 
