@@ -71,7 +71,7 @@ public class ApiSuiteBuilder {
         private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
         private Class<?> responseModel = null;
         private Assertions<?> assertions = null;
-        private PostCallExecution postCallExecution = null;
+        private PostCallExecution postCallExecution = PostCallExecution.NO_OPERATION_CALLBACK;
 
         private ApiCallBuilder() {
         }
@@ -112,6 +112,11 @@ public class ApiSuiteBuilder {
         }
 
         public class PostCallScriptBuilder {
+
+            public ApiCallBuilder nothing() {
+                postCallExecution = PostCallExecution.NO_OPERATION_CALLBACK;
+                return ApiCallBuilder.this;
+            }
 
             public ApiCallBuilder groovy(String groovyScript) {
                 Objects.requireNonNull(groovyScript);

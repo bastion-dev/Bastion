@@ -83,6 +83,7 @@ public class ApiCall {
     }
 
     public void setPostCallExecution(PostCallExecution postCallExecution) {
+        Objects.requireNonNull(postCallExecution);
         this.postCallExecution = postCallExecution;
     }
 }

@@ -8,5 +8,7 @@ import org.kpull.apitestsuites.runner.ExecutionContext;
 @FunctionalInterface
 public interface PostCallExecution {
 
+    PostCallExecution NO_OPERATION_CALLBACK = (context, environment) -> { };
+
     void execute(ExecutionContext context, ApiEnvironment environment);
 }
