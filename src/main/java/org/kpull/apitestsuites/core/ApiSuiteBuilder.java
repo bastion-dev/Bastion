@@ -88,26 +88,8 @@ public class ApiSuiteBuilder {
             return this;
         }
 
-        public ApiCallBuilder postCallExecution(final PostCallExecution postCallExecution) {
-            Objects.requireNonNull(postCallExecution);
-            this.postCallExecution = postCallExecution;
-            return this;
-        }
-
-        public ApiCallBuilder postCallScript(final String groovyScript) {
-            Objects.requireNonNull(groovyScript);
-            this.postCallExecution = new GroovyScriptPostCallExecution(groovyScript);
-            return this;
-        }
-
-        public ApiCallBuilder postCallScriptFromFile(File postCallScript) {
-            try {
-                Objects.requireNonNull(postCallScript);
-                this.postCallExecution = new GroovyScriptPostCallExecution(FileUtils.readFileToString(postCallScript));
-                return this;
-            } catch (IOException e) {
-                throw new IllegalStateException(format("Cannot open file: %s", postCallScript), e);
-            }
+        public PostCallScriptBuilder afterwardsExecute() {
+            return new PostCallScriptBuilder();
         }
 
         public <M> ResponseModelBuilder<M> responseModel(Class<M> responseModel) {
@@ -127,6 +109,31 @@ public class ApiSuiteBuilder {
         public ApiSuiteBuilder done() {
             apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallExecution));
             return ApiSuiteBuilder.this;
+        }
+
+        public class PostCallScriptBuilder {
+
+            public ApiCallBuilder groovy(String groovyScript) {
+                Objects.requireNonNull(groovyScript);
+                postCallExecution = new GroovyScriptPostCallExecution(groovyScript);
+                return ApiCallBuilder.this;
+            }
+
+            public ApiCallBuilder groovyFromFile(File groovyFile) {
+                try {
+                    Objects.requireNonNull(groovyFile);
+                    postCallExecution = new GroovyScriptPostCallExecution(FileUtils.readFileToString(groovyFile));
+                    return ApiCallBuilder.this;
+                } catch (IOException e) {
+                    throw new IllegalStateException(format("Cannot open file: %s", groovyFile), e);
+                }
+            }
+
+            public ApiCallBuilder callback(PostCallExecution callback) {
+                Objects.requireNonNull(callback);
+                ApiCallBuilder.this.postCallExecution = callback;
+                return ApiCallBuilder.this;
+            }
         }
 
         public class ResponseModelBuilder<M> {

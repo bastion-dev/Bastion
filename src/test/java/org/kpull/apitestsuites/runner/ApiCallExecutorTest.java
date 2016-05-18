@@ -41,10 +41,11 @@ public class ApiCallExecutorTest {
                             assertThat(statusCode).isEqualTo(HttpStatus.SC_OK);
                             assertThat(model.getDt()).isNotEmpty();
                         })
-                    .postCallScript(
+                    .afterwardsExecute()
+                        .groovy(
                             "environment.putObject('lat', jsonResponseBody.get('coord').get('lat'));" +
                             "System.out.println(model);"
-                    )
+                        )
                     .done()
                 .call()
                     .name("Post New Weather Forecast")

@@ -32,10 +32,11 @@ public class ApiSuiteRunnerTest {
                         .done()
                     .responseModel(WeatherModel.class)
                         .assertions((statusCode, model, context) -> assertThat(model.getDt()).isNotEmpty())
-                    .postCallExecution((context, environment) -> {
-                        context.getEnvironment().putObject("lat", context.getJsonResponseBody().get("coord").get("lat"));
-                        System.out.println(context.getResponseModel());
-                    })
+                    .afterwardsExecute()
+                        .callback((context, environment) -> {
+                            context.getEnvironment().putObject("lat", context.getJsonResponseBody().get("coord").get("lat"));
+                            System.out.println(context.getResponseModel());
+                        })
                     .done()
                 .build();
         // @formatter:on
