@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.junit;
+package org.kpull.bastion.junit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.internal.AssumptionViolatedException;
@@ -7,10 +7,10 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
-import org.kpull.apitestsuites.core.ApiCall;
-import org.kpull.apitestsuites.core.ApiEnvironment;
-import org.kpull.apitestsuites.core.ApiSuite;
-import org.kpull.apitestsuites.runner.ApiCallExecutor;
+import org.kpull.bastion.core.ApiCall;
+import org.kpull.bastion.core.ApiEnvironment;
+import org.kpull.bastion.core.ApiSuite;
+import org.kpull.bastion.runner.ApiCallExecutor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ApiSuiteRunner extends ParentRunner<ApiSuite> {
     protected List<ApiSuite> getChildren() {
         try {
             Object test = getTestClass().getOnlyConstructor().newInstance();
-            return getTestClass().getAnnotatedMethodValues(test, org.kpull.apitestsuites.junit.ApiSuite.class, ApiSuite.class);
+            return getTestClass().getAnnotatedMethodValues(test, org.kpull.bastion.junit.ApiSuite.class, ApiSuite.class);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("Problem computing ApiSuite methods in test class", e);
         }

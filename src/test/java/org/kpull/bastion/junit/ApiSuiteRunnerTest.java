@@ -1,8 +1,8 @@
-package org.kpull.apitestsuites.junit;
+package org.kpull.bastion.junit;
 
 import org.junit.runner.RunWith;
-import org.kpull.apitestsuites.core.ApiSuiteBuilder;
-import org.kpull.apitestsuites.support.WeatherModel;
+import org.kpull.bastion.core.ApiSuiteBuilder;
+import org.kpull.bastion.support.WeatherModel;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -13,7 +13,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class ApiSuiteRunnerTest {
 
     @ApiSuite
-    public org.kpull.apitestsuites.core.ApiSuite createApiSuite() {
+    public org.kpull.bastion.core.ApiSuite createApiSuite() {
         // @formatter:off
         return ApiSuiteBuilder.start()
                 .name("Open Weather API")

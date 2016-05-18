@@ -1,16 +1,16 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
 import java.util.Objects;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class ApiQueryParam {
+public class ApiHeader {
 
     private String name;
     private String value;
 
-    public ApiQueryParam(String name, String value) {
+    public ApiHeader(String name, String value) {
         setName(name);
         setValue(value);
     }
@@ -38,17 +38,17 @@ public class ApiQueryParam {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ApiQueryParam that = (ApiQueryParam) o;
+        ApiHeader apiHeader = (ApiHeader) o;
 
-        if (!getName().equals(that.getName())) return false;
-        return getValue().equals(that.getValue());
+        if (getName() != null ? !getName().equals(apiHeader.getName()) : apiHeader.getName() != null) return false;
+        return getValue() != null ? getValue().equals(apiHeader.getValue()) : apiHeader.getValue() == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = getName().hashCode();
-        result = 31 * result + getValue().hashCode();
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
         return result;
     }
 }

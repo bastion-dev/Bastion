@@ -1,9 +1,9 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
 import com.google.common.base.Strings;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import org.kpull.apitestsuites.runner.ExecutionContext;
+import org.kpull.bastion.runner.ExecutionContext;
 
 import java.util.Objects;
 

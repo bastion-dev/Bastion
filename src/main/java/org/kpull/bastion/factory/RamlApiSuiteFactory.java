@@ -1,7 +1,7 @@
-package org.kpull.apitestsuites.factory;
+package org.kpull.bastion.factory;
 
 import org.apache.commons.lang.StringUtils;
-import org.kpull.apitestsuites.core.*;
+import org.kpull.bastion.core.*;
 import org.raml.model.Action;
 import org.raml.model.ActionType;
 import org.raml.model.Raml;

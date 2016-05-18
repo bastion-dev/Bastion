@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.support;
+package org.kpull.bastion.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

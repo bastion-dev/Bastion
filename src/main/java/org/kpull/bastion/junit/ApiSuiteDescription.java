@@ -1,7 +1,7 @@
-package org.kpull.apitestsuites.junit;
+package org.kpull.bastion.junit;
 
 import org.junit.runner.Description;
-import org.kpull.apitestsuites.core.ApiSuite;
+import org.kpull.bastion.core.ApiSuite;
 
 import java.util.Objects;
 

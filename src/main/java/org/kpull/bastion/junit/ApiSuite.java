@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.junit;
+package org.kpull.bastion.junit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,13 +1,13 @@
-package org.kpull.apitestsuites.runner;
+package org.kpull.bastion.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpStatus;
 import org.jglue.fluentjson.JsonBuilderFactory;
 import org.junit.Test;
-import org.kpull.apitestsuites.core.ApiCall;
-import org.kpull.apitestsuites.core.ApiSuite;
-import org.kpull.apitestsuites.core.ApiSuiteBuilder;
-import org.kpull.apitestsuites.support.WeatherModel;
+import org.kpull.bastion.core.ApiCall;
+import org.kpull.bastion.core.ApiSuite;
+import org.kpull.bastion.core.ApiSuiteBuilder;
+import org.kpull.bastion.support.WeatherModel;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.data.MapEntry.entry;

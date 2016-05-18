@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
 import java.util.Collection;
 import java.util.Map;

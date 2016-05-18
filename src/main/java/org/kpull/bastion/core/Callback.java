@@ -1,6 +1,6 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
-import org.kpull.apitestsuites.runner.ExecutionContext;
+import org.kpull.bastion.runner.ExecutionContext;
 
 /**
  * @author Francesco

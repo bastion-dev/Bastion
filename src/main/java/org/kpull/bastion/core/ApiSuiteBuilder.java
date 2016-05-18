@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
 import org.apache.commons.io.FileUtils;
 import org.jglue.fluentjson.JsonArrayBuilder;

@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.core;
+package org.kpull.bastion.core;
 
 import java.util.LinkedList;
 import java.util.List;

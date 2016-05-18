@@ -1,4 +1,4 @@
-package org.kpull.apitestsuites.runner;
+package org.kpull.bastion.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
@@ -7,7 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import org.apache.commons.lang.StringUtils;
-import org.kpull.apitestsuites.core.*;
+import org.kpull.bastion.core.*;
 
 import java.io.IOException;
 import java.util.Objects;
