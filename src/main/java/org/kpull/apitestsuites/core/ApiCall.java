@@ -82,7 +82,7 @@ public class ApiCall {
         return postCallExecution;
     }
 
-    public void setPostCallExecution(final PostCallExecution postCallExecution) {
+    public void setPostCallExecution(PostCallExecution postCallExecution) {
         this.postCallExecution = postCallExecution;
     }
 }

@@ -14,13 +14,13 @@ public class GroovyScriptPostCallExecution implements PostCallExecution {
 
     private String groovyScript;
 
-    public GroovyScriptPostCallExecution(final String groovyScript) {
+    public GroovyScriptPostCallExecution(String groovyScript) {
         Objects.requireNonNull(groovyScript);
         this.groovyScript = groovyScript;
     }
 
     @Override
-    public void execute(final ExecutionContext context, final ApiEnvironment environment) {
+    public void execute(ExecutionContext context, ApiEnvironment environment) {
         if (!Strings.isNullOrEmpty(groovyScript)) {
             Binding binding = new Binding();
             binding.setVariable("context", context);
