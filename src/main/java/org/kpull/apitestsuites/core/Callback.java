@@ -6,9 +6,9 @@ import org.kpull.apitestsuites.runner.ExecutionContext;
  * @author Francesco
  */
 @FunctionalInterface
-public interface PostCallExecution {
+public interface Callback {
 
-    PostCallExecution NO_OPERATION_CALLBACK = (context, environment) -> { };
+    Callback NO_OPERATION_CALLBACK = (context, environment) -> { };
 
     void execute(ExecutionContext context, ApiEnvironment environment);
 }

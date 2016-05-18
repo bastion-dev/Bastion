@@ -71,7 +71,7 @@ public class ApiSuiteBuilder {
         private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
         private Class<?> responseModel = null;
         private Assertions<?> assertions = null;
-        private PostCallExecution postCallExecution = PostCallExecution.NO_OPERATION_CALLBACK;
+        private Callback postCallExecution = Callback.NO_OPERATION_CALLBACK;
 
         private ApiCallBuilder() {
         }
@@ -114,27 +114,27 @@ public class ApiSuiteBuilder {
         public class PostCallScriptBuilder {
 
             public ApiCallBuilder nothing() {
-                postCallExecution = PostCallExecution.NO_OPERATION_CALLBACK;
+                postCallExecution = Callback.NO_OPERATION_CALLBACK;
                 return ApiCallBuilder.this;
             }
 
             public ApiCallBuilder groovy(String groovyScript) {
                 Objects.requireNonNull(groovyScript);
-                postCallExecution = new GroovyScriptPostCallExecution(groovyScript);
+                postCallExecution = new GroovyCallback(groovyScript);
                 return ApiCallBuilder.this;
             }
 
             public ApiCallBuilder groovyFromFile(File groovyFile) {
                 try {
                     Objects.requireNonNull(groovyFile);
-                    postCallExecution = new GroovyScriptPostCallExecution(FileUtils.readFileToString(groovyFile));
+                    postCallExecution = new GroovyCallback(FileUtils.readFileToString(groovyFile));
                     return ApiCallBuilder.this;
                 } catch (IOException e) {
                     throw new IllegalStateException(format("Cannot open file: %s", groovyFile), e);
                 }
             }
 
-            public ApiCallBuilder callback(PostCallExecution callback) {
+            public ApiCallBuilder callback(Callback callback) {
                 Objects.requireNonNull(callback);
                 ApiCallBuilder.this.postCallExecution = callback;
                 return ApiCallBuilder.this;

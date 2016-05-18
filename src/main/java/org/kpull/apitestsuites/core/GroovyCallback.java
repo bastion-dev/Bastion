@@ -10,11 +10,11 @@ import java.util.Objects;
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class GroovyScriptPostCallExecution implements PostCallExecution {
+public class GroovyCallback implements Callback {
 
     private String groovyScript;
 
-    public GroovyScriptPostCallExecution(String groovyScript) {
+    public GroovyCallback(String groovyScript) {
         Objects.requireNonNull(groovyScript);
         this.groovyScript = groovyScript;
     }
