@@ -84,9 +84,7 @@ public class ApiCallExecutor {
     }
 
     private void executePostCallScript() {
-        if (apiCallToExecute.getPostCallExecution() != null) {
-            apiCallToExecute.getPostCallExecution().execute(context, environment);
-        }
+        apiCallToExecute.getPostCallExecution().execute(context.getHttpResponse().getStatus(), context.getResponse(), environment, context);
     }
 
     private void performAssertions(HttpResponse response, Object model) {

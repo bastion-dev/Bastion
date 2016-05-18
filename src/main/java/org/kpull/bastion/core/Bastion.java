@@ -37,8 +37,8 @@ public class Bastion {
         return new ApiEnvironmentBuilder();
     }
 
-    public ApiCallBuilder call() {
-        return new ApiCallBuilder();
+    public ApiCallBuilder call(String name) {
+        return new ApiCallBuilder(name);
     }
 
     public ApiSuite build() {
@@ -73,13 +73,9 @@ public class Bastion {
         private Assertions<?> assertions = null;
         private Callback postCallExecution = Callback.NO_OPERATION_CALLBACK;
 
-        private ApiCallBuilder() {
-        }
-
-        public ApiCallBuilder name(String name) {
+        private ApiCallBuilder(String name) {
             Objects.requireNonNull(name);
             this.name = name;
-            return this;
         }
 
         public ApiCallBuilder description(String description) {
@@ -92,14 +88,14 @@ public class Bastion {
             return new PostCallScriptBuilder();
         }
 
-        public <M> ResponseModelBuilder<M> responseModel(Class<M> responseModel) {
+        public <M> ResponseModelBuilder<M> bind(Class<M> responseModel) {
             Objects.requireNonNull(responseModel);
             this.responseModel = responseModel;
             return new ResponseModelBuilder<>();
         }
 
-        public ApiRequestBuilder request() {
-            return new ApiRequestBuilder();
+        public ApiRequestBuilder request(String method, String url) {
+            return new ApiRequestBuilder(method, url);
         }
 
         public ApiResponseBuilder response() {
@@ -163,20 +159,11 @@ public class Bastion {
             private String type = "";
             private String body = "";
 
-            private ApiRequestBuilder() {
-
-            }
-
-            public ApiRequestBuilder method(String method) {
+            private ApiRequestBuilder(String method, String url) {
                 Objects.requireNonNull(method);
-                this.method = method;
-                return this;
-            }
-
-            public ApiRequestBuilder url(String url) {
                 Objects.requireNonNull(url);
+                this.method = method;
                 this.url = url;
-                return this;
             }
 
             public ApiRequestBuilder type(String type) {

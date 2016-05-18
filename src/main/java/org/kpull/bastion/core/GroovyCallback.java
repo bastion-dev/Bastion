@@ -20,7 +20,7 @@ public class GroovyCallback implements Callback {
     }
 
     @Override
-    public void execute(ExecutionContext context, ApiEnvironment environment) {
+    public void execute(int statusCode, ApiResponse response, ApiEnvironment environment, ExecutionContext context) {
         if (!Strings.isNullOrEmpty(groovyScript)) {
             Binding binding = new Binding();
             binding.setVariable("context", context);

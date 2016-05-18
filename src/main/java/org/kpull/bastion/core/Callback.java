@@ -8,7 +8,8 @@ import org.kpull.bastion.runner.ExecutionContext;
 @FunctionalInterface
 public interface Callback {
 
-    Callback NO_OPERATION_CALLBACK = (context, environment) -> { };
+    Callback NO_OPERATION_CALLBACK = (statusCode, response, environment, context) -> {
+    };
 
-    void execute(ExecutionContext context, ApiEnvironment environment);
+    void execute(int statusCode, ApiResponse response, ApiEnvironment environment, ExecutionContext context);
 }

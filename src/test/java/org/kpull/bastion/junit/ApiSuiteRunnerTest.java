@@ -20,20 +20,17 @@ public class ApiSuiteRunnerTest {
                 .environment()
                     .entry("APPID", System.getProperty("WeatherApiKey"))
                     .done()
-                .call()
-                    .name("Get London's Current Weather")
+                .call("Get London's Current Weather")
                     .description("Get the current weather conditions in London, UK.")
-                    .request()
-                        .method("GET")
-                        .url("http://api.openweathermap.org/data/2.5/weather")
+                    .request("GET", "http://api.openweathermap.org/data/2.5/weather")
                         .type("application/json")
                         .queryParam("q", "London")
                         .queryParam("APPID", "{{APPID}}")
                         .done()
-                    .responseModel(WeatherModel.class)
+                    .bind(WeatherModel.class)
                         .assertions((statusCode, model, context) -> assertThat(model.getDt()).isNotEmpty())
                     .afterwardsExecute()
-                        .callback((context, environment) -> {
+                        .callback((statusCode, response, environment, context) -> {
                             context.getEnvironment().putObject("lat", context.getJsonResponseBody().get("coord").get("lat"));
                             System.out.println(context.getResponseModel());
                         })
