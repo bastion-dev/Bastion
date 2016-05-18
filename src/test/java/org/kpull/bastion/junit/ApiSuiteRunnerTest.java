@@ -1,7 +1,7 @@
 package org.kpull.bastion.junit;
 
 import org.junit.runner.RunWith;
-import org.kpull.bastion.core.ApiSuiteBuilder;
+import org.kpull.bastion.core.Bastion;
 import org.kpull.bastion.support.WeatherModel;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -15,7 +15,7 @@ public class ApiSuiteRunnerTest {
     @ApiSuite
     public org.kpull.bastion.core.ApiSuite createApiSuite() {
         // @formatter:off
-        return ApiSuiteBuilder.start()
+        return Bastion.start()
                 .name("Open Weather API")
                 .environment()
                     .entry("APPID", System.getProperty("WeatherApiKey"))

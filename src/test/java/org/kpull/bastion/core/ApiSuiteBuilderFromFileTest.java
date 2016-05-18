@@ -15,7 +15,7 @@ public class ApiSuiteBuilderFromFileTest {
     @Test
     public void buildApiSuiteWithBodyFromFile() throws URISyntaxException {
         // @formatter:off
-        ApiSuite suite = ApiSuiteBuilder.start()
+        ApiSuite suite = Bastion.start()
                 .name("Test API")
                 .call()
                     .name("Test Body From File")

@@ -15,19 +15,19 @@ import static java.lang.String.format;
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class ApiSuiteBuilder {
+public class Bastion {
 
     private String name = "";
     private ApiEnvironment environment = new ApiEnvironment();
     private List<ApiCall> apiCalls = new LinkedList<>();
-    private ApiSuiteBuilder() {
+    private Bastion() {
     }
 
-    public static ApiSuiteBuilder start() {
-        return new ApiSuiteBuilder();
+    public static Bastion start() {
+        return new Bastion();
     }
 
-    public ApiSuiteBuilder name(String name) {
+    public Bastion name(String name) {
         Objects.requireNonNull(name);
         this.name = name;
         return this;
@@ -58,9 +58,9 @@ public class ApiSuiteBuilder {
             return this;
         }
 
-        public ApiSuiteBuilder done() {
+        public Bastion done() {
             environment.putAll(entries);
-            return ApiSuiteBuilder.this;
+            return Bastion.this;
         }
     }
 
@@ -106,9 +106,9 @@ public class ApiSuiteBuilder {
             return new ApiResponseBuilder();
         }
 
-        public ApiSuiteBuilder done() {
+        public Bastion done() {
             apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallExecution));
-            return ApiSuiteBuilder.this;
+            return Bastion.this;
         }
 
         public class PostCallScriptBuilder {
