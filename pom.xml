@@ -5,8 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kpull</groupId>
-    <artifactId>api-test-suites</artifactId>
+    <artifactId>bastion</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <name>Bastion</name>
+    <description>A Java library for testing HTTP API endpoints.</description>
+    <url>https://github.com/KPull/Bastion</url>
+    <developers>
+        <developer>
+            <id>KPull</id>
+            <name>Kyle Pullicino</name>
+        </developer>
+        <developer>
+            <id>FrelliBB</id>
+            <name>Francesco Elia Borg Bonaci</name>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
