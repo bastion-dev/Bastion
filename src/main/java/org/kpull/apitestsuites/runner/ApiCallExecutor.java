@@ -1,14 +1,11 @@
 package org.kpull.apitestsuites.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
 import org.apache.commons.lang.StringUtils;
 import org.kpull.apitestsuites.core.*;
 
@@ -87,19 +84,8 @@ public class ApiCallExecutor {
     }
 
     private void executePostCallScript() {
-        if (!Strings.isNullOrEmpty(apiCallToExecute.getPostCallScript())) {
-            Binding binding = new Binding();
-            binding.setVariable("context", context);
-            binding.setVariable("apiCall", context.getCall());
-            binding.setVariable("apiRequest", context.getRequest());
-            binding.setVariable("httpRequest", context.getHttpRequest());
-            binding.setVariable("apiResponse", context.getCall().getResponse());
-            binding.setVariable("httpResponse", context.getHttpResponse());
-            binding.setVariable("jsonResponseBody", context.getJsonResponseBody());
-            binding.setVariable("model", context.getResponseModel());
-            binding.setVariable("environment", environment);
-            GroovyShell groovy = new GroovyShell(binding);
-            groovy.evaluate(apiCallToExecute.getPostCallScript());
+        if (apiCallToExecute.getPostCallExecution() != null) {
+            apiCallToExecute.getPostCallExecution().execute(context, environment);
         }
     }
 

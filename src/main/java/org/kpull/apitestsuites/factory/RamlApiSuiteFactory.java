@@ -45,7 +45,7 @@ public class RamlApiSuiteFactory {
                 ActionType actionType = action.getKey();
                 Action actionContent = action.getValue();
                 String name = actionType.name() + " " + resourceContent.getRelativeUri();
-                ApiCall apiCall = new ApiCall(name, StringUtils.defaultString(actionContent.getDescription()), new ApiRequest(actionType.name(), resourceContent.getUri(), Collections.emptyList(), "application/json", "", Collections.emptyList()), new ApiResponse(Collections.emptyList(), 0, "", ""), null, null, "");
+                ApiCall apiCall = new ApiCall(name, StringUtils.defaultString(actionContent.getDescription()), new ApiRequest(actionType.name(), resourceContent.getUri(), Collections.emptyList(), "application/json", "", Collections.emptyList()), new ApiResponse(Collections.emptyList(), 0, "", ""), null, null, null);
                 apiCalls.add(apiCall);
             });
         });
