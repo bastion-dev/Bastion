@@ -28,9 +28,9 @@ public class ApiSuiteRunner extends ParentRunner<ApiSuite> {
     protected List<ApiSuite> getChildren() {
         try {
             Object test = getTestClass().getOnlyConstructor().newInstance();
-            return getTestClass().getAnnotatedMethodValues(test, org.kpull.bastion.junit.ApiSuite.class, ApiSuite.class);
+            return getTestClass().getAnnotatedMethodValues(test, BastionSuite.class, ApiSuite.class);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Problem computing ApiSuite methods in test class", e);
+            throw new IllegalStateException("Problem computing BastionSuite methods in test class", e);
         }
     }
 

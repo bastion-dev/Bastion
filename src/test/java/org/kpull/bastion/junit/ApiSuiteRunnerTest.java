@@ -12,7 +12,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 @RunWith(ApiSuiteRunner.class)
 public class ApiSuiteRunnerTest {
 
-    @ApiSuite
+    @BastionSuite
     public org.kpull.bastion.core.ApiSuite createApiSuite() {
         // @formatter:off
         return Bastion.start()

@@ -161,6 +161,7 @@ public class ApiEnvironment implements Map<String, String> {
     }
 
     public String process(String source) {
+        // TODO: Improve the readability of this method (such as make the pattern a constant).
         String result = source;
         Pattern variablePattern = Pattern.compile("\\{\\{([a-zA-Z0-9_]*?)\\}\\}");
         Matcher matcher = variablePattern.matcher(result);
