@@ -104,7 +104,7 @@ public class ApiCallExecutor {
                 Objects.requireNonNull(objectMapper, "Object Mapper must be set before we can deserialize to a model object");
                 return objectMapper.reader(modelClass).readValue(httpResponse.getRawBody());
             } catch (IOException e) {
-                return null;
+                throw new IllegalStateException("Could not parse response body into model class [" + modelClass.getName() + "].", e);
             }
         }).orElse(null);
         context.setResponseModel(model);

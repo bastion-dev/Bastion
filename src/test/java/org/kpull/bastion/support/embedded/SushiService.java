@@ -1,5 +1,6 @@
 package org.kpull.bastion.support.embedded;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 import spark.Spark;
@@ -9,15 +10,38 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.stream.Collectors.toList;
-import static org.kpull.bastion.support.embedded.SushiError.*;
-import static spark.Spark.*;
+import static javax.servlet.http.HttpServletResponse.SC_CREATED;
+import static org.apache.commons.lang.exception.ExceptionUtils.getRootCauseMessage;
+import static org.kpull.bastion.support.embedded.SushiError.INTERNAL_SERVER_ERROR;
+import static org.kpull.bastion.support.embedded.SushiError.INVALID_ENTITY;
+import static org.kpull.bastion.support.embedded.SushiError.NOT_AUTHENTICATED;
+import static org.kpull.bastion.support.embedded.SushiError.NOT_FOUND;
+import static spark.Spark.after;
+import static spark.Spark.before;
+import static spark.Spark.delete;
+import static spark.Spark.exception;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
 
+/**
+ * A sushi based testing service that contains basic API functionality using {@link Spark} as a lightweight web service framework.
+ * The sushi service deploys an embedded Jetty container on a provided port and exposes the APIs on localhost.
+ */
 public class SushiService {
 
-    private static Map<Long, Sushi> sushiRepository = new HashMap<>();
-    private static AtomicLong idGenerator = new AtomicLong();
+    private Map<Long, Sushi> sushiRepository = new HashMap<>();
+    private AtomicLong nextId = new AtomicLong();
+    private int port;
 
-    public static void start(final int port) {
+    public SushiService(final int port) {
+        this.port = port;
+    }
+
+    /**
+     * Registers all routes for the web service and starts up the embedded Jetty container.
+     */
+    public void start() {
         final JsonTransformer json = new JsonTransformer();
 
         port(port);
@@ -27,9 +51,10 @@ public class SushiService {
 
         post("/sushi", (req, res) -> {
             final Sushi newSushi = json.fromJson(req.body(), Sushi.class);
-            long id = idGenerator.incrementAndGet();
+            long id = nextId.incrementAndGet();
             newSushi.setId(id);
             sushiRepository.put(id, newSushi);
+            res.status(SC_CREATED);
             return newSushi;
         }, json);
 
@@ -60,14 +85,20 @@ public class SushiService {
             return removed;
         });
 
-        exception(RuntimeException.class, (ex, req, res) -> res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res))));
+        exception(RuntimeException.class, (ex, req, res) -> res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res, getRootCauseMessage(ex)))));
+        exception(JsonParseException.class, (ex, req, res) -> res.body(json.render(INVALID_ENTITY.toResponse(res, getRootCauseMessage(ex)))));
+        System.out.println("Sushi Service: Started on port: " + port);
     }
 
-    public static void stop() {
+    public void stop() {
+        System.out.println("Sushi Service: Stopping.");
         Spark.stop();
     }
 
-    private static class JsonTransformer implements ResponseTransformer {
+    /**
+     * {@link ResponseTransformer} for converting {@link Spark} responses to JSON.
+     */
+    private class JsonTransformer implements ResponseTransformer {
 
         private Gson gson = new Gson();
 

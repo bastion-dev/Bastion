@@ -2,12 +2,19 @@ package org.kpull.bastion.support.embedded;
 
 import java.math.BigDecimal;
 
+/**
+ * A model object that represents a single Sushi object for the SushiService testing API.
+ */
 public class Sushi {
 
     private long id;
     private String name;
     private BigDecimal price;
     private Type type;
+
+    protected Sushi() {
+        // required for deserialization
+    }
 
     public long getId() {
         return id;
@@ -58,7 +65,7 @@ public class Sushi {
         MAKI
     }
 
-    private static final class Builder {
+    public static final class Builder {
 
         private long id;
         private String name;
