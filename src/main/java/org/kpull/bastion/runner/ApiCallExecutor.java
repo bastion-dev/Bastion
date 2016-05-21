@@ -52,15 +52,9 @@ public class ApiCallExecutor {
             initialiseContext();
             ApiRequest request = apiCallToExecute.getRequest();
             HttpRequest httpRequest = createHttpRequest(request);
-            if (httpRequest instanceof HttpRequestWithBody) {
-                ((HttpRequestWithBody) httpRequest).body(environment.process(request.getBody()));
-            }
-            request.getHeaders().forEach(header -> {
-                httpRequest.header(header.getName(), environment.process(header.getValue()));
-            });
-            request.getQueryParams().forEach(queryParam -> {
-                httpRequest.queryString(queryParam.getName(), environment.process(queryParam.getValue()));
-            });
+            addBodyToRequest(httpRequest);
+            addHeadersToRequest(httpRequest);
+            addQueryParamsToRequest(httpRequest);
             HttpResponse<String> httpResponse = httpRequest.asString();
             context.setHttpResponse(httpResponse);
             ApiResponse response = createAndSaveResponse(httpResponse);
@@ -70,6 +64,24 @@ public class ApiCallExecutor {
             executePostCallScript();
         } catch (UnirestException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void addQueryParamsToRequest(HttpRequest httpRequest) {
+        apiCallToExecute.getRequest().getQueryParams().forEach(queryParam -> {
+            httpRequest.queryString(queryParam.getName(), environment.process(queryParam.getValue()));
+        });
+    }
+
+    private void addHeadersToRequest(HttpRequest httpRequest) {
+        apiCallToExecute.getRequest().getHeaders().forEach(header -> {
+            httpRequest.header(header.getName(), environment.process(header.getValue()));
+        });
+    }
+
+    private void addBodyToRequest(HttpRequest httpRequest) {
+        if (httpRequest instanceof HttpRequestWithBody) {
+            ((HttpRequestWithBody) httpRequest).body(environment.process(apiCallToExecute.getRequest().getBody()));
         }
     }
 
