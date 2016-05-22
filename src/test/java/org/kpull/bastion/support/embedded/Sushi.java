@@ -91,6 +91,11 @@ public class Sushi {
             return this;
         }
 
+        public Builder price(final long val) {
+            price = new BigDecimal(val);
+            return this;
+        }
+
         public Builder type(final Type val) {
             type = val;
             return this;
