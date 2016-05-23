@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
@@ -114,7 +116,7 @@ public class ApiCallExecutor {
                 Objects.requireNonNull(objectMapper, "Object Mapper must be set before we can deserialize to a model object");
                 return objectMapper.reader(modelClass).readValue(httpResponse.getRawBody());
             } catch (IOException e) {
-                throw new IllegalStateException("Could not parse response body into model class [" + modelClass.getName() + "].", e);
+                throw new IllegalStateException(format("Could not parse response body into model class [%s].", modelClass.getName()), e);
             }
         }).orElse(null);
         context.setResponseModel(model);

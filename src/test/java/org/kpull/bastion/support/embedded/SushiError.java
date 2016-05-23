@@ -15,7 +15,7 @@ public enum SushiError {
     private int statusCode;
     private String reason;
 
-    SushiError(final int statusCode, final String reason) {
+    SushiError(int statusCode, String reason) {
         this.statusCode = statusCode;
         this.reason = reason;
     }
@@ -25,7 +25,7 @@ public enum SushiError {
      * @param response the Spark response to set the HTTP status for
      * @return An error response object with the default error reason.
      */
-    public SushiOrderErrorResponse toResponse(final Response response) {
+    public SushiOrderErrorResponse toResponse(Response response) {
         response.status(statusCode);
         return new SushiOrderErrorResponse(name(), reason);
     }
@@ -36,7 +36,7 @@ public enum SushiError {
      * @param reason the reason for the error
      * @return An error response object with a custom error reason.
      */
-    public SushiOrderErrorResponse toResponse(final Response response, final String reason) {
+    public SushiOrderErrorResponse toResponse(Response response, String reason) {
         response.status(statusCode);
         return new SushiOrderErrorResponse(name(), reason);
     }
@@ -49,9 +49,17 @@ public enum SushiError {
         private String code;
         private String reason;
 
-        public SushiOrderErrorResponse(final String code, final String reason) {
+        public SushiOrderErrorResponse(String code, String reason) {
             this.code = code;
             this.reason = reason;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getReason() {
+            return reason;
         }
     }
 }

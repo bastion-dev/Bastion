@@ -12,17 +12,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import static java.util.stream.Collectors.toList;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static org.apache.commons.lang.exception.ExceptionUtils.getRootCauseMessage;
-import static org.kpull.bastion.support.embedded.SushiError.INTERNAL_SERVER_ERROR;
-import static org.kpull.bastion.support.embedded.SushiError.INVALID_ENTITY;
-import static org.kpull.bastion.support.embedded.SushiError.NOT_AUTHENTICATED;
-import static org.kpull.bastion.support.embedded.SushiError.NOT_FOUND;
-import static spark.Spark.after;
-import static spark.Spark.before;
-import static spark.Spark.delete;
-import static spark.Spark.exception;
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.post;
+import static org.kpull.bastion.support.embedded.SushiError.*;
+import static spark.Spark.*;
 
 /**
  * A sushi based testing service that contains basic API functionality using {@link Spark} as a lightweight web service framework.
@@ -34,7 +25,7 @@ public class SushiService {
     private AtomicLong nextId = new AtomicLong();
     private int port;
 
-    public SushiService(final int port) {
+    public SushiService(int port) {
         this.port = port;
     }
 
@@ -42,7 +33,7 @@ public class SushiService {
      * Registers all routes for the web service and starts up the embedded Jetty container.
      */
     public void start() {
-        final JsonTransformer json = new JsonTransformer();
+        JsonTransformer json = new JsonTransformer();
 
         port(port);
 
@@ -50,7 +41,7 @@ public class SushiService {
         after((req, res) -> res.header("Content-Type", "application/json"));
 
         post("/sushi", (req, res) -> {
-            final Sushi newSushi = json.fromJson(req.body(), Sushi.class);
+            Sushi newSushi = json.fromJson(req.body(), Sushi.class);
             long id = nextId.incrementAndGet();
             newSushi.setId(id);
             sushiRepository.put(id, newSushi);
@@ -59,7 +50,7 @@ public class SushiService {
         }, json);
 
         get("/sushi", (req, res) -> {
-            final String nameFilter = req.queryParams("name");
+            String nameFilter = req.queryParams("name");
             if (nameFilter == null) {
                 return sushiRepository.values();
             } else {
@@ -68,8 +59,8 @@ public class SushiService {
         }, json);
 
         get("/sushi/:id", (req, res) -> {
-            final long id = Integer.parseInt(req.params("id"));
-            final Sushi sushi = sushiRepository.get(id);
+            long id = Integer.parseInt(req.params("id"));
+            Sushi sushi = sushiRepository.get(id);
             if (sushi == null) {
                 return NOT_FOUND.toResponse(res);
             }
@@ -77,8 +68,8 @@ public class SushiService {
         }, json);
 
         delete("/sushi/:id", (req, res) -> {
-            final long id = Integer.parseInt(req.params("id"));
-            final Sushi removed = sushiRepository.remove(id);
+            long id = Integer.parseInt(req.params("id"));
+            Sushi removed = sushiRepository.remove(id);
             if (removed == null) {
                 return NOT_FOUND.toResponse(res);
             }
@@ -103,11 +94,11 @@ public class SushiService {
         private Gson gson = new Gson();
 
         @Override
-        public String render(final Object model) {
+        public String render(Object model) {
             return gson.toJson(model);
         }
 
-        public <T> T fromJson(final String json, final Class<T> type) {
+        public <T> T fromJson(String json, Class<T> type) {
             return gson.fromJson(json, type);
         }
     }

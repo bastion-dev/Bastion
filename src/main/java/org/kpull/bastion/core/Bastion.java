@@ -181,7 +181,7 @@ public class Bastion {
                 return this;
             }
 
-            public ApiRequestBuilder bodyFromModel(final Object model) {
+            public ApiRequestBuilder bodyFromModel(Object model) {
                 Objects.requireNonNull(model);
                 this.body = gson.toJson(model);
                 return this;

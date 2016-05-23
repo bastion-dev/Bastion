@@ -11,44 +11,11 @@ public class Sushi {
     private String name;
     private BigDecimal price;
     private Type type;
-
     protected Sushi() {
         // required for deserialization
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(final long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(final Type type) {
-        this.type = type;
-    }
-
-    private Sushi(final Builder builder) {
+    private Sushi(Builder builder) {
         id = builder.id;
         name = builder.name;
         price = builder.price;
@@ -57,6 +24,38 @@ public class Sushi {
 
     public static Builder newSushi() {
         return new Builder();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public enum Type {
@@ -72,31 +71,31 @@ public class Sushi {
         private BigDecimal price;
         private Type type;
 
-        public Builder() {
+        private Builder() {
         }
 
-        public Builder id(final long val) {
+        public Builder id(long val) {
             id = val;
             return this;
         }
 
 
-        public Builder name(final String val) {
+        public Builder name(String val) {
             name = val;
             return this;
         }
 
-        public Builder price(final BigDecimal val) {
+        public Builder price(BigDecimal val) {
             price = val;
             return this;
         }
 
-        public Builder price(final long val) {
+        public Builder price(long val) {
             price = new BigDecimal(val);
             return this;
         }
 
-        public Builder type(final Type val) {
+        public Builder type(Type val) {
             type = val;
             return this;
         }
