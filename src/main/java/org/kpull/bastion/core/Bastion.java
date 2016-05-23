@@ -1,5 +1,6 @@
 package org.kpull.bastion.core;
 
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.jglue.fluentjson.JsonArrayBuilder;
 import org.jglue.fluentjson.JsonBuilderFactory;
@@ -16,6 +17,8 @@ import static java.lang.String.format;
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
 public class Bastion {
+
+    private static Gson gson = new Gson();
 
     private String name = "";
     private ApiEnvironment environment = new ApiEnvironment();
@@ -175,6 +178,12 @@ public class Bastion {
             public ApiRequestBuilder body(String body) {
                 Objects.requireNonNull(body);
                 this.body = body;
+                return this;
+            }
+
+            public ApiRequestBuilder bodyFromModel(final Object model) {
+                Objects.requireNonNull(model);
+                this.body = gson.toJson(model);
                 return this;
             }
 
