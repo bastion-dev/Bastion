@@ -22,35 +22,51 @@ public class Bastion {
         bastionListenerCollection.add(newListener);
     }
 
-    public static ApiResponse call(final String message, final Request request) {
+    public static UntypedApiResponse call(final String message, final Request request) {
         return BastionFactory.getDefaultBastionFactory().create().notifyListenersAndCall(message, request);
     }
 
-    private ApiResponse notifyListenersAndCall(final String message, final Request request) {
+    private UntypedApiResponse notifyListenersAndCall(final String message, final Request request) {
         bastionListenerCollection.forEach(BastionListener::callStarted);
-        return new ApiResponse();
+        Response response = new RequestExecutor(request).execute();
+        return new UntypedApiResponse(response);
     }
 
-    public class ApiResponse<T> {
+    private class UntypedApiResponse {
 
         private Gson gson = new Gson();
 
-        private ApiResponse() { }
+        UntypedApiResponse(Response response) {
+            this.response = response;
+        }
 
-        private T model;
         private Response response;
+        private Object model;
 
-        public ApiResponse bindToModel(Class<T> modelClass) {
+        public <M> TypedApiResponse<M> bind(Class<M> modelClass) {
             requireNonNull(modelClass);
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getBody()));
-            model = gson.fromJson(reader, modelClass);
-            return this;
+            TypedApiResponse<M> apiResponse = new TypedApiResponse<>(response);
+            apiResponse.model = gson.fromJson(reader, modelClass);
+            return apiResponse;
         }
 
-        public void thenAssert(final Assertions assertions) {
-            // something
+        public void thenAssert(Assertions<Object> assertions) {
+            assertions.assertions(response.getStatusCode(), model);
         }
-
     }
 
+    private class TypedApiResponse<T> {
+
+        private Response response;
+        private T model;
+
+        TypedApiResponse(Response response) {
+            this.response = response;
+        }
+
+        public void thenAssert(Assertions<T> assertions) {
+            assertions.assertions(response.getStatusCode(), model);
+        }
+    }
 }

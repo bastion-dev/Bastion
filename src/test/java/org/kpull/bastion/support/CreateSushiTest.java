@@ -13,10 +13,9 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
     @Test
     public void testCreateSushi_Success() {
         Bastion.call("Successfully create sushi", new CreateSushiRequest())
-               .bindToModel(Sushi.class)
-               .thenAssert((statusCode, model, context) -> {
-                   // whatever
+               .bind(Sushi.class)
+               .thenAssert((statusCode, model) -> {
+                   System.out.println(model.getName());
                });
     }
-
 }
