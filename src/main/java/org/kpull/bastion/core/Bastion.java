@@ -1,6 +1,12 @@
 package org.kpull.bastion.core;
 
+import com.google.gson.Gson;
 import org.kpull.bastion.external.Request;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
 
@@ -21,12 +27,19 @@ public class Bastion {
         bastionListenerCollection.add(newListener);
     }
 
-    public static class ApiResponse {
+    public static class ApiResponse<T> {
+
+        private Gson gson = new Gson();
 
         private ApiResponse() { }
 
-        public ApiResponse bindToModel(final Class<?> modelClass) {
-            // something
+        private T model;
+        private Response response;
+
+        public ApiResponse bindToModel(Class<T> modelClass) {
+            requireNonNull(modelClass);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getBody()));
+            model = gson.fromJson(reader, modelClass);
             return this;
         }
 
