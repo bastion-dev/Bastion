@@ -25,7 +25,5 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
                     // do stuff
                 })
                 .call();
-
-        Bastion.api("",null).thenDo((statusCode, context) -> {}).
     }
 }

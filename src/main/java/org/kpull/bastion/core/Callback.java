@@ -3,13 +3,18 @@ package org.kpull.bastion.core;
 import org.kpull.bastion.runner.ExecutionContext;
 
 /**
- * @author Francesco
+ *
  */
 @FunctionalInterface
-public interface Callback {
+public interface Callback<M> {
 
     Callback NO_OPERATION_CALLBACK = (statusCode, context) -> {
     };
 
-    void execute(int statusCode, ExecutionContext context);
+    @SuppressWarnings("unchecked")
+    static <M> Callback<M> noCallback() {
+        return (Callback<M>) NO_OPERATION_CALLBACK;
+    }
+
+    void execute(int statusCode, M model);
 }
