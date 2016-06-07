@@ -4,17 +4,14 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
-import org.kpull.bastion.core.BastionFactory;
 import org.kpull.bastion.core.BastionListener;
+import org.kpull.bastion.core.BastionListenerRegistrar;
 
 public class BastionRunner extends BlockJUnit4ClassRunner implements BastionListener {
 
-    public BastionRunner(final Class<?> testClass) throws InitializationError {
+    public BastionRunner(Class<?> testClass) throws InitializationError {
         super(testClass);
-
-        final BastionFactory bastionFactory = new BastionFactory();
-        BastionFactory.setDefaultBastionFactory(bastionFactory);
-        bastionFactory.create().addBastionListener(this);
+        BastionListenerRegistrar.getDefaultBastionListenerRegistrar().registerListener(this);
     }
 
     @Override
@@ -23,7 +20,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     }
 
     @Override
-    public void run(final RunNotifier runNotifier) {
+    public void run(RunNotifier runNotifier) {
 
     }
 

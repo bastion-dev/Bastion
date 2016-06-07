@@ -18,12 +18,14 @@ public class Bastion {
         bastionListenerCollection = new ArrayList<>();
     }
 
-    public void addBastionListener(final BastionListener newListener) {
-        bastionListenerCollection.add(newListener);
+    public static UntypedApiResponse api(String message, Request request) {
+        Bastion bastion = new Bastion();
+        BastionListenerRegistrar.getDefaultBastionListenerRegistrar().applyListenersToBastion(bastion);
+        return bastion.notifyListenersAndCall(message, request);
     }
 
-    public static UntypedApiResponse api(final String message, final Request request) {
-        return BastionFactory.getDefaultBastionFactory().create().notifyListenersAndCall(message, request);
+    public void addBastionListener(BastionListener newListener) {
+        bastionListenerCollection.add(newListener);
     }
 
     private <M> void callInternal(final String message, final Request request, M model, Assertions<M> assertions, Callback<M> callback) {
@@ -41,22 +43,39 @@ public class Bastion {
         }
     }
 
-    private UntypedApiResponse notifyListenersAndCall(final String message, final Request request) {
+    private UntypedApiResponse notifyListenersAndCall(String message, Request request) {
         notifyListenersCallStarted();
         Response response = new RequestExecutor(request).execute();
         return new UntypedApiResponse(response);
     }
 
+    private void notifyListenersCallStarted() {
+        bastionListenerCollection.forEach(BastionListener::callStarted);
+    }
+
+    private void notifyListenersCallFailed() {
+        bastionListenerCollection.forEach(BastionListener::callFailed);
+    }
+
+    private void notifyListenersCallError() {
+        bastionListenerCollection.forEach(BastionListener::callError);
+    }
+
+    private void notifyListenersCallFinished() {
+        bastionListenerCollection.forEach(BastionListener::callFinished);
+    }
+
     public class UntypedApiResponse {
 
-        UntypedApiResponse(Response response) {
-            this.response = response;
-        }
-
+        private Gson gson = new Gson();
         private Response response;
         private Object model;
         private Assertions<Object> assertions;
         private Callback<Object> callback;
+
+        UntypedApiResponse(Response response) {
+            this.response = response;
+        }
 
         public <M> BoundApiResponse<M> bind(Class<M> modelClass) {
             requireNonNull(modelClass);
@@ -117,6 +136,9 @@ public class Bastion {
         public void call() {
 
         }
+    }
+
+    public class FinishedApiResponse<T> {
     }
 
     private void notifyListenersCallStarted() {
