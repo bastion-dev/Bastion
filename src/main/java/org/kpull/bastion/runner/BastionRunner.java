@@ -42,4 +42,9 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     }
 
+    @Override
+    public void callError() {
+
+    }
+
 }

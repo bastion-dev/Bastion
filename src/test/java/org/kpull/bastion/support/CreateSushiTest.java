@@ -1,21 +1,31 @@
 package org.kpull.bastion.support;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.kpull.bastion.core.Bastion;
-import org.kpull.bastion.runner.BastionRunner;
 import org.kpull.bastion.support.embedded.Sushi;
 import org.kpull.bastion.support.embedded.TestWithEmbeddedServer;
 
-@RunWith(BastionRunner.class)
+import static org.assertj.core.api.Assertions.*;
+import static org.kpull.bastion.core.Bastion.*;
+
+//@RunWith(BastionRunner.class)
 public class CreateSushiTest extends TestWithEmbeddedServer {
+
+    private String someVar;
 
     @Test
     public void testCreateSushi_Success() {
-        Bastion.call("Successfully create sushi", new CreateSushiRequest())
-               .bind(Sushi.class)
-               .thenAssert((statusCode, model) -> {
-                   System.out.println(model.getName());
-               });
+        Bastion.api("Successfully create sushi", new CreateSushiRequest())
+                .bind(Sushi.class)
+                .thenAssert((statusCode, model) -> {
+                    assertThat(statusCode).isEqualTo(201);
+                    assertThat(model.getName()).isEqualTo("happiness");
+                })
+                .thenDo((statusCode, model) -> {
+                    // do stuff
+                })
+                .call();
+
+        Bastion.api("",null).thenDo((statusCode, context) -> {}).
     }
 }

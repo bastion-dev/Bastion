@@ -22,17 +22,17 @@ public class Bastion {
         bastionListenerCollection.add(newListener);
     }
 
-    public static UntypedApiResponse call(final String message, final Request request) {
+    public static UntypedApiResponse api(final String message, final Request request) {
         return BastionFactory.getDefaultBastionFactory().create().notifyListenersAndCall(message, request);
     }
 
     private UntypedApiResponse notifyListenersAndCall(final String message, final Request request) {
-        bastionListenerCollection.forEach(BastionListener::callStarted);
+        notifyListenersCallStarted();
         Response response = new RequestExecutor(request).execute();
         return new UntypedApiResponse(response);
     }
 
-    private class UntypedApiResponse {
+    public class UntypedApiResponse {
 
         private Gson gson = new Gson();
 
@@ -41,32 +41,88 @@ public class Bastion {
         }
 
         private Response response;
-        private Object model;
 
-        public <M> TypedApiResponse<M> bind(Class<M> modelClass) {
+        private Object model;
+        private Assertions<Object> assertions;
+        private Callback<Object> callback;
+
+        public <M> BoundApiResponse<M> bind(Class<M> modelClass) {
             requireNonNull(modelClass);
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getBody()));
-            TypedApiResponse<M> apiResponse = new TypedApiResponse<>(response);
+            BoundApiResponse<M> apiResponse = new BoundApiResponse<>(response);
             apiResponse.model = gson.fromJson(reader, modelClass);
             return apiResponse;
         }
 
-        public void thenAssert(Assertions<Object> assertions) {
-            assertions.assertions(response.getStatusCode(), model);
+        public AssertedApiResponse<Object> thenAssert(Assertions<Object> assertions) {
+            this.assertions = assertions;
+        }
+
+        public CallbackedApiResponse<Object> thenDo(Callback<Object> callback) {
+            this.callback = callback;
+        }
+
+        public FinishedApiResponse<Object> call() {
+
         }
     }
 
-    private class TypedApiResponse<T> {
+    public class BoundApiResponse<T> {
 
         private Response response;
-        private T model;
 
-        TypedApiResponse(Response response) {
+        private T model;
+        private Assertions<T> assertions;
+        BoundApiResponse(Response response) {
             this.response = response;
         }
 
-        public void thenAssert(Assertions<T> assertions) {
-            assertions.assertions(response.getStatusCode(), model);
+        public AssertedApiResponse<T> thenAssert(Assertions<T> assertions) {
+            this.assertions = assertions;
         }
+
+        public CallbackedApiResponse<T> thenDo(Callback<T> callback) {
+            this.callback = callback;
+        }
+
+        public FinishedApiResponse<T> call() {
+
+        }
+    }
+
+    public class AssertedApiResponse<T> {
+        public CallbackedApiResponse<T> thenDo(Callback<T> callback) {
+            this.callback = callback;
+        }
+
+        public FinishedApiResponse<T> call() {
+
+        }
+    }
+
+    public class CallbackedApiResponse<T> {
+        public FinishedApiResponse<T> call() {
+
+        }
+    }
+
+    public class FinishedApiResponse<T> {
+
+    }
+
+    private void notifyListenersCallStarted() {
+        bastionListenerCollection.forEach(BastionListener::callStarted);
+    }
+
+    private void notifyListenersCallFailed() {
+        bastionListenerCollection.forEach(BastionListener::callFailed);
+    }
+
+    private void notifyListenersCallError() {
+        bastionListenerCollection.forEach(BastionListener::callError);
+    }
+
+    private void notifyListenersCallFinished() {
+        bastionListenerCollection.forEach(BastionListener::callFinished);
     }
 }

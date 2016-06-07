@@ -21,4 +21,9 @@ public interface BastionListener {
      */
     void callFailed();
 
+    /**
+     * Event fired when an error (that is not an assertion error) on a call occurs.
+     */
+    void callError();
+
 }
