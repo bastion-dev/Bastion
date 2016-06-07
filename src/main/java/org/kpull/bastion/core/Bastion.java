@@ -28,7 +28,7 @@ public class Bastion {
         bastionListenerCollection.add(newListener);
     }
 
-    private <M> void callInternal(final String message, final Request request, M model, Assertions<M> assertions, Callback<M> callback) {
+    private <M> void callInternal(String message, Request request, M model, Assertions<M> assertions, Callback<M> callback) {
         try {
             notifyListenersCallStarted();
             Response response = new RequestExecutor(request).execute();
@@ -139,21 +139,5 @@ public class Bastion {
     }
 
     public class FinishedApiResponse<T> {
-    }
-
-    private void notifyListenersCallStarted() {
-        bastionListenerCollection.forEach(BastionListener::callStarted);
-    }
-
-    private void notifyListenersCallFailed() {
-        bastionListenerCollection.forEach(BastionListener::callFailed);
-    }
-
-    private void notifyListenersCallError() {
-        bastionListenerCollection.forEach(BastionListener::callError);
-    }
-
-    private void notifyListenersCallFinished() {
-        bastionListenerCollection.forEach(BastionListener::callFinished);
     }
 }
