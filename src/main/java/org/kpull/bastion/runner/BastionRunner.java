@@ -1,10 +1,16 @@
 package org.kpull.bastion.runner;
 
 import org.junit.runner.Description;
-import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.InitializationError;
+import org.kpull.bastion.core.BastionListener;
 
-public class BastionRunner extends Runner {
+public class BastionRunner extends BlockJUnit4ClassRunner implements BastionListener {
+
+    public BastionRunner(final Class<?> testClass) throws InitializationError {
+        super(testClass);
+    }
 
     @Override
     public Description getDescription() {
@@ -13,6 +19,21 @@ public class BastionRunner extends Runner {
 
     @Override
     public void run(final RunNotifier runNotifier) {
+
+    }
+
+    @Override
+    public void callStarted() {
+
+    }
+
+    @Override
+    public void callFinished() {
+
+    }
+
+    @Override
+    public void callFailed() {
 
     }
 
