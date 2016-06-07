@@ -10,6 +10,7 @@ import org.apache.http.entity.ContentType;
 import org.kpull.bastion.external.Request;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RequestExecutor {
@@ -17,6 +18,7 @@ public class RequestExecutor {
     private Request requestToExecute;
 
     public RequestExecutor(Request requestToExecute) {
+        Objects.requireNonNull(requestToExecute);
         this.requestToExecute = requestToExecute;
     }
 
