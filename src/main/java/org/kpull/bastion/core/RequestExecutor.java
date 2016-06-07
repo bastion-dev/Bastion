@@ -15,60 +15,76 @@ import java.util.stream.Collectors;
 
 public class RequestExecutor {
 
-    private Request requestToExecute;
+    private Request bastionRequest;
+    private HttpRequest executableRequest;
 
-    public RequestExecutor(Request requestToExecute) {
-        Objects.requireNonNull(requestToExecute);
-        this.requestToExecute = requestToExecute;
+    public RequestExecutor(Request bastionRequest) {
+        Objects.requireNonNull(bastionRequest);
+        this.bastionRequest = bastionRequest;
+        this.executableRequest = identifyHttpRequest();
     }
 
     public Response execute() {
         try {
-            HttpRequest httpRequest;
-            switch (requestToExecute.method().getValue()) {
-                case "POST":
-                    httpRequest = Unirest.post(requestToExecute.url());
-                    break;
-                case "GET":
-                    httpRequest = Unirest.get(requestToExecute.url());
-                    break;
-                case "PUT":
-                    httpRequest = Unirest.put(requestToExecute.url());
-                    break;
-                case "DELETE":
-                    httpRequest = Unirest.delete(requestToExecute.url());
-                    break;
-                case "OPTIONS":
-                    httpRequest = Unirest.options(requestToExecute.url());
-                    break;
-                case "HEAD":
-                    httpRequest = Unirest.head(requestToExecute.url());
-                    break;
-                case "PATCH":
-                    httpRequest = Unirest.patch(requestToExecute.url());
-                    break;
-                default:
-                    httpRequest = null;
-            }
-            requestToExecute.headers().stream().forEach(header -> httpRequest.queryString(header.getName(), header.getValue()));
-            requestToExecute.queryParams().stream().forEach(queryParam -> httpRequest.queryString(queryParam.getName(), queryParam.getValue()));
-            if (httpRequest instanceof HttpRequestWithBody) {
-                if (requestToExecute.contentType().equals(ContentType.APPLICATION_JSON)) {
-                    ((HttpRequestWithBody) httpRequest).body(new Gson().toJson(requestToExecute.body()));
-                } else {
-                    ((HttpRequestWithBody) httpRequest).body(requestToExecute.body().toString());
-                }
-            }
-            HttpResponse<InputStream> httpResponse = httpRequest.asBinary();
-            return new Response(httpResponse.getStatus(),
-                    httpResponse.getStatusText(),
-                    httpResponse.getHeaders().entrySet().stream().flatMap(header ->
-                            header.getValue().stream().map(headerValue ->
-                                    new ApiHeader(header.getKey(), headerValue))).collect(Collectors.toList()),
-                    httpResponse.getBody());
+            applyHeaders();
+            applyQueryParameters();
+            applyBody();
+            HttpResponse<InputStream> httpResponse = performRequest();
+            return convertToBastionResponse(httpResponse);
         } catch (UnirestException exception) {
             throw new IllegalStateException("Failed executing request", exception);
         }
     }
 
+    private HttpRequest identifyHttpRequest() {
+        switch (bastionRequest.method().getValue()) {
+            case "GET":
+                return Unirest.get(bastionRequest.url());
+            case "POST":
+                return Unirest.post(bastionRequest.url());
+            case "PATCH":
+                return Unirest.patch(bastionRequest.url());
+            case "DELETE":
+                return Unirest.delete(bastionRequest.url());
+            case "PUT":
+                return Unirest.put(bastionRequest.url());
+            case "OPTIONS":
+                return Unirest.options(bastionRequest.url());
+            case "HEAD":
+                return Unirest.head(bastionRequest.url());
+            default:
+                return null;
+        }
+    }
+
+    private void applyHeaders() {
+        bastionRequest.headers().stream().forEach(header -> executableRequest.header(header.getName(), header.getValue()));
+    }
+
+    private void applyQueryParameters() {
+        bastionRequest.queryParams().stream().forEach(queryParam -> executableRequest.queryString(queryParam.getName(), queryParam.getValue()));
+    }
+
+    private void applyBody() {
+        if (executableRequest instanceof HttpRequestWithBody) {
+            if (bastionRequest.contentType().equals(ContentType.APPLICATION_JSON)) {
+                ((HttpRequestWithBody) executableRequest).body(new Gson().toJson(bastionRequest.body()));
+            } else {
+                ((HttpRequestWithBody) executableRequest).body(bastionRequest.body().toString());
+            }
+        }
+    }
+
+    private HttpResponse<InputStream> performRequest() throws UnirestException {
+        return executableRequest.asBinary();
+    }
+
+    private Response convertToBastionResponse(HttpResponse<InputStream> httpResponse) {
+        return new Response(httpResponse.getStatus(),
+                httpResponse.getStatusText(),
+                httpResponse.getHeaders().entrySet().stream().flatMap(header ->
+                        header.getValue().stream().map(headerValue ->
+                                new ApiHeader(header.getKey(), headerValue))).collect(Collectors.toList()),
+                httpResponse.getBody());
+    }
 }
