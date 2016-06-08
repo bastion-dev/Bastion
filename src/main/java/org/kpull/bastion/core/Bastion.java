@@ -51,7 +51,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
             Response response = new RequestExecutor(request).execute();
             MODEL model;
             if (modelType != null) {
-                model = (MODEL) modelConverters.stream().filter(converter -> converter.handles(response, modelType))
+                model = modelConverters.stream().filter(converter -> converter.handles(response, modelType))
                         .map(converter -> converter.convert(response, modelType))
                         .findFirst()
                         .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
@@ -108,8 +108,8 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
         Objects.requireNonNull(modelType);
         Bastion<T> castedBuilder = (Bastion<T>) this;
