@@ -19,100 +19,107 @@ public class Bastion {
     }
 
     public static UntypedApiRequest api(String message, Request request) {
-        Bastion bastion = new Bastion();
-        BastionListenerRegistrar.getDefaultBastionListenerRegistrar().applyListenersToBastion(bastion);
-        return bastion.notifyListenersAndCall(message, request);
+        return new UntypedApiRequest(message, request);
     }
 
-    private UntypedApiRequest notifyListenersAndCall(String message, Request request) {
-        notifyListenersCallStarted();
-        Response response = new RequestExecutor(request).execute();
-        return new UntypedApiRequest(response);
-    }
+    public static class UntypedApiRequest {
 
-    public class UntypedApiRequest {
+        private String message;
+        private Request request;
 
-        private Gson gson = new Gson();
-        private Response response;
-        private Object model;
-        private Assertions<Object> assertions;
-        private Callback<Object> callback;
-
-        UntypedApiRequest(Response response) {
-            this.response = response;
+        UntypedApiRequest(String message, Request request) {
+            this.message = message;
+            this.request = request;
         }
 
         public <M> ApiRequestWithTypedResponse<M> bind(Class<M> modelClass) {
             requireNonNull(modelClass);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getBody()));
-            ApiRequestWithTypedResponse<M> apiResponse = new ApiRequestWithTypedResponse<>(response);
-            apiResponse.model = new Gson().fromJson(reader, modelClass);
-            return apiResponse;
+            return new ApiRequestWithTypedResponse<>(message, request, modelClass);
         }
 
         public ApiRequestWithAssertions<Object> thenAssert(Assertions<Object> assertions) {
-            this.assertions = assertions;
-            return new ApiRequestWithAssertions<>();
+            return new ApiRequestWithAssertions<>(message, request, Object.class, assertions);
         }
 
         public ApiRequestWithCallback<Object> thenDo(Callback<Object> callback) {
-            this.callback = callback;
-            return new ApiRequestWithCallback<>();
+            return new ApiRequestWithCallback<>(message, request, Object.class, Assertions.noAssertions(), Callback.noCallback());
         }
 
         public void call() {
-
+            callInternal(message, request, Object.class, Assertions.noAssertions(), Callback.noCallback());
         }
     }
 
-    public class ApiRequestWithTypedResponse<M> {
+    public static class ApiRequestWithTypedResponse<M> {
 
-        private Response response;
+        private String message;
+        private Request request;
+        private Class<M> responseType;
 
-        private M model;
-        private Assertions<M> assertions;
-        private Callback<M> callback;
-
-        ApiRequestWithTypedResponse(Response response) {
-            this.response = response;
+        ApiRequestWithTypedResponse(String message, Request request, Class<M> responseType) {
+            this.message = message;
+            this.request = request;
+            this.responseType = responseType;
         }
 
         public ApiRequestWithAssertions<M> thenAssert(Assertions<M> assertions) {
-            this.assertions = assertions;
-            return new ApiRequestWithAssertions<>();
+            return new ApiRequestWithAssertions<>(message, request, responseType, assertions);
         }
 
         public ApiRequestWithCallback<M> thenDo(Callback<M> callback) {
-            this.callback = callback;
-            return new ApiRequestWithCallback<>();
+            return new ApiRequestWithCallback<>(message, request, responseType, Assertions.noAssertions(), callback);
         }
 
         public void call() {
-            callInternal(null, null, null, null, null);
+            callInternal(message, request, responseType, Assertions.noAssertions(), Callback.noCallback());
         }
     }
 
-    public class ApiRequestWithAssertions<M> {
+    public static class ApiRequestWithAssertions<M> {
 
+        private String message;
+        private Request request;
+        private Class<M> responseType;
+        private Assertions<M> assertions;
+
+        public ApiRequestWithAssertions(String message, Request request, Class<M> responseType, Assertions<M> assertions) {
+            this.message = message;
+            this.request = request;
+            this.responseType = responseType;
+            this.assertions = assertions;
+        }
+
+        public ApiRequestWithCallback<M> thenDo(Callback<M> callback) {
+            return new ApiRequestWithCallback<>(message, request, responseType, assertions, callback);
+        }
+
+        public void call() {
+            callInternal(message, request, responseType, assertions, Callback.noCallback());
+        }
+    }
+
+    public static class ApiRequestWithCallback<M> {
+
+        private String message;
+        private Request request;
+        private Class<M> responseType;
+        private Assertions<M> assertions;
         private Callback<M> callback;
 
-        public ApiRequestWithCallback<M> thenDo(Callback<M> callback) {
+        public ApiRequestWithCallback(String message, Request request, Class<M> responseType, Assertions<M> assertions, Callback<M> callback) {
+            this.message = message;
+            this.request = request;
+            this.responseType = responseType;
+            this.assertions = assertions;
             this.callback = callback;
-            return new ApiRequestWithCallback<>();
         }
 
         public void call() {
-
+            callInternal(message, request, responseType, assertions, callback);
         }
     }
 
-    public class ApiRequestWithCallback<M> {
-        public void call() {
-
-        }
-    }
-
-    public class FinishedApiResponse<M> {
+    public static class FinishedApiResponse<M> {
     }
 
     private void notifyListenersCallStarted() {
@@ -135,18 +142,22 @@ public class Bastion {
         bastionListenerCollection.add(newListener);
     }
 
-    private <M> void callInternal(String message, Request request, M model, Assertions<M> assertions, Callback<M> callback) {
+    private static <M> void callInternal(String message, Request request, Class<M> responseType, Assertions<M> assertions, Callback<M> callback) {
+        Bastion bastion = new Bastion();
+        BastionListenerRegistrar.getDefaultBastionListenerRegistrar().applyListenersToBastion(bastion);
+
         try {
-            notifyListenersCallStarted();
+            bastion.notifyListenersCallStarted();
             Response response = new RequestExecutor(request).execute();
+            M model = new Gson().fromJson(new BufferedReader((new InputStreamReader(response.getBody()))), responseType);
             assertions.execute(response.getStatusCode(), model);
             callback.execute(response.getStatusCode(), model);
         } catch (AssertionError e) {
-            notifyListenersCallFailed();
+            bastion.notifyListenersCallFailed();
         } catch (Throwable t) {
-            notifyListenersCallError();
+            bastion.notifyListenersCallError();
         } finally {
-            notifyListenersCallFinished();
+            bastion.notifyListenersCallFinished();
         }
     }
 }
