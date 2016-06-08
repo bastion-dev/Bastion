@@ -21,7 +21,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     private Collection<BastionListener> bastionListenerCollection;
     private Collection<ResponseModelConverter> modelConverters;
     private Request request;
-    private Class<?> modelType;
+    private Class<MODEL> modelType;
     private Assertions<? super MODEL> assertions;
     private Callback<? super MODEL> callback;
 
