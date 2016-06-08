@@ -4,8 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
-import org.kpull.bastion.core.BastionListener;
-import org.kpull.bastion.core.BastionListenerRegistrar;
+import org.kpull.bastion.core.event.*;
 
 public class BastionRunner extends BlockJUnit4ClassRunner implements BastionListener {
 
@@ -25,22 +24,22 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     }
 
     @Override
-    public void callStarted() {
+    public void callStarted(BastionStartedEvent event) {
 
     }
 
     @Override
-    public void callFinished() {
+    public void callFinished(BastionFinishedEvent event) {
 
     }
 
     @Override
-    public void callFailed() {
+    public void callFailed(BastionFailureEvent event) {
 
     }
 
     @Override
-    public void callError() {
+    public void callError(BastionErrorEvent event) {
 
     }
 

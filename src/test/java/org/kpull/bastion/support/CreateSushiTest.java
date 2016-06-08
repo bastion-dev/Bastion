@@ -5,8 +5,7 @@ import org.kpull.bastion.core.Bastion;
 import org.kpull.bastion.support.embedded.Sushi;
 import org.kpull.bastion.support.embedded.TestWithEmbeddedServer;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.kpull.bastion.core.Bastion.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 //@RunWith(BastionRunner.class)
 public class CreateSushiTest extends TestWithEmbeddedServer {
@@ -17,7 +16,7 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
     public void testCreateSushi_Success() {
         Bastion.api("Successfully create sushi", new CreateSushiRequest())
                 .bind(Sushi.class)
-                .thenAssert((statusCode, model) -> {
+                .withAssertions((statusCode, model) -> {
                     assertThat(statusCode).isEqualTo(201);
                     assertThat(model.getName()).isEqualTo("happiness");
                 })

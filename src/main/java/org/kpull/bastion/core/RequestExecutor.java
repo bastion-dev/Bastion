@@ -30,7 +30,7 @@ public class RequestExecutor {
             applyQueryParameters();
             applyBody();
             HttpResponse<InputStream> httpResponse = performRequest();
-            return convertToBastionResponse(httpResponse);
+            return convertToRawResponse(httpResponse);
         } catch (UnirestException exception) {
             throw new IllegalStateException("Failed executing request", exception);
         }
@@ -79,8 +79,8 @@ public class RequestExecutor {
         return executableRequest.asBinary();
     }
 
-    private Response convertToBastionResponse(HttpResponse<InputStream> httpResponse) {
-        return new Response(httpResponse.getStatus(),
+    private Response convertToRawResponse(HttpResponse<InputStream> httpResponse) {
+        return new RawResponse(httpResponse.getStatus(),
                 httpResponse.getStatusText(),
                 httpResponse.getHeaders().entrySet().stream().flatMap(header ->
                         header.getValue().stream().map(headerValue ->

@@ -1,163 +1,139 @@
 package org.kpull.bastion.core;
 
-import com.google.gson.Gson;
+import org.kpull.bastion.core.builder.AssertionsBuilder;
+import org.kpull.bastion.core.builder.BastionBuilder;
+import org.kpull.bastion.core.builder.CallbackBuilder;
+import org.kpull.bastion.core.builder.ExecuteRequestBuilder;
+import org.kpull.bastion.core.event.*;
+import org.kpull.bastion.core.model.ModelConvertersRegistrar;
+import org.kpull.bastion.core.model.ResponseModelConverter;
 import org.kpull.bastion.external.Request;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
 
-import static java.util.Objects.requireNonNull;
+import static java.lang.String.format;
 
-public class Bastion {
+public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersRegistrar, BastionEventPublisher {
 
+    private String message;
     private Collection<BastionListener> bastionListenerCollection;
+    private Collection<ResponseModelConverter> modelConverters;
+    private Request request;
+    private Class<?> modelType;
+    private Assertions<? super MODEL> assertions;
+    private Callback<? super MODEL> callback;
 
-    Bastion() {
-        bastionListenerCollection = new ArrayList<>();
+    Bastion(String message, Request request) {
+        Objects.requireNonNull(message);
+        Objects.requireNonNull(request);
+        bastionListenerCollection = new LinkedList<>();
+        modelConverters = new LinkedList<>();
+        this.message = message;
+        this.request = request;
+        this.modelType = null;
+        this.assertions = Assertions.noAssertions();
+        this.callback = Callback.noCallback();
     }
 
-    public static UntypedApiRequest api(String message, Request request) {
-        return new UntypedApiRequest(message, request);
-    }
-
-    public static class UntypedApiRequest {
-
-        private String message;
-        private Request request;
-
-        UntypedApiRequest(String message, Request request) {
-            this.message = message;
-            this.request = request;
-        }
-
-        public <M> ApiRequestWithTypedResponse<M> bind(Class<M> modelClass) {
-            requireNonNull(modelClass);
-            return new ApiRequestWithTypedResponse<>(message, request, modelClass);
-        }
-
-        public ApiRequestWithAssertions<Object> thenAssert(Assertions<Object> assertions) {
-            return new ApiRequestWithAssertions<>(message, request, Object.class, assertions);
-        }
-
-        public ApiRequestWithCallback<Object> thenDo(Callback<Object> callback) {
-            return new ApiRequestWithCallback<>(message, request, Object.class, Assertions.noAssertions(), Callback.noCallback());
-        }
-
-        public void call() {
-            callInternal(message, request, Object.class, Assertions.noAssertions(), Callback.noCallback());
-        }
-    }
-
-    public static class ApiRequestWithTypedResponse<M> {
-
-        private String message;
-        private Request request;
-        private Class<M> responseType;
-
-        ApiRequestWithTypedResponse(String message, Request request, Class<M> responseType) {
-            this.message = message;
-            this.request = request;
-            this.responseType = responseType;
-        }
-
-        public ApiRequestWithAssertions<M> thenAssert(Assertions<M> assertions) {
-            return new ApiRequestWithAssertions<>(message, request, responseType, assertions);
-        }
-
-        public ApiRequestWithCallback<M> thenDo(Callback<M> callback) {
-            return new ApiRequestWithCallback<>(message, request, responseType, Assertions.noAssertions(), callback);
-        }
-
-        public void call() {
-            callInternal(message, request, responseType, Assertions.noAssertions(), Callback.noCallback());
-        }
-    }
-
-    public static class ApiRequestWithAssertions<M> {
-
-        private String message;
-        private Request request;
-        private Class<M> responseType;
-        private Assertions<M> assertions;
-
-        public ApiRequestWithAssertions(String message, Request request, Class<M> responseType, Assertions<M> assertions) {
-            this.message = message;
-            this.request = request;
-            this.responseType = responseType;
-            this.assertions = assertions;
-        }
-
-        public ApiRequestWithCallback<M> thenDo(Callback<M> callback) {
-            return new ApiRequestWithCallback<>(message, request, responseType, assertions, callback);
-        }
-
-        public void call() {
-            callInternal(message, request, responseType, assertions, Callback.noCallback());
-        }
-    }
-
-    public static class ApiRequestWithCallback<M> {
-
-        private String message;
-        private Request request;
-        private Class<M> responseType;
-        private Assertions<M> assertions;
-        private Callback<M> callback;
-
-        public ApiRequestWithCallback(String message, Request request, Class<M> responseType, Assertions<M> assertions, Callback<M> callback) {
-            this.message = message;
-            this.request = request;
-            this.responseType = responseType;
-            this.assertions = assertions;
-            this.callback = callback;
-        }
-
-        public void call() {
-            callInternal(message, request, responseType, assertions, callback);
-        }
-    }
-
-    public static class FinishedApiResponse<M> {
-    }
-
-    private void notifyListenersCallStarted() {
-        bastionListenerCollection.forEach(BastionListener::callStarted);
-    }
-
-    private void notifyListenersCallFailed() {
-        bastionListenerCollection.forEach(BastionListener::callFailed);
-    }
-
-    private void notifyListenersCallError() {
-        bastionListenerCollection.forEach(BastionListener::callError);
-    }
-
-    private void notifyListenersCallFinished() {
-        bastionListenerCollection.forEach(BastionListener::callFinished);
+    public static BastionBuilder<Object> api(String message, Request request) {
+        return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
     public void addBastionListener(BastionListener newListener) {
         bastionListenerCollection.add(newListener);
     }
 
-    private static <M> void callInternal(String message, Request request, Class<M> responseType, Assertions<M> assertions, Callback<M> callback) {
-        Bastion bastion = new Bastion();
-        BastionListenerRegistrar.getDefaultBastionListenerRegistrar().applyListenersToBastion(bastion);
-
+    private void callInternal() {
         try {
-            bastion.notifyListenersCallStarted();
+            notifyListenersCallStarted(new BastionStartedEvent());
             Response response = new RequestExecutor(request).execute();
-            M model = new Gson().fromJson(new BufferedReader((new InputStreamReader(response.getBody()))), responseType);
+            MODEL model;
+            if (modelType != null) {
+                model = (MODEL) modelConverters.stream().filter(converter -> converter.handles(response, modelType))
+                        .map(converter -> converter.convert(response, modelType))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
+            } else {
+                model = null;
+            }
             assertions.execute(response.getStatusCode(), model);
             callback.execute(response.getStatusCode(), model);
         } catch (AssertionError e) {
-            bastion.notifyListenersCallFailed();
+            notifyListenersCallFailed(new BastionFailureEvent(e));
         } catch (Throwable t) {
-            bastion.notifyListenersCallError();
+            notifyListenersCallError(new BastionErrorEvent(t));
         } finally {
-            bastion.notifyListenersCallFinished();
+            notifyListenersCallFinished(new BastionFinishedEvent());
         }
+    }
+
+    @Override
+    public void registerListener(BastionListener listener) {
+        bastionListenerCollection.add(listener);
+    }
+
+    @Override
+    public void notifyListenersCallStarted(BastionStartedEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callStarted(event));
+    }
+
+    @Override
+    public void notifyListenersCallFailed(BastionFailureEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callFailed(event));
+    }
+
+    @Override
+    public void notifyListenersCallError(BastionErrorEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callError(event));
+    }
+
+    @Override
+    public void notifyListenersCallFinished(BastionFinishedEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callFinished(event));
+    }
+
+    @Override
+    public void call() {
+        callInternal();
+    }
+
+    @Override
+    public Response getResponse() {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
+        Objects.requireNonNull(modelType);
+        Bastion<T> castedBuilder = (Bastion<T>) this;
+        castedBuilder.modelType = modelType;
+        return castedBuilder;
+    }
+
+    @Override
+    public CallbackBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions) {
+        Objects.requireNonNull(assertions);
+        this.assertions = assertions;
+        return this;
+    }
+
+    @Override
+    public ExecuteRequestBuilder thenDo(Callback<? super MODEL> callback) {
+        Objects.requireNonNull(callback);
+        this.callback = callback;
+        return this;
+    }
+
+    @Override
+    public void registerModelConverter(ResponseModelConverter converter) {
+        Objects.requireNonNull(converter);
+        modelConverters.add(converter);
     }
 }

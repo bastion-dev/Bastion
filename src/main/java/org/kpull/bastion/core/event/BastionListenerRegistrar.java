@@ -1,4 +1,6 @@
-package org.kpull.bastion.core;
+package org.kpull.bastion.core.event;
+
+import org.kpull.bastion.core.Bastion;
 
 import java.util.Collection;
 import java.util.LinkedList;

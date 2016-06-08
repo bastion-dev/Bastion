@@ -3,14 +3,13 @@ package org.kpull.bastion.core;
 import com.google.common.base.Strings;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import org.kpull.bastion.runner.ExecutionContext;
 
 import java.util.Objects;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class GroovyCallback implements Callback {
+public class GroovyCallback implements Callback<Object> {
 
     private String groovyScript;
 
@@ -36,6 +35,7 @@ public class GroovyCallback implements Callback {
     @Override
     public void execute(int statusCode, Object model) {
         if (!Strings.isNullOrEmpty(groovyScript)) {
+            // TODO: Fill this in
             Binding binding = new Binding();
             binding.setVariable("model", model);
             GroovyShell groovy = new GroovyShell(binding);

@@ -1,40 +1,22 @@
 package org.kpull.bastion.core;
 
+import org.apache.http.entity.ContentType;
+
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
-public class Response {
+/**
+ * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ */
+public interface Response {
+    Optional<ContentType> getContentType();
 
-    private int statusCode;
-    private String statusText;
-    private Collection<ApiHeader> headers;
-    private InputStream body;
+    int getStatusCode();
 
-    public Response(int statusCode, String statusText, Collection<ApiHeader> headers, InputStream body) {
-        this.statusCode = statusCode;
-        this.statusText = statusText;
-        this.headers = headers;
-        this.body = body;
-    }
+    String getStatusText();
 
-    public Optional<ApiHeader> getContentType() {
-        return headers.stream().filter(header -> header.getName().equalsIgnoreCase("content-type")).findFirst();
-    }
+    Collection<ApiHeader> getHeaders();
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatusText() {
-        return statusText;
-    }
-
-    public Collection<ApiHeader> getHeaders() {
-        return headers;
-    }
-
-    public InputStream getBody() {
-        return body;
-    }
+    InputStream getBody();
 }
