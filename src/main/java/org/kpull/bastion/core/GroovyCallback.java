@@ -19,15 +19,25 @@ public class GroovyCallback implements Callback {
         this.groovyScript = groovyScript;
     }
 
+//    @Override
+//    public void execute(int statusCode, ExecutionContext context) {
+//        if (!Strings.isNullOrEmpty(groovyScript)) {
+//            Binding binding = new Binding();
+//            binding.setVariable("context", context);
+//            binding.setVariable("httpRequest", context.getHttpRequest());
+//            binding.setVariable("httpResponse", context.getHttpResponse());
+//            binding.setVariable("jsonResponseBody", context.getJsonResponseBody());
+//            binding.setVariable("model", context.getResponseModel());
+//            GroovyShell groovy = new GroovyShell(binding);
+//            groovy.evaluate(groovyScript);
+//        }
+//    }
+
     @Override
-    public void execute(int statusCode, ExecutionContext context) {
+    public void execute(int statusCode, Object model) {
         if (!Strings.isNullOrEmpty(groovyScript)) {
             Binding binding = new Binding();
-            binding.setVariable("context", context);
-            binding.setVariable("httpRequest", context.getHttpRequest());
-            binding.setVariable("httpResponse", context.getHttpResponse());
-            binding.setVariable("jsonResponseBody", context.getJsonResponseBody());
-            binding.setVariable("model", context.getResponseModel());
+            binding.setVariable("model", model);
             GroovyShell groovy = new GroovyShell(binding);
             groovy.evaluate(groovyScript);
         }

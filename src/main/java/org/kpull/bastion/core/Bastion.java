@@ -87,10 +87,12 @@ public class Bastion {
 
         public AssertedApiResponse<Object> thenAssert(Assertions<Object> assertions) {
             this.assertions = assertions;
+            return new AssertedApiResponse<>();
         }
 
         public CallbackedApiResponse<Object> thenDo(Callback<Object> callback) {
             this.callback = callback;
+            return new CallbackedApiResponse<>();
         }
 
         public void call() {
@@ -104,6 +106,7 @@ public class Bastion {
 
         private M model;
         private Assertions<M> assertions;
+        private Callback<M> callback;
 
         BoundApiResponse(Response response) {
             this.response = response;
@@ -111,20 +114,26 @@ public class Bastion {
 
         public AssertedApiResponse<M> thenAssert(Assertions<M> assertions) {
             this.assertions = assertions;
+            return new AssertedApiResponse<>();
         }
 
         public CallbackedApiResponse<M> thenDo(Callback<M> callback) {
             this.callback = callback;
+            return new CallbackedApiResponse<>();
         }
 
         public void call() {
-            callInternal();
+            callInternal(null, null, null, null, null);
         }
     }
 
     public class AssertedApiResponse<M> {
+
+        private Callback<M> callback;
+
         public CallbackedApiResponse<M> thenDo(Callback<M> callback) {
             this.callback = callback;
+            return new CallbackedApiResponse<>();
         }
 
         public void call() {
