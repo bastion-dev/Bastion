@@ -1,14 +1,12 @@
 package org.kpull.bastion.core;
 
-import org.kpull.bastion.runner.ExecutionContext;
-
 /**
  *
  */
 @FunctionalInterface
 public interface Callback<M> {
 
-    Callback NO_OPERATION_CALLBACK = (statusCode, context) -> {
+    Callback NO_OPERATION_CALLBACK = (statusCode, response, context) -> {
     };
 
     @SuppressWarnings("unchecked")
@@ -16,5 +14,5 @@ public interface Callback<M> {
         return (Callback<M>) NO_OPERATION_CALLBACK;
     }
 
-    void execute(int statusCode, M model);
+    void execute(int statusCode, ModelResponse<? extends M> response, M model);
 }

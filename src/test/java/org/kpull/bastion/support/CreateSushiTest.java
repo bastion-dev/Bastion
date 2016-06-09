@@ -10,17 +10,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@RunWith(BastionRunner.class)
 public class CreateSushiTest extends TestWithEmbeddedServer {
 
-    private String someVar;
-
     @Test
     public void testCreateSushi_Success() {
         Bastion.api("Successfully create sushi", new CreateSushiRequest())
                 .bind(Sushi.class)
-                .withAssertions((statusCode, model) -> {
+                .withAssertions((statusCode, response, model) -> {
+                    assertThat(response.getContentType().isPresent()).isTrue();
+                    assertThat(response.getContentType().get().getMimeType()).isEqualToIgnoringCase("application/json");
                     assertThat(statusCode).isEqualTo(201);
                     assertThat(model.getName()).isEqualTo("happiness");
                 })
-                .thenDo((statusCode, model) -> {
+                .thenDo((statusCode, response, model) -> {
                     // do stuff
                 })
                 .call();

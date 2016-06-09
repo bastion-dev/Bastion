@@ -58,6 +58,9 @@ public class RequestExecutor {
     }
 
     private void applyHeaders() {
+        if (!bastionRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type"))) {
+            executableRequest.header("Content-type", bastionRequest.contentType().toString());
+        }
         bastionRequest.headers().stream().forEach(header -> executableRequest.header(header.getName(), header.getValue()));
     }
 
@@ -67,7 +70,7 @@ public class RequestExecutor {
 
     private void applyBody() {
         if (executableRequest instanceof HttpRequestWithBody) {
-            if (bastionRequest.contentType().equals(ContentType.APPLICATION_JSON)) {
+            if (bastionRequest.contentType().getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
                 ((HttpRequestWithBody) executableRequest).body(new Gson().toJson(bastionRequest.body()));
             } else {
                 ((HttpRequestWithBody) executableRequest).body(bastionRequest.body().toString());

@@ -33,7 +33,7 @@ public class GroovyCallback implements Callback<Object> {
 //    }
 
     @Override
-    public void execute(int statusCode, Object model) {
+    public void execute(int statusCode, ModelResponse<?> response, Object model) {
         if (!Strings.isNullOrEmpty(groovyScript)) {
             // TODO: Fill this in
             Binding binding = new Binding();

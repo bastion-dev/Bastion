@@ -1,14 +1,12 @@
 package org.kpull.bastion.core;
 
-import org.kpull.bastion.runner.ExecutionContext;
-
 /**
  *
  */
 @FunctionalInterface
 public interface Assertions<M> {
 
-    Assertions NO_ASSERTIONS = ((statusCode, model) -> {
+    Assertions NO_ASSERTIONS = ((statusCode, response, model) -> {
     });
 
     @SuppressWarnings("unchecked")
@@ -16,6 +14,6 @@ public interface Assertions<M> {
         return (Assertions<M>) NO_ASSERTIONS;
     }
 
-    void execute(int statusCode, M model);
+    void execute(int statusCode, ModelResponse<? extends M> response, M model);
 
 }

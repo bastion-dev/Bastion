@@ -58,8 +58,9 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
             } else {
                 model = null;
             }
-            assertions.execute(response.getStatusCode(), model);
-            callback.execute(response.getStatusCode(), model);
+            ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
+            assertions.execute(response.getStatusCode(), modelResponse, model);
+            callback.execute(response.getStatusCode(), modelResponse, model);
         } catch (AssertionError e) {
             notifyListenersCallFailed(new BastionFailureEvent(e));
         } catch (Throwable t) {
