@@ -1,5 +1,6 @@
 package org.kpull.bastion.core;
 
+import org.apache.commons.lang.StringUtils;
 import org.kpull.bastion.core.builder.AssertionsBuilder;
 import org.kpull.bastion.core.builder.BastionBuilder;
 import org.kpull.bastion.core.builder.CallbackBuilder;
@@ -45,9 +46,17 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         bastionListenerCollection.add(newListener);
     }
 
+    private String getDescriptiveText() {
+        if (StringUtils.isNotEmpty(message)) {
+            return request.name() + " - " + message;
+        } else {
+            return request.name();
+        }
+    }
+
     private void callInternal() {
         try {
-            notifyListenersCallStarted(new BastionStartedEvent());
+            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
             Response response = new RequestExecutor(request).execute();
             MODEL model;
             if (modelType != null) {
@@ -62,11 +71,11 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
             assertions.execute(response.getStatusCode(), modelResponse, model);
             callback.execute(response.getStatusCode(), modelResponse, model);
         } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(e));
+            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), e));
         } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(t));
+            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), t));
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent());
+            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText()));
         }
     }
 

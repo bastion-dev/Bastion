@@ -5,4 +5,7 @@ package org.kpull.bastion.core.event;
  */
 public class BastionStartedEvent extends BastionEvent {
 
+    public BastionStartedEvent(String requestMessage) {
+        super(requestMessage);
+    }
 }

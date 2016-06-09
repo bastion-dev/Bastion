@@ -3,11 +3,12 @@ package org.kpull.bastion.core.event;
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class BastionErrorEvent {
+public class BastionErrorEvent extends BastionEvent {
 
     private Throwable throwable;
 
-    public BastionErrorEvent(Throwable throwable) {
+    public BastionErrorEvent(String requestMessage, Throwable throwable) {
+        super(requestMessage);
         this.throwable = throwable;
     }
 
