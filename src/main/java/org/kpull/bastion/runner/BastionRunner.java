@@ -10,6 +10,7 @@ import org.kpull.bastion.core.Bastion;
 import org.kpull.bastion.core.BastionFactory;
 import org.kpull.bastion.core.event.*;
 import org.kpull.bastion.core.model.GsonResponseModelConverter;
+import org.kpull.bastion.core.model.StringResponseModelConverter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,6 +28,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
         BastionFactory.setDefaultBastionFactory(new BastionFactory() {
             @Override
             protected void prepareBastion(Bastion<?> bastion) {
+                bastion.registerModelConverter(new StringResponseModelConverter());
                 bastion.registerModelConverter(new GsonResponseModelConverter());
                 bastion.registerListener(BastionRunner.this);
             }

@@ -17,8 +17,9 @@ public abstract class BastionFactory {
         BastionFactory.defaultBastionFactory = defaultBastionFactory;
     }
 
-    public Bastion<Object> getBastion(String message, Request request) {
-        Bastion<Object> bastion = new Bastion<>(message, request);
+    public Bastion<String> getBastion(String message, Request request) {
+        Bastion<String> bastion = new Bastion<>(message, request);
+        bastion.bind(String.class);
         prepareBastion(bastion);
         return bastion;
     }
