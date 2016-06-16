@@ -16,12 +16,6 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-/**
- * The main class used for creating Bastion tests. This class is meant to be used as a fluent builder. Each Bastion test
- * has a descriptive message, a request
- *
- * @param <MODEL>
- */
 public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersRegistrar, BastionEventPublisher {
 
     private String message;
