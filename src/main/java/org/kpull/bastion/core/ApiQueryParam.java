@@ -3,7 +3,8 @@ package org.kpull.bastion.core;
 import java.util.Objects;
 
 /**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ * Simple data structure for holding a single instance of an HTTP request query parameter. Query parameters are provided
+ * as part of a requests URL following the question mark symbol.
  */
 public class ApiQueryParam {
 

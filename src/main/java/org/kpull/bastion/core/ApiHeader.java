@@ -3,7 +3,7 @@ package org.kpull.bastion.core;
 import java.util.Objects;
 
 /**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ * Simple data structure for holding a single instance of an HTTP response header.
  */
 public class ApiHeader {
 

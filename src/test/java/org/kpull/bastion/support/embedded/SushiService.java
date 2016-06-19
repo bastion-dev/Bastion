@@ -12,8 +12,17 @@ import java.util.concurrent.atomic.AtomicLong;
 import static java.util.stream.Collectors.toList;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static org.apache.commons.lang.exception.ExceptionUtils.getRootCauseMessage;
-import static org.kpull.bastion.support.embedded.SushiError.*;
-import static spark.Spark.*;
+import static org.kpull.bastion.support.embedded.SushiError.INTERNAL_SERVER_ERROR;
+import static org.kpull.bastion.support.embedded.SushiError.INVALID_ENTITY;
+import static org.kpull.bastion.support.embedded.SushiError.NOT_AUTHENTICATED;
+import static org.kpull.bastion.support.embedded.SushiError.NOT_FOUND;
+import static spark.Spark.after;
+import static spark.Spark.before;
+import static spark.Spark.delete;
+import static spark.Spark.exception;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
 
 /**
  * A sushi based testing service that contains basic API functionality using {@link Spark} as a lightweight web service framework.
@@ -78,11 +87,9 @@ public class SushiService {
 
         exception(RuntimeException.class, (ex, req, res) -> res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res, getRootCauseMessage(ex)))));
         exception(JsonParseException.class, (ex, req, res) -> res.body(json.render(INVALID_ENTITY.toResponse(res, getRootCauseMessage(ex)))));
-        System.out.println("Sushi Service: Started on port: " + port);
     }
 
     public void stop() {
-        System.out.println("Sushi Service: Stopping.");
         Spark.stop();
     }
 

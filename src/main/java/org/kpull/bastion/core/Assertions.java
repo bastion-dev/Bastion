@@ -1,13 +1,19 @@
 package org.kpull.bastion.core;
 
-import org.kpull.bastion.runner.ExecutionContext;
-
 /**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ *
  */
 @FunctionalInterface
-public interface Assertions<M extends Object> {
+public interface Assertions<M> {
 
-    void assertions(int statusCode, M model, ExecutionContext context);
+    Assertions NO_ASSERTIONS = ((statusCode, response, model) -> {
+    });
+
+    @SuppressWarnings("unchecked")
+    static <M> Assertions<M> noAssertions() {
+        return (Assertions<M>) NO_ASSERTIONS;
+    }
+
+    void execute(int statusCode, ModelResponse<? extends M> response, M model);
 
 }

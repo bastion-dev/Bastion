@@ -1,272 +1,146 @@
 package org.kpull.bastion.core;
 
-import com.google.gson.Gson;
-import org.apache.commons.io.FileUtils;
-import org.jglue.fluentjson.JsonArrayBuilder;
-import org.jglue.fluentjson.JsonBuilderFactory;
-import org.jglue.fluentjson.JsonObjectBuilder;
+import org.apache.commons.lang.StringUtils;
+import org.kpull.bastion.core.builder.AssertionsBuilder;
+import org.kpull.bastion.core.builder.BastionBuilder;
+import org.kpull.bastion.core.builder.CallbackBuilder;
+import org.kpull.bastion.core.builder.ExecuteRequestBuilder;
+import org.kpull.bastion.core.event.*;
+import org.kpull.bastion.core.model.ModelConvertersRegistrar;
+import org.kpull.bastion.core.model.ResponseModelConverter;
+import org.kpull.bastion.external.Request;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
-/**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
- */
-public class Bastion {
+public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersRegistrar, BastionEventPublisher {
 
-    private static Gson gson = new Gson();
+    private String message;
+    private Collection<BastionListener> bastionListenerCollection;
+    private Collection<ResponseModelConverter> modelConverters;
+    private Request request;
+    private Class<MODEL> modelType;
+    private Assertions<? super MODEL> assertions;
+    private Callback<? super MODEL> callback;
 
-    private String name = "";
-    private ApiEnvironment environment = new ApiEnvironment();
-    private List<ApiCall> apiCalls = new LinkedList<>();
-    private Bastion() {
+    Bastion(String message, Request request) {
+        Objects.requireNonNull(message);
+        Objects.requireNonNull(request);
+        bastionListenerCollection = new LinkedList<>();
+        modelConverters = new LinkedList<>();
+        this.message = message;
+        this.request = request;
+        this.modelType = null;
+        this.assertions = Assertions.noAssertions();
+        this.callback = Callback.noCallback();
     }
 
-    public static Bastion start() {
-        return new Bastion();
+    public static Bastion<String> api(String message, Request request) {
+        return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
-    public Bastion name(String name) {
-        Objects.requireNonNull(name);
-        this.name = name;
+    public void addBastionListener(BastionListener newListener) {
+        bastionListenerCollection.add(newListener);
+    }
+
+    private String getDescriptiveText() {
+        if (StringUtils.isNotEmpty(message)) {
+            return request.name() + " - " + message;
+        } else {
+            return request.name();
+        }
+    }
+
+    private void callInternal() {
+        Objects.requireNonNull(modelType, "Bastion instance was configured incorrectly. modelType cannot be null. Remember to bind your Bastion request to a modelType.");
+        try {
+            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
+            Response response = new RequestExecutor(request).execute();
+            MODEL model;
+            model = modelConverters.stream().filter(converter -> converter.handles(response, modelType))
+                    .map(converter -> converter.convert(response, modelType))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
+            ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
+            assertions.execute(response.getStatusCode(), modelResponse, model);
+            callback.execute(response.getStatusCode(), modelResponse, model);
+        } catch (AssertionError e) {
+            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), e));
+        } catch (Throwable t) {
+            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), t));
+        } finally {
+            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText()));
+        }
+    }
+
+    @Override
+    public void registerListener(BastionListener listener) {
+        bastionListenerCollection.add(listener);
+    }
+
+    @Override
+    public void notifyListenersCallStarted(BastionStartedEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callStarted(event));
+    }
+
+    @Override
+    public void notifyListenersCallFailed(BastionFailureEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callFailed(event));
+    }
+
+    @Override
+    public void notifyListenersCallError(BastionErrorEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callError(event));
+    }
+
+    @Override
+    public void notifyListenersCallFinished(BastionFinishedEvent event) {
+        Objects.requireNonNull(event);
+        bastionListenerCollection.forEach((listener) -> listener.callFinished(event));
+    }
+
+    @Override
+    public void call() {
+        callInternal();
+    }
+
+    @Override
+    public Response getResponse() {
+        return null;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
+        Objects.requireNonNull(modelType);
+        Bastion<T> castedBuilder = (Bastion<T>) this;
+        castedBuilder.modelType = modelType;
+        return castedBuilder;
+    }
+
+    @Override
+    public CallbackBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions) {
+        Objects.requireNonNull(assertions);
+        this.assertions = assertions;
         return this;
     }
 
-    public ApiEnvironmentBuilder environment() {
-        return new ApiEnvironmentBuilder();
+    @Override
+    public ExecuteRequestBuilder thenDo(Callback<? super MODEL> callback) {
+        Objects.requireNonNull(callback);
+        this.callback = callback;
+        return this;
     }
 
-    public ApiCallBuilder call(String name) {
-        return new ApiCallBuilder(name);
-    }
-
-    public ApiSuite build() {
-        return new ApiSuite(name, environment, apiCalls);
-    }
-
-    public class ApiEnvironmentBuilder {
-        private Map<String, String> entries = new HashMap<>();
-
-        private ApiEnvironmentBuilder() {
-        }
-
-        public ApiEnvironmentBuilder entry(String key, Object value) {
-            Objects.requireNonNull(key);
-            Objects.requireNonNull(value);
-            entries.put(key, value.toString());
-            return this;
-        }
-
-        public Bastion done() {
-            environment.putAll(entries);
-            return Bastion.this;
-        }
-    }
-
-    public class ApiCallBuilder {
-        private String name = "";
-        private String description = "";
-        private ApiRequest request = new ApiRequest("", "", Collections.emptyList(), "", "", Collections.emptyList());
-        private ApiResponse response = new ApiResponse(Collections.emptyList(), 0, "", "");
-        private Class<?> responseModel = null;
-        private Assertions<?> assertions = null;
-        private Callback postCallExecution = Callback.NO_OPERATION_CALLBACK;
-
-        private ApiCallBuilder(String name) {
-            Objects.requireNonNull(name);
-            this.name = name;
-        }
-
-        public ApiCallBuilder description(String description) {
-            Objects.requireNonNull(description);
-            this.description = description;
-            return this;
-        }
-
-        public PostCallScriptBuilder afterwardsExecute() {
-            return new PostCallScriptBuilder();
-        }
-
-        public <M> ResponseModelBuilder<M> bind(Class<M> responseModel) {
-            Objects.requireNonNull(responseModel);
-            this.responseModel = responseModel;
-            return new ResponseModelBuilder<>();
-        }
-
-        public ApiRequestBuilder request(String method, String url) {
-            return new ApiRequestBuilder(method, url);
-        }
-
-        public ApiResponseBuilder response() {
-            return new ApiResponseBuilder();
-        }
-
-        public Bastion done() {
-            apiCalls.add(new ApiCall(name, description, request, response, responseModel, assertions, postCallExecution));
-            return Bastion.this;
-        }
-
-        public class PostCallScriptBuilder {
-
-            public ApiCallBuilder nothing() {
-                postCallExecution = Callback.NO_OPERATION_CALLBACK;
-                return ApiCallBuilder.this;
-            }
-
-            public ApiCallBuilder groovy(String groovyScript) {
-                Objects.requireNonNull(groovyScript);
-                postCallExecution = new GroovyCallback(groovyScript);
-                return ApiCallBuilder.this;
-            }
-
-            public ApiCallBuilder groovyFromFile(File groovyFile) {
-                try {
-                    Objects.requireNonNull(groovyFile);
-                    postCallExecution = new GroovyCallback(FileUtils.readFileToString(groovyFile));
-                    return ApiCallBuilder.this;
-                } catch (IOException e) {
-                    throw new IllegalStateException(format("Cannot open file: %s", groovyFile), e);
-                }
-            }
-
-            public ApiCallBuilder callback(Callback callback) {
-                Objects.requireNonNull(callback);
-                ApiCallBuilder.this.postCallExecution = callback;
-                return ApiCallBuilder.this;
-            }
-        }
-
-        public class ResponseModelBuilder<M> {
-
-            public ApiCallBuilder assertions(Assertions<M> assertions) {
-                Objects.requireNonNull(assertions);
-                ApiCallBuilder.this.assertions = assertions;
-                return ApiCallBuilder.this;
-            }
-
-            public ApiCallBuilder noAssertions() {
-                return ApiCallBuilder.this;
-            }
-
-        }
-
-        public class ApiRequestBuilder {
-            private String method = "";
-            private String url = "";
-            private List<ApiHeader> headers = new LinkedList<>();
-            private List<ApiQueryParam> queryParams = new LinkedList<>();
-            private String type = "";
-            private String body = "";
-
-            private ApiRequestBuilder(String method, String url) {
-                Objects.requireNonNull(method);
-                Objects.requireNonNull(url);
-                this.method = method;
-                this.url = url;
-            }
-
-            public ApiRequestBuilder type(String type) {
-                Objects.requireNonNull(type);
-                this.type = type;
-                return this;
-            }
-
-            public ApiRequestBuilder body(String body) {
-                Objects.requireNonNull(body);
-                this.body = body;
-                return this;
-            }
-
-            public ApiRequestBuilder bodyFromModel(Object model) {
-                Objects.requireNonNull(model);
-                this.body = gson.toJson(model);
-                return this;
-            }
-
-            public ApiRequestBuilder bodyFromJsonObject(Function<JsonObjectBuilder<?, ?>, String> jsonBuilder) {
-                Objects.requireNonNull(jsonBuilder);
-                this.body = jsonBuilder.apply(JsonBuilderFactory.buildObject());
-                return this;
-            }
-
-            public ApiRequestBuilder bodyFromJsonArray(Function<JsonArrayBuilder, String> jsonBuilder) {
-                Objects.requireNonNull(jsonBuilder);
-                this.body = jsonBuilder.apply(JsonBuilderFactory.buildArray());
-                return this;
-            }
-
-            public ApiRequestBuilder bodyFromFile(File body) {
-                try {
-                    Objects.requireNonNull(body);
-                    this.body = FileUtils.readFileToString(body);
-                    return this;
-                } catch (IOException e) {
-                    throw new IllegalStateException(format("Cannot open file: %s", body), e);
-                }
-            }
-
-            public ApiRequestBuilder header(String name, String value) {
-                Objects.requireNonNull(name);
-                Objects.requireNonNull(value);
-                headers.add(new ApiHeader(name, value));
-                return this;
-            }
-
-            public ApiRequestBuilder queryParam(String name, String value) {
-                Objects.requireNonNull(name);
-                Objects.requireNonNull(value);
-                queryParams.add(new ApiQueryParam(name, value));
-                return this;
-            }
-
-            public ApiCallBuilder done() {
-                request = new ApiRequest(method, url, headers, type, body, queryParams);
-                return ApiCallBuilder.this;
-            }
-        }
-
-        public class ApiResponseBuilder {
-            private List<ApiHeader> headers = new LinkedList<>();
-            private int statusCode = 0;
-            private String type = "";
-            private String body = "";
-
-            private ApiResponseBuilder() {
-            }
-
-            public ApiResponseBuilder statusCode(int statusCode) {
-                Objects.requireNonNull(statusCode);
-                this.statusCode = statusCode;
-                return this;
-            }
-
-            public ApiResponseBuilder type(String type) {
-                Objects.requireNonNull(type);
-                this.type = type;
-                return this;
-            }
-
-            public ApiResponseBuilder body(String body) {
-                Objects.requireNonNull(body);
-                this.body = body;
-                return this;
-            }
-
-            public ApiResponseBuilder header(String name, String value) {
-                Objects.requireNonNull(name);
-                Objects.requireNonNull(value);
-                headers.add(new ApiHeader(name, value));
-                return this;
-            }
-
-            public ApiCallBuilder done() {
-                response = new ApiResponse(headers, 0, type, body);
-                return ApiCallBuilder.this;
-            }
-        }
+    @Override
+    public void registerModelConverter(ResponseModelConverter converter) {
+        Objects.requireNonNull(converter);
+        modelConverters.add(converter);
     }
 }
