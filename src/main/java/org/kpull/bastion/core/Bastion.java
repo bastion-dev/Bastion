@@ -55,18 +55,15 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     }
 
     private void callInternal() {
+        Objects.requireNonNull(modelType, "Bastion instance was configured incorrectly. modelType cannot be null. Remember to bind your Bastion request to a modelType.");
         try {
             notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
             Response response = new RequestExecutor(request).execute();
             MODEL model;
-            if (modelType != null) {
-                model = modelConverters.stream().filter(converter -> converter.handles(response, modelType))
-                        .map(converter -> converter.convert(response, modelType))
-                        .findFirst()
-                        .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
-            } else {
-                model = null;
-            }
+            model = modelConverters.stream().filter(converter -> converter.handles(response, modelType))
+                    .map(converter -> converter.convert(response, modelType))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
             ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
             assertions.execute(response.getStatusCode(), modelResponse, model);
             callback.execute(response.getStatusCode(), modelResponse, model);

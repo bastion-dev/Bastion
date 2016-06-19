@@ -8,9 +8,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.kpull.bastion.core.Bastion;
 import org.kpull.bastion.core.BastionFactory;
+import org.kpull.bastion.core.DefaultBastionFactory;
 import org.kpull.bastion.core.event.*;
-import org.kpull.bastion.core.model.GsonResponseModelConverter;
-import org.kpull.bastion.core.model.StringResponseModelConverter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,11 +24,10 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     public BastionRunner(Class<?> testClass) throws InitializationError {
         super(testClass);
-        BastionFactory.setDefaultBastionFactory(new BastionFactory() {
+        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory() {
             @Override
             protected void prepareBastion(Bastion<?> bastion) {
-                bastion.registerModelConverter(new StringResponseModelConverter());
-                bastion.registerModelConverter(new GsonResponseModelConverter());
+                registerModelConverters(bastion);
                 bastion.registerListener(BastionRunner.this);
             }
         });
