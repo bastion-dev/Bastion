@@ -1,4 +1,4 @@
-package org.kpull.bastion.runner;
+package org.kpull.bastion.junit;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
