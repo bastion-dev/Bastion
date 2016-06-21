@@ -1,11 +1,12 @@
 package org.kpull.bastion.core;
 
-import org.apache.commons.lang.StringUtils;
+import com.google.common.base.Strings;
 import org.kpull.bastion.core.builder.AssertionsBuilder;
 import org.kpull.bastion.core.builder.BastionBuilder;
 import org.kpull.bastion.core.builder.CallbackBuilder;
 import org.kpull.bastion.core.builder.ExecuteRequestBuilder;
 import org.kpull.bastion.core.event.*;
+import org.kpull.bastion.core.model.DecodingHints;
 import org.kpull.bastion.core.model.ModelConvertersRegistrar;
 import org.kpull.bastion.core.model.ResponseModelConverter;
 import org.kpull.bastion.external.Request;
@@ -47,10 +48,10 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     }
 
     private String getDescriptiveText() {
-        if (StringUtils.isNotEmpty(message)) {
-            return request.name() + " - " + message;
-        } else {
+        if (Strings.isNullOrEmpty(message)) {
             return request.name();
+        } else {
+            return request.name() + " - " + message;
         }
     }
 
@@ -59,11 +60,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         try {
             notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
             Response response = new RequestExecutor(request).execute();
-            MODEL model;
-            model = modelConverters.stream().filter(converter -> converter.handles(response, modelType))
-                    .map(converter -> converter.convert(response, modelType))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError(format("Could not parse response into model object of type %s", modelType.getName())));
+            MODEL model = decodeModel(response);
             ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
             assertions.execute(response.getStatusCode(), modelResponse, model);
             callback.execute(response.getStatusCode(), modelResponse, model);
@@ -74,6 +71,23 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         } finally {
             notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText()));
         }
+    }
+
+    private MODEL decodeModel(Response response) {
+        MODEL model;
+        DecodingHints decodingHints = new DecodingHints(modelType);
+        Object decodedResponseModel = modelConverters.stream().map(converter -> converter.decode(response, decodingHints).orElse(null)).findFirst().orElse(null);
+        if (modelInstanceOfRequiredType(decodedResponseModel)) {
+            //noinspection unchecked
+            model = (MODEL) decodedResponseModel;
+        } else {
+            throw new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()));
+        }
+        return model;
+    }
+
+    private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
+        return modelType.isAssignableFrom(decodedResponseModel.getClass());
     }
 
     @Override

@@ -1,9 +1,14 @@
 package org.kpull.bastion.core.model;
 
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.CharStreams;
+import org.apache.http.Consts;
+import org.apache.http.entity.ContentType;
 import org.kpull.bastion.core.Response;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Optional;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
@@ -11,16 +16,13 @@ import java.io.IOException;
 public class StringResponseModelConverter implements ResponseModelConverter {
 
     @Override
-    public boolean handles(Response response, Class<?> targetType) {
-        return String.class.isAssignableFrom(targetType);
-    }
-
-    @Override
-    public <MODEL> MODEL convert(Response response, Class<MODEL> targetType) {
+    public Optional<?> decode(Response response, DecodingHints hints) {
         try {
-            return (MODEL) IOUtils.toString(response.getBody());
+            Charset responseCharset = response.getContentType().map(ContentType::getCharset).orElse(Consts.ISO_8859_1);
+            return Optional.of(CharStreams.toString(new InputStreamReader(response.getBody(), responseCharset)));
         } catch (IOException e) {
-            throw new IllegalArgumentException("Error reading response data", e);
+            return Optional.empty();
         }
     }
+
 }

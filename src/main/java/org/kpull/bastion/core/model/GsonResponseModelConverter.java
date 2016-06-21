@@ -1,29 +1,24 @@
 package org.kpull.bastion.core.model;
 
 import com.google.gson.Gson;
+import org.apache.http.Consts;
 import org.apache.http.entity.ContentType;
 import org.kpull.bastion.core.Response;
 
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Objects;
+import java.util.Optional;
 
 public class GsonResponseModelConverter implements ResponseModelConverter {
 
     @Override
-    public <MODEL> MODEL convert(Response response, Class<MODEL> targetType) {
-        Objects.requireNonNull(response);
-        Objects.requireNonNull(targetType);
-        Charset charset = response.getContentType().orElse(ContentType.APPLICATION_JSON).getCharset();
-        if (charset == null) {
-            charset = Charset.defaultCharset();
+    public Optional<?> decode(Response response, DecodingHints hints) {
+        ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
+        if (!responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
+            return Optional.empty();
         }
+        Charset responseCharset = responseContentType.getCharset() != null ? responseContentType.getCharset() : Consts.ISO_8859_1;
         Gson gson = new Gson();
-        return gson.fromJson(new InputStreamReader(response.getBody(), charset), targetType);
-    }
-
-    @Override
-    public boolean handles(Response response, Class<?> targetType) {
-        return response.getContentType().isPresent() && response.getContentType().get().getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType());
+        return Optional.ofNullable(gson.fromJson(new InputStreamReader(response.getBody(), responseCharset), hints.getModelType()));
     }
 }
