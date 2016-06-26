@@ -6,6 +6,8 @@ Bastion supports keeping state between your different API calls so that you can 
 fully-automated end-to-end tests for your APIs which contain more than one call (eg. create 
 a user then login with *that* user).
 
+# Usage
+
 # Building
 
 Use Maven to build Bastion and run the associated tests. After checking out the repository 

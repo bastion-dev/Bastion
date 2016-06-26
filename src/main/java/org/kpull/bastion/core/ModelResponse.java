@@ -6,6 +6,12 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Represents an HTTP response which also has a response model object. The response model is bound from the content/body
+ * of the HTTP response.
+ *
+ * @param <MODEL> The model object type which was bound for this HTTP response.
+ */
 public class ModelResponse<MODEL> implements Response {
 
     private Response response;
