@@ -6,9 +6,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Optional;
 
-/**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
- */
 public interface Response {
     Optional<ContentType> getContentType();
 

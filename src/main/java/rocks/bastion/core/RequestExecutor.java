@@ -13,6 +13,9 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Responsible for executing a Bastion remote request built using the {@link Bastion} builder and prepare a response object.
+ */
 public class RequestExecutor {
 
     private Request bastionRequest;
