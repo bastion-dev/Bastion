@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.kpull</groupId>
+    <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -19,6 +19,14 @@
         <developer>
             <id>FrelliBB</id>
             <name>Francesco Elia Borg Bonaci</name>
+        </developer>
+        <developer>
+            <id>maria-camenzuli</id>
+            <name>Maria Camenzuli</name>
+        </developer>
+        <developer>
+            <id>chiarafelicesc</id>
+            <name>Chiara Felice Sant Cassia</name>
         </developer>
     </developers>
 
