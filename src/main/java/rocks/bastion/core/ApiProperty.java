@@ -27,7 +27,6 @@ public class ApiProperty {
      * @return This property objects's current name.
      */
     public String getName() {
-
         return name;
     }
 

@@ -9,7 +9,7 @@ import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
 import rocks.bastion.core.model.ModelConvertersRegistrar;
 import rocks.bastion.core.model.ResponseModelConverter;
-import rocks.bastion.external.Request;
+import rocks.bastion.core.request.Request;
 
 import java.util.Collection;
 import java.util.LinkedList;

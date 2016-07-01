@@ -1,6 +1,6 @@
 package rocks.bastion.core;
 
-import rocks.bastion.external.Request;
+import rocks.bastion.core.request.Request;
 
 import java.util.Objects;
 
