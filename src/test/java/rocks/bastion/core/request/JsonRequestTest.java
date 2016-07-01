@@ -6,9 +6,6 @@ import rocks.bastion.external.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
- */
 public class JsonRequestTest {
 
     @Test
