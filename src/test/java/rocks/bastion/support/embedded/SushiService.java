@@ -1,7 +1,7 @@
 package rocks.bastion.support.embedded;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import spark.ResponseTransformer;
 import spark.Spark;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.stream.Collectors.toList;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
-import static org.apache.commons.lang.exception.ExceptionUtils.getRootCauseMessage;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 import static rocks.bastion.support.embedded.SushiError.*;
 import static spark.Spark.*;
 

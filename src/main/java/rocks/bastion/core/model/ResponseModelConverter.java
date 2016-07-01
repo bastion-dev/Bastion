@@ -8,7 +8,7 @@ import java.util.Optional;
  * Interprets and decodes an HTTP response into a model object. Bastion will ask ResponseModelConverters to decode the
  * HTTP response if possible. If the response model converter is unable to decode the HTTP response into a Java object,
  * then it should return an {@link Optional#empty() empty Optional}.
- * <br/><br/>
+ * <br><br>
  * Together, a list of ResponseModelConverters will form a strategy for turning an arbitrary HTTP response to a usable
  * Java object usable in Bastion tests and assertions.
  */

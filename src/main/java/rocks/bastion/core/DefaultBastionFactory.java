@@ -9,7 +9,7 @@ import rocks.bastion.core.model.StringResponseModelConverter;
  * The default implementation of a {@link BastionFactory} which registers a basic set of {@link ResponseModelConverter model converters}. Also registers
  * an event listener to Bastion which will cause exceptions and errors thrown during a Bastion request to propagate up the
  * frame stack.
- * <br/><br/>
+ * <br><br>
  * The set of model converters which are registered by this factory are listed below: <ul>
  *     <li>{@link StringResponseModelConverter} - Binds the response to a {@link String} model by reading the content
  *     inside the HTTP response.
@@ -26,8 +26,8 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
     }
 
     protected void registerModelConverters(Bastion<?> bastion) {
-        bastion.registerModelConverter(new StringResponseModelConverter());
         bastion.registerModelConverter(new GsonResponseModelConverter());
+        bastion.registerModelConverter(new StringResponseModelConverter());
     }
 
     @Override

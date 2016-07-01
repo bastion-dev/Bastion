@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * Creates and configures an instance of the {@link Bastion} fluent builder. A single factory can be designated as the
- * <emph>Default</emph> factory which is used by the {@link Bastion#api(String, Request)} method. Subclasses will generally
+ * <i>Default</i> factory which is used by the {@link Bastion#api(String, Request)} method. Subclasses will generally
  * implement the {@link BastionFactory#prepareBastion(Bastion)} to further configure the instance with any additional
  * features necessary.
  */
