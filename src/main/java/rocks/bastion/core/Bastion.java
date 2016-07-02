@@ -1,6 +1,7 @@
 package rocks.bastion.core;
 
 import com.google.common.base.Strings;
+import rocks.bastion.core.assertions.Assertions;
 import rocks.bastion.core.builder.AssertionsBuilder;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.CallbackBuilder;

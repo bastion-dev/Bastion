@@ -1,4 +1,8 @@
-package rocks.bastion.core;
+package rocks.bastion.core.assertions;
+
+import rocks.bastion.core.Bastion;
+import rocks.bastion.core.Callback;
+import rocks.bastion.core.ModelResponse;
 
 /**
  * Specifies assertions to apply to a response model received after performing a Bastion request. The assertions
@@ -34,7 +38,7 @@ public interface Assertions<M> {
      * Asserts that the given response, retrieved after Bastion performs an HTTP request, is correct. To indicate
      * that the response did not pass assertions, this method throws {@link AssertionError}. Note that this is important
      * because Bastion makes a distinction between a test containing an error (ie. any exception which is not {@linkplain AssertionError})
-     * and one which has a failed assertion. This different will be made visible in a testing framework which is running a Bastion test.
+     * and one which has a failed assertion. This difference will be made visible in a testing framework which is running a Bastion test.
      *
      * @param statusCode The HTTP status code received for the response.
      * @param response   A representation of the HTTP response which was received.

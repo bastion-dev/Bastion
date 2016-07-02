@@ -1,6 +1,6 @@
 package rocks.bastion.core.builder;
 
-import rocks.bastion.core.Assertions;
+import rocks.bastion.core.assertions.Assertions;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
