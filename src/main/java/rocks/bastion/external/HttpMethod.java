@@ -39,4 +39,9 @@ public class HttpMethod {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }
