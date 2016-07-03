@@ -16,6 +16,9 @@ import rocks.bastion.core.request.InvalidJsonException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 import static java.lang.String.format;
@@ -35,6 +38,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
     private int expectedStatusCode;
     private ContentType contentType;
     private String expectedJson;
+    private Collection<String> ignoredFieldsValue;
 
     private JsonResponseAssertions(int expectedStatusCode, String expectedJson) {
         Objects.requireNonNull(expectedJson);
@@ -42,6 +46,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
         this.expectedStatusCode = expectedStatusCode;
         this.contentType = ContentType.APPLICATION_JSON;
         this.expectedJson = expectedJson;
+        this.ignoredFieldsValue = new HashSet<>();
 
         validateExpectedJson();
     }
@@ -66,12 +71,35 @@ public class JsonResponseAssertions implements Assertions<Object> {
         }
     }
 
-    private void validateExpectedJson() throws InvalidJsonException {
-        try {
-            new JsonParser().parse(expectedJson);
-        } catch (JsonParseException parseException) {
-            throw new InvalidJsonException(parseException, this.expectedJson);
-        }
+    /**
+     * Ignore a particular field's value in the actual JSON response. Notice that Bastion will still fail the assertion if a
+     * JSON field is missing, is in the wrong place, or is extra. Ignoring field value using this method is useful for
+     * randomly generated values in the response, such as IDs or timestamps.
+     * <br><br>
+     * Implementation wise, when performing the JSON patch diff between the expected and the actual responses, Bastion will ignore
+     * any patch operations which have {@code op} {@code "replace"} and a field which is one of the ignored fields.
+     *
+     * @param field The field name to ignore
+     * @return This object (for method chaining)
+     */
+    public JsonResponseAssertions ignoreFieldValue(String field) {
+        Objects.requireNonNull(field);
+        ignoredFieldsValue.add(field);
+        return this;
+    }
+
+    /**
+     * The assertions object will initially check that the content-type header returned by the actual response is
+     * "application/json". This can be overriden to check for a different content-type header using this method. Despite
+     * this, this assertions object will still try to interpret the body as if it were JSON text.
+     *
+     * @param contentType The expected content-type header
+     * @return This object (for method chaining)
+     */
+    public JsonResponseAssertions overrideContentType(ContentType contentType) {
+        Objects.requireNonNull(contentType);
+        this.contentType = contentType;
+        return this;
     }
 
     @Override
@@ -86,6 +114,14 @@ public class JsonResponseAssertions implements Assertions<Object> {
         }
     }
 
+    private void validateExpectedJson() throws InvalidJsonException {
+        try {
+            new JsonParser().parse(expectedJson);
+        } catch (JsonParseException parseException) {
+            throw new InvalidJsonException(parseException, this.expectedJson);
+        }
+    }
+
     private void assertContentTypeHeader(ModelResponse<?> response) {
         Assert.assertTrue("Content-type exists in response", response.getContentType().isPresent());
         Assert.assertEquals("Content-type MIME type", contentType.getMimeType(), response.getContentType().get().getMimeType());
@@ -96,19 +132,21 @@ public class JsonResponseAssertions implements Assertions<Object> {
         JsonFactory factory = mapper.getFactory();
         JsonNode actualJsonTree = factory.createParser(response.getBody()).readValueAsTree();
         JsonNode expectedJsonTree = factory.createParser(expectedJson).readValueAsTree();
-        return JsonDiff.asJson(actualJsonTree, expectedJsonTree);
+        JsonNode jsonPatch = JsonDiff.asJson(actualJsonTree, expectedJsonTree);
+        removeReplaceOpsForIgnoredFields(jsonPatch);
+        return jsonPatch;
     }
 
-    /**
-     * The assertions object will initially check that the content-type header returned by the actual response is
-     * "application/json". This can be overriden to check for a different content-type header using this method. Despite
-     * this, this assertions object will still try to interpret the body as if it were JSON text.
-     *
-     * @param contentType The expected content-type header
-     */
-    public void overrideContentType(ContentType contentType) {
-        Objects.requireNonNull(contentType);
-        this.contentType = contentType;
+    private void removeReplaceOpsForIgnoredFields(JsonNode jsonPatch) {
+        Iterator<JsonNode> patchIterator = jsonPatch.iterator();
+        while (patchIterator.hasNext()) {
+            JsonNode patchOperation = patchIterator.next();
+            JsonNode operationType = patchOperation.get("op");
+            JsonNode pathName = patchOperation.get("path");
+            if (operationType.asText().equals("replace") && ignoredFieldsValue.contains(pathName.asText())) {
+                patchIterator.remove();
+            }
+        }
     }
 
 }

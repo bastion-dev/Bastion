@@ -1,12 +1,10 @@
 package rocks.bastion.core;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
-import org.apache.http.entity.ContentType;
 import rocks.bastion.core.request.Request;
 
 import java.io.InputStream;
@@ -73,11 +71,7 @@ public class RequestExecutor {
 
     private void applyBody() {
         if (executableRequest instanceof HttpRequestWithBody) {
-            if (bastionRequest.contentType().getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
-                ((HttpRequestWithBody) executableRequest).body(new Gson().toJson(bastionRequest.body()));
-            } else {
-                ((HttpRequestWithBody) executableRequest).body(bastionRequest.body().toString());
-            }
+            ((HttpRequestWithBody) executableRequest).body(bastionRequest.body().toString());
         }
     }
 

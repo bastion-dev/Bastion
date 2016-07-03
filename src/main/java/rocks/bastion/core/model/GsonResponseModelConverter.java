@@ -13,6 +13,9 @@ public class GsonResponseModelConverter implements ResponseModelConverter {
 
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {
+        if (hints.getModelType().equals(String.class)) {
+            return Optional.empty();
+        }
         ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
         if (!responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
             return Optional.empty();

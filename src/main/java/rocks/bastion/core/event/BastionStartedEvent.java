@@ -6,6 +6,6 @@ package rocks.bastion.core.event;
 public class BastionStartedEvent extends BastionEvent {
 
     public BastionStartedEvent(String requestMessage) {
-        super(requestMessage);
+        super(requestMessage, null);
     }
 }

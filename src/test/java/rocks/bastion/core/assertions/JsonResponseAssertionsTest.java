@@ -2,6 +2,7 @@ package rocks.bastion.core.assertions;
 
 import org.junit.Assert;
 import org.junit.Test;
+import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.RawResponse;
 import rocks.bastion.core.request.InvalidJsonException;
@@ -18,6 +19,13 @@ public class JsonResponseAssertionsTest {
     @Test(expected = InvalidJsonException.class)
     public void fromString_invalidJson_shouldThrowException() throws Exception {
         JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" ");
+    }
+
+    @Test
+    public void execute_ignoredField_shouldAssertSuccessfully() throws Exception {
+        JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }").ignoreFieldValue("/key");
+        ModelResponse<String> response = prepareModelResponse("{ \"key\":\"kyle1\", \"surname\":\"pullicino\" }");
+        assertions.execute(200, response, response.getModel());
     }
 
     @Test
@@ -59,7 +67,7 @@ public class JsonResponseAssertionsTest {
     }
 
     private ModelResponse<String> prepareModelResponse(String jsonContent) {
-        return new ModelResponse<>(new RawResponse(200, "OK", Collections.emptyList(), new ByteArrayInputStream(jsonContent.getBytes())),
+        return new ModelResponse<>(new RawResponse(200, "OK", Collections.singletonList(new ApiHeader("Content-type", "application/json")), new ByteArrayInputStream(jsonContent.getBytes())),
                 jsonContent);
     }
 }

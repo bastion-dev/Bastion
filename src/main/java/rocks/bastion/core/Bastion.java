@@ -60,19 +60,20 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
 
     private void callInternal() {
         Objects.requireNonNull(modelType, "Bastion instance was configured incorrectly. modelType cannot be null. Remember to bind your Bastion request to a modelType.");
+        ModelResponse<MODEL> modelResponse = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
             Response response = new RequestExecutor(request).execute();
             MODEL model = decodeModel(response);
-            ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
+            modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
         } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), e));
+            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
         } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), t));
+            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText()));
+            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
         }
     }
 
@@ -89,7 +90,13 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     private MODEL decodeModel(Response response) {
         MODEL model;
         DecodingHints decodingHints = new DecodingHints(modelType);
-        Object decodedResponseModel = modelConverters.stream().map(converter -> converter.decode(response, decodingHints).orElse(null)).findFirst().orElse(null);
+        Object decodedResponseModel = null;
+        for (ResponseModelConverter converter : modelConverters) {
+            decodedResponseModel = converter.decode(response, decodingHints).orElse(null);
+            if (decodedResponseModel != null) {
+                break;
+            }
+        }
         if (modelInstanceOfRequiredType(decodedResponseModel)) {
             //noinspection unchecked
             model = (MODEL) decodedResponseModel;

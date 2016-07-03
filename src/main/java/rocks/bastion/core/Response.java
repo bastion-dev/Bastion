@@ -15,5 +15,11 @@ public interface Response {
 
     Collection<ApiHeader> getHeaders();
 
+    /**
+     * Gets the response's body, ready for reading. The implementation does not guarantee that it will always return the
+     * state of the input stream
+     *
+     * @return
+     */
     InputStream getBody();
 }

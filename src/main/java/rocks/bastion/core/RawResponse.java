@@ -1,7 +1,10 @@
 package rocks.bastion.core;
 
+import com.google.common.io.ByteStreams;
 import org.apache.http.entity.ContentType;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Objects;
@@ -12,17 +15,21 @@ public class RawResponse implements Response {
     private int statusCode;
     private String statusText;
     private Collection<ApiHeader> headers;
-    private InputStream body;
+    private byte[] bodyContent;
 
     public RawResponse(int statusCode, String statusText, Collection<ApiHeader> headers, InputStream body) {
-        Objects.requireNonNull(statusCode);
-        Objects.requireNonNull(statusText);
-        Objects.requireNonNull(headers);
-        Objects.requireNonNull(body);
-        this.statusCode = statusCode;
-        this.statusText = statusText;
-        this.headers = headers;
-        this.body = body;
+        try {
+            Objects.requireNonNull(statusCode);
+            Objects.requireNonNull(statusText);
+            Objects.requireNonNull(headers);
+            Objects.requireNonNull(body);
+            this.statusCode = statusCode;
+            this.statusText = statusText;
+            this.headers = headers;
+            bodyContent = ByteStreams.toByteArray(body);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while reading the body input stream", e);
+        }
     }
 
     @Override
@@ -47,6 +54,6 @@ public class RawResponse implements Response {
 
     @Override
     public InputStream getBody() {
-        return body;
+        return new ByteArrayInputStream(bodyContent);
     }
 }

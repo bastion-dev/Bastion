@@ -1,5 +1,6 @@
 package rocks.bastion.junit;
 
+import com.google.common.io.CharStreams;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -9,8 +10,11 @@ import org.junit.runners.model.InitializationError;
 import rocks.bastion.core.Bastion;
 import rocks.bastion.core.BastionFactory;
 import rocks.bastion.core.DefaultBastionFactory;
+import rocks.bastion.core.Response;
 import rocks.bastion.core.event.*;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BastionRunner extends BlockJUnit4ClassRunner implements BastionListener {
@@ -65,6 +69,11 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     @Override
     public void callFailed(BastionFailureEvent event) {
         currentNotifier.fireTestFailure(new Failure(runningBastionRequest, event.getAssertionError()));
+        Response response = event.getResponse();
+        try {
+            System.err.printf("Response body: %s\n", CharStreams.toString(new InputStreamReader(response.getBody())));
+        } catch (IOException ignored) {
+        }
         throw event.getAssertionError();
     }
 

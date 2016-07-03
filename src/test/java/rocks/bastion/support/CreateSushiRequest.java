@@ -1,5 +1,6 @@
 package rocks.bastion.support;
 
+import com.google.gson.Gson;
 import org.apache.http.entity.ContentType;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
@@ -44,7 +45,7 @@ public class CreateSushiRequest implements Request {
 
     @Override
     public Object body() {
-        return Sushi.newSushi().name("happiness").build();
+        return new Gson().toJson(Sushi.newSushi().name("happiness").build());
     }
 
 }
