@@ -1,0 +1,12 @@
+{
+  "name": "john",
+  "timestamp": "2016-10-15T20:00:25+0100",
+  "favourites": {
+    "food": "apples",
+    "colours": [
+      "blue",
+      "red"
+    ],
+    "number": 23
+  }
+}
