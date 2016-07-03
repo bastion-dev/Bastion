@@ -1,5 +1,6 @@
 package rocks.bastion.core;
 
+import rocks.bastion.core.assertions.Assertions;
 import rocks.bastion.core.request.Request;
 
 import java.util.Objects;
@@ -13,6 +14,7 @@ import java.util.Objects;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
+    private boolean suppressAssertions = false;
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
@@ -54,9 +56,21 @@ public abstract class BastionFactory {
      */
     public Bastion<String> getBastion(String message, Request request) {
         Bastion<String> bastion = new Bastion<>(message, request);
+        bastion.setSuppressAssertions(suppressAssertions);
         bastion.bind(String.class);
         prepareBastion(bastion);
         return bastion;
+    }
+
+    /**
+     * Configures whether {@link Bastion} objects returned by this factory should be configured to suppress assertions or
+     * not. When set to suppress assertions, Bastion will execute the HTTP request as normal as well as any callbacks provided
+     * but will skip executing any assertions provided to the {@link Bastion#withAssertions(Assertions)} method.
+     *
+     * @param suppressAssertions {@literal true} to suppress assertions; {@literal false}, otherwise.
+     */
+    public void suppressAssertions(boolean suppressAssertions) {
+        this.suppressAssertions = suppressAssertions;
     }
 
     /**

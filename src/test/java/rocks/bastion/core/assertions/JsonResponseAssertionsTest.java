@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.RawResponse;
+import rocks.bastion.core.request.InvalidJsonException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -13,6 +14,12 @@ import java.util.Collections;
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
 public class JsonResponseAssertionsTest {
+
+    @Test(expected = InvalidJsonException.class)
+    public void fromString_invalidJson_shouldThrowException() throws Exception {
+        JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" ");
+    }
+
     @Test
     public void execute_fromStringJsonMismatches_shouldThrowErrorWithDiff() throws Exception {
         try {

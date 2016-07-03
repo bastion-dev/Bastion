@@ -25,6 +25,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     private Collection<ResponseModelConverter> modelConverters;
     private Request request;
     private Class<MODEL> modelType;
+    private boolean suppressAssertions;
     private Assertions<? super MODEL> assertions;
     private Callback<? super MODEL> callback;
 
@@ -36,11 +37,12 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         this.message = message;
         this.request = request;
         this.modelType = null;
+        this.suppressAssertions = false;
         this.assertions = Assertions.noAssertions();
         this.callback = Callback.noCallback();
     }
 
-    public static Bastion<String> api(String message, Request request) {
+    public static BastionBuilder<String> api(String message, Request request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
@@ -63,14 +65,24 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
             Response response = new RequestExecutor(request).execute();
             MODEL model = decodeModel(response);
             ModelResponse<MODEL> modelResponse = new ModelResponse<>(response, model);
-            assertions.execute(response.getStatusCode(), modelResponse, model);
-            callback.execute(response.getStatusCode(), modelResponse, model);
+            executeAssertions(modelResponse);
+            executeCallback(modelResponse);
         } catch (AssertionError e) {
             notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), e));
         } catch (Throwable t) {
             notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), t));
         } finally {
             notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText()));
+        }
+    }
+
+    private void executeCallback(ModelResponse<MODEL> modelResponse) {
+        callback.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
+    }
+
+    private void executeAssertions(ModelResponse<MODEL> modelResponse) {
+        if (!suppressAssertions) {
+            assertions.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
         }
     }
 
@@ -85,6 +97,17 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
             throw new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()));
         }
         return model;
+    }
+
+    /**
+     * Sets whether assertions should be suppressed for this Bastion request. When assertions
+     * are suppressed, Bastion will not execute whatever assertions were passed in to the {@link #withAssertions(Assertions)}
+     * method.
+     *
+     * @param suppressAssertions {@literal true} to suppress assertions; {@literal false}, otherwise.
+     */
+    public void setSuppressAssertions(boolean suppressAssertions) {
+        this.suppressAssertions = suppressAssertions;
     }
 
     private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {

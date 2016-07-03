@@ -42,6 +42,8 @@ public class JsonResponseAssertions implements Assertions<Object> {
         this.expectedStatusCode = expectedStatusCode;
         this.contentType = ContentType.APPLICATION_JSON;
         this.expectedJson = expectedJson;
+
+        validateExpectedJson();
     }
 
     public static JsonResponseAssertions fromString(int expectedStatusCode, String expectedJson) {
@@ -76,12 +78,17 @@ public class JsonResponseAssertions implements Assertions<Object> {
     public void execute(int statusCode, ModelResponse<?> response, Object model) throws AssertionError {
         try {
             Assert.assertEquals("Response Status Code", expectedStatusCode, statusCode);
-            // TODO: Assert content-type
+            assertContentTypeHeader(response);
             JsonNode jsonPatch = computeJsonPatch(response);
             assertJsonPatchIsEmpty(jsonPatch);
         } catch (IOException e) {
             throw new RuntimeException("An error occurred while parsing JSON text", e);
         }
+    }
+
+    private void assertContentTypeHeader(ModelResponse<?> response) {
+        Assert.assertTrue("Content-type exists in response", response.getContentType().isPresent());
+        Assert.assertEquals("Content-type MIME type", contentType.getMimeType(), response.getContentType().get().getMimeType());
     }
 
     private JsonNode computeJsonPatch(Response response) throws IOException {
