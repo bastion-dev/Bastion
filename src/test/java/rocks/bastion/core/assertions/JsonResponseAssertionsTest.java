@@ -23,7 +23,7 @@ public class JsonResponseAssertionsTest {
 
     @Test
     public void execute_ignoredField_shouldAssertSuccessfully() throws Exception {
-        JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }").ignoreFieldValue("/key");
+        JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }").ignoreFieldsValues("/key");
         ModelResponse<String> response = prepareModelResponse("{ \"key\":\"kyle1\", \"surname\":\"pullicino\" }");
         assertions.execute(200, response, response.getModel());
     }

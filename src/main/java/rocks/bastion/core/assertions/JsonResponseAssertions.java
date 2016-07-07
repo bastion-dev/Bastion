@@ -16,10 +16,7 @@ import rocks.bastion.core.request.InvalidJsonException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -72,20 +69,25 @@ public class JsonResponseAssertions implements Assertions<Object> {
     }
 
     /**
-     * Ignore a particular field's value in the actual JSON response. Notice that Bastion will still fail the assertion if a
-     * JSON field is missing, is in the wrong place, or is extra. Ignoring field value using this method is useful for
+     * Ignore particular fields' values in the actual JSON response. Notice that Bastion will still fail the assertion if a
+     * JSON field is missing, is in the wrong place, or is extra. Ignoring fields' values using this method is useful for
      * randomly generated values in the response, such as IDs or timestamps.
      * <br><br>
      * Implementation wise, when performing the JSON patch diff between the expected and the actual responses, Bastion will ignore
      * any patch operations which have {@code op} {@code "replace"} and a field which is one of the ignored fields.
      *
-     * @param field The field name to ignore
+     * @param fields The fields' names to ignore
      * @return This object (for method chaining)
      */
-    public JsonResponseAssertions ignoreFieldValue(String field) {
+    public JsonResponseAssertions ignoreFieldsValues(String... fields) {
+        Objects.requireNonNull(fields);
+        Arrays.stream(fields).forEach(this::ignoreSingleFieldValue);
+        return this;
+    }
+
+    private void ignoreSingleFieldValue(String field) {
         Objects.requireNonNull(field);
         ignoredFieldsValue.add(field);
-        return this;
     }
 
     /**
