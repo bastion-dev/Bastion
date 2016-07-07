@@ -8,7 +8,7 @@ import rocks.bastion.junit.BastionRunner
 import rocks.bastion.support.embedded.TestWithEmbeddedServer
 
 @RunWith(BastionRunner.class)
-public class CreateSushiTest extends TestWithEmbeddedServer {
+public class GroovyCreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void secondTestCreateSushi_Success() {
