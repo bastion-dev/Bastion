@@ -1,9 +1,6 @@
-package rocks.bastion.core.request;
+package rocks.bastion.core;
 
 import org.apache.http.entity.ContentType;
-import rocks.bastion.core.ApiHeader;
-import rocks.bastion.core.ApiQueryParam;
-import rocks.bastion.external.HttpMethod;
 
 import java.util.Collection;
 

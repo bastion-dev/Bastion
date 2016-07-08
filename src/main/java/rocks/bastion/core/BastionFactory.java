@@ -1,8 +1,5 @@
 package rocks.bastion.core;
 
-import rocks.bastion.core.assertions.Assertions;
-import rocks.bastion.core.request.Request;
-
 import java.util.Objects;
 
 /**

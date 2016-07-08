@@ -1,4 +1,4 @@
-package rocks.bastion.external;
+package rocks.bastion.core;
 
 import java.util.Objects;
 

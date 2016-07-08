@@ -1,4 +1,4 @@
-package rocks.bastion.core.request;
+package rocks.bastion.core.json;
 
 import static java.lang.String.format;
 

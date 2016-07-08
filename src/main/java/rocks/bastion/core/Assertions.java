@@ -1,8 +1,4 @@
-package rocks.bastion.core.assertions;
-
-import rocks.bastion.core.Bastion;
-import rocks.bastion.core.Callback;
-import rocks.bastion.core.ModelResponse;
+package rocks.bastion.core;
 
 /**
  * Specifies assertions to apply to a response model received after performing a Bastion request. The assertions

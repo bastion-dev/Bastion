@@ -5,7 +5,8 @@ import org.junit.Test;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.RawResponse;
-import rocks.bastion.core.request.InvalidJsonException;
+import rocks.bastion.core.json.InvalidJsonException;
+import rocks.bastion.core.json.JsonResponseAssertions;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

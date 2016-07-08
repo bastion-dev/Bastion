@@ -1,7 +1,6 @@
 package rocks.bastion.core;
 
 import com.google.common.base.Strings;
-import rocks.bastion.core.assertions.Assertions;
 import rocks.bastion.core.builder.AssertionsBuilder;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.CallbackBuilder;
@@ -10,7 +9,6 @@ import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
 import rocks.bastion.core.model.ModelConvertersRegistrar;
 import rocks.bastion.core.model.ResponseModelConverter;
-import rocks.bastion.core.request.Request;
 
 import java.util.Collection;
 import java.util.LinkedList;

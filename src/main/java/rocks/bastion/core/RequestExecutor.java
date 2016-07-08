@@ -5,7 +5,6 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
-import rocks.bastion.core.request.Request;
 
 import java.io.InputStream;
 import java.util.Objects;

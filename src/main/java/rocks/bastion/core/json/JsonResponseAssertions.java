@@ -1,4 +1,4 @@
-package rocks.bastion.core.assertions;
+package rocks.bastion.core.json;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,9 +9,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import org.apache.http.entity.ContentType;
 import org.junit.Assert;
+import rocks.bastion.core.Assertions;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.Response;
-import rocks.bastion.core.request.InvalidJsonException;
 
 import java.io.File;
 import java.io.IOException;

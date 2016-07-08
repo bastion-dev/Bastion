@@ -1,4 +1,4 @@
-package rocks.bastion.core.request;
+package rocks.bastion.core.json;
 
 import com.google.common.io.Files;
 import com.google.gson.JsonParseException;
@@ -6,7 +6,8 @@ import com.google.gson.JsonParser;
 import org.apache.http.entity.ContentType;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
-import rocks.bastion.external.HttpMethod;
+import rocks.bastion.core.HttpMethod;
+import rocks.bastion.core.Request;
 
 import java.io.File;
 import java.io.IOException;

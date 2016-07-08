@@ -4,7 +4,9 @@ import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
-import rocks.bastion.external.HttpMethod;
+import rocks.bastion.core.HttpMethod;
+import rocks.bastion.core.json.InvalidJsonException;
+import rocks.bastion.core.json.JsonRequest;
 
 import java.io.File;
 import java.net.URISyntaxException;
