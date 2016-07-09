@@ -1,4 +1,4 @@
-``# Overview
+# Overview
 
 Bastion is a Java-based library for quickly creating tests for your HTTP APIs.
 You can quickly define the request object to send as well as the expected response. Bastion excels at
