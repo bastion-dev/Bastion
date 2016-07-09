@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * Creates and configures an instance of the {@link Bastion} fluent builder. A single factory can be designated as the
- * <i>Default</i> factory which is used by the {@link Bastion#api(String, Request)} method. Subclasses will generally
+ * <i>Default</i> factory which is used by the {@link Bastion#request(String, Request)} method. Subclasses will generally
  * implement the {@link BastionFactory#prepareBastion(Bastion)} to further configure the instance with any additional
  * features necessary.
  */
@@ -15,7 +15,7 @@ public abstract class BastionFactory {
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
-     * when a user calls the {@link Bastion#api(String, Request)} method.
+     * when a user calls the {@link Bastion#request(String, Request)} method.
      *
      * @return A non-null factory instance which is considered to be the "Default."
      */
@@ -28,7 +28,7 @@ public abstract class BastionFactory {
 
     /**
      * Designate a new factory instance as the "Default". This changes which factory is used when users call the
-     * {@link Bastion#api(String, Request)} method allowing external systems to modify Bastion functionality. For example,
+     * {@link Bastion#request(String, Request)} method allowing external systems to modify Bastion functionality. For example,
      * a test library could potentially register a new factory which will register event listeners for when Bastion calls
      * start/end to display them in a UI.
      *

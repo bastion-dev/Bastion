@@ -40,7 +40,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         this.callback = Callback.noCallback();
     }
 
-    public static BastionBuilder<String> api(String message, Request request) {
+    public static BastionBuilder<String> request(String message, Request request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 

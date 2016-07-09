@@ -12,7 +12,7 @@ public class GroovyCreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void secondTestCreateSushi_Success() {
-        Bastion.api("First Request", JsonRequest.postFromString("http://localhost:9876/sushi",
+        Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi",
                 '''{
                 "name":"sashimi",
                 "price":"5.60",

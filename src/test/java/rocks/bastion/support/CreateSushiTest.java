@@ -16,7 +16,7 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void testCreateSushi_Success() {
-        Bastion.api("SUCCESS", new CreateSushiRequest())
+        Bastion.request("SUCCESS", new CreateSushiRequest())
                 .bind(Sushi.class)
                 .withAssertions((statusCode, response, model) -> {
                     assertThat(response.getContentType().isPresent()).isTrue();
@@ -29,7 +29,7 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
                 })
                 .call();
 
-        Bastion.api("SUCCESS (Again)", new CreateSushiRequest())
+        Bastion.request("SUCCESS (Again)", new CreateSushiRequest())
                 .bind(Sushi.class)
                 .withAssertions((statusCode, response, model) -> {
                     assertThat(response.getContentType().isPresent()).isTrue();
@@ -45,7 +45,7 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void secondTestCreateSushi_Success() {
-        Bastion.api("First Request", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
+        Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
                 "\"name\":\"sashimi\", " +
                 "\"price\":\"5.60\", " +
                 "\"type\":\"SASHIMI\" " +
