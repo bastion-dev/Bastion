@@ -153,11 +153,6 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     @Override
-    public Response getResponse() {
-        return null;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
         Objects.requireNonNull(modelType);
