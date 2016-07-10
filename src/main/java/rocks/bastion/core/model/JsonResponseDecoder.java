@@ -1,27 +1,52 @@
 package rocks.bastion.core.model;
 
-import com.google.gson.Gson;
-import org.apache.http.Consts;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.entity.ContentType;
 import rocks.bastion.core.Response;
 
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.io.IOException;
 import java.util.Optional;
 
 public class JsonResponseDecoder implements ResponseDecoder {
 
+    private static ObjectMapper jsonObjectMapper = null;
+
+    private synchronized static ObjectMapper getObjectMapper() {
+        if (jsonObjectMapper == null) {
+            jsonObjectMapper = new ObjectMapper();
+        }
+        return jsonObjectMapper;
+    }
+
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {
-        if (hints.getModelType().equals(String.class)) {
-            return Optional.empty();
-        }
         ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
-        if (!responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
+        if (!supportsContentType(responseContentType)) {
             return Optional.empty();
         }
-        Charset responseCharset = responseContentType.getCharset() != null ? responseContentType.getCharset() : Consts.ISO_8859_1;
-        Gson gson = new Gson();
-        return Optional.ofNullable(gson.fromJson(new InputStreamReader(response.getBody(), responseCharset), hints.getModelType()));
+        JsonNode decodedJsonTree;
+        try {
+            decodedJsonTree = getObjectMapper().readTree(response.getBody());
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+        Optional<?> decodedModel = decodeTreeUsingHints(decodedJsonTree, hints);
+        return decodedModel;
+    }
+
+    private Optional<?> decodeTreeUsingHints(JsonNode decodedJsonTree, DecodingHints hints) {
+        return Optional.of(hints.getModelType().<Object>map(modelType -> {
+            try {
+                return getObjectMapper().treeToValue(decodedJsonTree, modelType);
+            } catch (JsonProcessingException ignored) {
+                return null;
+            }
+        }).orElse(decodedJsonTree));
+    }
+
+    private boolean supportsContentType(ContentType responseContentType) {
+        return responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType());
     }
 }

@@ -54,7 +54,6 @@ public abstract class BastionFactory {
     public Bastion<String> getBastion(String message, Request request) {
         Bastion<String> bastion = new Bastion<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
-        bastion.bind(String.class);
         prepareBastion(bastion);
         return bastion;
     }

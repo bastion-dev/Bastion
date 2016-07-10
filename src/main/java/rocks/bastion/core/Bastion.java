@@ -57,7 +57,6 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     private void callInternal() {
-        Objects.requireNonNull(modelType, "Bastion instance was configured incorrectly. modelType cannot be null. Remember to bind your Bastion request to a modelType.");
         ModelResponse<MODEL> modelResponse = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
@@ -116,7 +115,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
-        return modelType.isAssignableFrom(decodedResponseModel.getClass());
+        return modelType == null || modelType.isAssignableFrom(decodedResponseModel.getClass());
     }
 
     @Override
