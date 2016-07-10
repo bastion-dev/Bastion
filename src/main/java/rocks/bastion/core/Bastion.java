@@ -7,8 +7,8 @@ import rocks.bastion.core.builder.CallbackBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
-import rocks.bastion.core.model.ModelConvertersRegistrar;
-import rocks.bastion.core.model.ResponseModelConverter;
+import rocks.bastion.core.model.ResponseDecoder;
+import rocks.bastion.core.model.ResponseDecodersRegistrar;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,11 +16,11 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersRegistrar, BastionEventPublisher {
+public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher {
 
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
-    private Collection<ResponseModelConverter> modelConverters;
+    private Collection<ResponseDecoder> modelConverters;
     private Request request;
     private Class<MODEL> modelType;
     private boolean suppressAssertions;
@@ -89,7 +89,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
         MODEL model;
         DecodingHints decodingHints = new DecodingHints(modelType);
         Object decodedResponseModel = null;
-        for (ResponseModelConverter converter : modelConverters) {
+        for (ResponseDecoder converter : modelConverters) {
             decodedResponseModel = converter.decode(response, decodingHints).orElse(null);
             if (decodedResponseModel != null) {
                 break;
@@ -182,8 +182,8 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ModelConvertersReg
     }
 
     @Override
-    public void registerModelConverter(ResponseModelConverter converter) {
-        Objects.requireNonNull(converter);
-        modelConverters.add(converter);
+    public void registerModelConverter(ResponseDecoder decoder) {
+        Objects.requireNonNull(decoder);
+        modelConverters.add(decoder);
     }
 }

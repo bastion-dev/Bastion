@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Optional;
 
-public class GsonResponseModelConverter implements ResponseModelConverter {
+public class JsonResponseDecoder implements ResponseDecoder {
 
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {

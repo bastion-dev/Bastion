@@ -1,8 +1,8 @@
 package rocks.bastion.core.model;
 
 /**
- * Provides hints to the {@link ResponseModelConverter} about how to interpret the given HTTP response. Typically this
- * object will contain the type of model that was requested by the user so that a {@link ResponseModelConverter} can
+ * Provides hints to the {@link ResponseDecoder} about how to interpret the given HTTP response. Typically this
+ * object will contain the type of model that was requested by the user so that a {@link ResponseDecoder} can
  * decode the response into a specific model as requested by the user.
  */
 public class DecodingHints {

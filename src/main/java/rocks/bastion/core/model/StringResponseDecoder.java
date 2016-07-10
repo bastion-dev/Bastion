@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class StringResponseModelConverter implements ResponseModelConverter {
+public class StringResponseDecoder implements ResponseDecoder {
 
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {

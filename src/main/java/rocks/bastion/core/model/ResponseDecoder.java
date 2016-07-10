@@ -12,7 +12,7 @@ import java.util.Optional;
  * Together, a list of ResponseModelConverters will form a strategy for turning an arbitrary HTTP response to a usable
  * Java object usable in Bastion tests and assertions.
  */
-public interface ResponseModelConverter {
+public interface ResponseDecoder {
 
     /**
      * Attempts to decode the given HTTP response to a Java object. If this model converter is unable to decode the
