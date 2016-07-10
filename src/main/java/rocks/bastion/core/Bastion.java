@@ -57,21 +57,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     private void callInternal() {
-        ModelResponse<MODEL> modelResponse = null;
-        try {
-            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
-            Response response = new RequestExecutor(request).execute();
-            MODEL model = decodeModel(response);
-            modelResponse = new ModelResponse<>(response, model);
-            executeAssertions(modelResponse);
-            executeCallback(modelResponse);
-        } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
-        } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
-        } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
-        }
+
     }
 
     private void executeCallback(ModelResponse<MODEL> modelResponse) {
@@ -148,8 +134,25 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     @Override
-    public void call() {
-        callInternal();
+    public ModelResponse<MODEL> call() {
+        ModelResponse<MODEL> modelResponse = null;
+        try {
+            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
+            Response response = new RequestExecutor(request).execute();
+            MODEL model = decodeModel(response);
+            modelResponse = new ModelResponse<>(response, model);
+            executeAssertions(modelResponse);
+            executeCallback(modelResponse);
+            return modelResponse;
+        } catch (AssertionError e) {
+            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
+            return modelResponse;
+        } catch (Throwable t) {
+            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
+            return modelResponse;
+        } finally {
+            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
+        }
     }
 
     @Override
