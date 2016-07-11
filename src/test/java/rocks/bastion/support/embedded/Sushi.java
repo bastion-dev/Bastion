@@ -58,6 +58,28 @@ public class Sushi {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Sushi sushi = (Sushi) o;
+
+        if (getId() != sushi.getId()) return false;
+        if (getName() != null ? !getName().equals(sushi.getName()) : sushi.getName() != null) return false;
+        if (getPrice() != null ? !getPrice().equals(sushi.getPrice()) : sushi.getPrice() != null) return false;
+        return getType() == sushi.getType();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        return result;
+    }
+
     public enum Type {
         NIGIRI,
         SASHIMI,

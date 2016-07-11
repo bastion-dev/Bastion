@@ -5,8 +5,8 @@ import rocks.bastion.core.Callback;
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public interface CallbackBuilder<MODEL> extends ExecuteRequestBuilder {
+public interface CallbackBuilder<MODEL> extends ExecuteRequestBuilder<MODEL> {
 
-    ExecuteRequestBuilder thenDo(Callback<? super MODEL> callback);
+    ExecuteRequestBuilder<? extends MODEL> thenDo(Callback<? super MODEL> callback);
 
 }

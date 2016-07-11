@@ -1,10 +1,7 @@
 package rocks.bastion.core;
 
 import com.google.common.base.Strings;
-import rocks.bastion.core.builder.AssertionsBuilder;
-import rocks.bastion.core.builder.BastionBuilder;
-import rocks.bastion.core.builder.CallbackBuilder;
-import rocks.bastion.core.builder.ExecuteRequestBuilder;
+import rocks.bastion.core.builder.*;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
 import rocks.bastion.core.model.ResponseDecoder;
@@ -16,7 +13,7 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher {
+public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
@@ -26,6 +23,8 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     private boolean suppressAssertions;
     private Assertions<? super MODEL> assertions;
     private Callback<? super MODEL> callback;
+    private MODEL model;
+    private ModelResponse<MODEL> modelResponse;
 
     Bastion(String message, Request request) {
         Objects.requireNonNull(message);
@@ -134,22 +133,22 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     @Override
-    public ModelResponse<MODEL> call() {
-        ModelResponse<MODEL> modelResponse = null;
+    public PostExecutionBuilder<? extends MODEL> call() {
+        modelResponse = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
             Response response = new RequestExecutor(request).execute();
-            MODEL model = decodeModel(response);
+            model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
-            return modelResponse;
+            return this;
         } catch (AssertionError e) {
             notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
-            return modelResponse;
+            return this;
         } catch (Throwable t) {
             notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
-            return modelResponse;
+            return this;
         } finally {
             notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
         }
@@ -172,10 +171,20 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     @Override
-    public ExecuteRequestBuilder thenDo(Callback<? super MODEL> callback) {
+    public ExecuteRequestBuilder<? extends MODEL> thenDo(Callback<? super MODEL> callback) {
         Objects.requireNonNull(callback);
         this.callback = callback;
         return this;
+    }
+
+    @Override
+    public MODEL getModel() {
+        return model;
+    }
+
+    @Override
+    public ModelResponse<? extends MODEL> getResponse() {
+        return modelResponse;
     }
 
     @Override

@@ -1,21 +1,25 @@
 package rocks.bastion.support;
 
+import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import rocks.bastion.core.Assertions;
+import rocks.bastion.core.BasicRequest;
 import rocks.bastion.core.Bastion;
-import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.junit.BastionRunner;
 import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithEmbeddedServer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(BastionRunner.class)
 public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
 
     @Test
-    public void secondTestCreateSushi_Success() {
-        ModelResponse<Sushi> response = Bastion.request("Create Sushi", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
+    public void createAndGetSameSushi_Success() {
+        Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
                 "\"name\":\"sashimi\", " +
                 "\"price\":\"5.60\", " +
                 "\"type\":\"SASHIMI\" " +
@@ -27,8 +31,14 @@ public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
                         "\"type\":\"SASHIMI\" " +
                         "}"
                 ).ignoreFieldsValues("/id")
-        ).call();
-        Sushi createdSushi = response.getModel();
-        Bastion.request("Get Sushi", )
+        ).call().getModel();
+
+        Bastion.request("Get Sushi", BasicRequest.get("http://localhost:9876/sushi/" + createdSushi.getId()))
+                .bind(Sushi.class).withAssertions((Assertions<Sushi>) (statusCode, response, model) -> {
+            assertThat(statusCode).describedAs("Status Code").isEqualTo(200);
+            assertThat(response.getContentType().isPresent()).describedAs("Content Type Header exists").isTrue();
+            assertThat(response.getContentType().get().getMimeType()).describedAs("Content Type Header").isEqualTo(ContentType.APPLICATION_JSON.getMimeType());
+            assertThat(model).describedAs("Returned Sushi").isEqualTo(createdSushi);
+        }).call();
     }
 }

@@ -23,7 +23,6 @@ public class BasicRequest implements Request {
     private BasicRequest(HttpMethod method, String url, String body) throws InvalidJsonException {
         Objects.requireNonNull(method);
         Objects.requireNonNull(url);
-        Objects.requireNonNull(body);
 
         this.method = method;
         this.url = url;
