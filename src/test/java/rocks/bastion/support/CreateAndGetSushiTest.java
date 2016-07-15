@@ -30,7 +30,7 @@ public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
                         "\"price\":5.60, " +
                         "\"type\":\"SASHIMI\" " +
                         "}"
-                ).ignoreFieldsValues("/id")
+                ).ignoreValuesForProperties("id")
         ).call().getModel();
 
         Bastion.request("Get Sushi", BasicRequest.get("http://localhost:9876/sushi/" + createdSushi.getId()))
