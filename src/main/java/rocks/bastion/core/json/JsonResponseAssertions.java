@@ -79,15 +79,23 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * @param fields The fields' names to ignore
      * @return This object (for method chaining)
      */
-    public JsonResponseAssertions ignoreFieldsValues(String... fields) {
+    public JsonResponseAssertions ignoreValuesForProperties(String... fields) {
         Objects.requireNonNull(fields);
-        Arrays.stream(fields).forEach(this::ignoreSingleFieldValue);
+        Arrays.stream(fields).forEach(this::ignoreValueForProperty);
         return this;
     }
 
-    private void ignoreSingleFieldValue(String field) {
+    private void ignoreValueForProperty(String field) {
         Objects.requireNonNull(field);
+        field = sanitizePropertyName(field);
         ignoredFieldsValue.add(field);
+    }
+
+    private String sanitizePropertyName(String field) {
+        if (!field.startsWith("/")) {
+            return "/" + field;
+        }
+        return field;
     }
 
     /**

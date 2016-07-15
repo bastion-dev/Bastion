@@ -56,7 +56,7 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
                         "\"price\":5.60, " +
                         "\"type\":\"SASHIMI\" " +
                         "}"
-                ).ignoreFieldsValues("/id")
+                ).ignoreValuesForProperties("/id")
         ).call();
     }
 }

@@ -36,24 +36,24 @@ import rocks.bastion.support.embedded.*;
 public class CreateSushiTest extends TestWithEmbeddedServer {
     @Test
     public void testCreateSushi_Success() {
-        Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
+        Sushi createdSushi = Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
                 "\"name\":\"sashimi\", " +
                 "\"price\":\"5.60\", " +
                 "\"type\":\"SASHIMI\" " +
                 "}"
-        )).withAssertions(JsonResponseAssertions.fromString(201, "{ " +
+        )).bind(Sushi.class).withAssertions(JsonResponseAssertions.fromString(201, "{ " +
                         "\"id\":5, " +
                         "\"name\":\"sashimi\", " +
                         "\"price\":5.60, " +
                         "\"type\":\"SASHIMI\" " +
                         "}"
                 ).ignoreFieldsValues("/id")
-        ).call();
+        ).call().getModel();
     }
 }
 ```
 
-The test above performs a single request. The first parameter to the `request()` method takes a descriptive name which will be used in test reports to indicate whether the request was successful or not.
+The test above performs a single request. Notice that we use the `BastionRunner` class as our test runner (using the `@RunWith` annotation) which causes each API request to show up in your IDE's test window.  The first parameter to the `request()` method takes a descriptive name which will be used in test reports to indicate whether the request was successful or not.
 
 The second argument takes a `Request` object: in our example, we supply a `JsonRequest` which is useful for sending HTTP requests containing JSON bodies. `JsonRequest.postFromString` will configure the request to use the `POST` HTTP method on the specified URL and also send the correct headers. Please see the JavaDocs for more information on how to configure different `JsonRequest`s.
 
@@ -61,7 +61,7 @@ The `withAssertions()` method adds assertions which are tested for when Bastion 
 
 Finally, `call()` executes the request and performs the assertions on the response. Notice that, you can supply your own implementations of `Request` and `Assertions` to suit your exact testing needs.
 
-## Using Callbacks
+If you would like to use the returned body content or any of the response information use the methods `getModel()` and `getResponse()`.
 
 # Building
 
