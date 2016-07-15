@@ -30,13 +30,13 @@ public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
 
         Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromFile(BASE_URL, requestFile))
                                     .bind(Sushi.class)
-                                    .withAssertions(JsonResponseAssertions.fromFile(201, responseFile).ignoreFieldsValues("/id"))
+                                    .withAssertions(JsonResponseAssertions.fromFile(201, responseFile).ignoreValuesForProperties("/id"))
                                     .call()
                                     .getModel();
 
         Sushi gottenSushi = Bastion.request("Get Sushi", BasicRequest.get(BASE_URL + "/" + createdSushi.getId()))
                                    .bind(Sushi.class)
-                                   .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreFieldsValues("/id"))
+                                   .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreValuesForProperties("/id"))
                                    .call()
                                    .getModel();
 
