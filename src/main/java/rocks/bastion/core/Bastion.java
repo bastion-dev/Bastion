@@ -100,7 +100,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     }
 
     private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
-        return modelType == null || modelType.isAssignableFrom(decodedResponseModel.getClass());
+        return modelType == null || (decodedResponseModel != null && modelType.isAssignableFrom(decodedResponseModel.getClass()));
     }
 
     @Override

@@ -1,9 +1,11 @@
 package rocks.bastion.core;
 
+import java.util.Objects;
+
 /**
  * Specifies assertions to apply to a response model received after performing a Bastion request. The assertions
  * are checked only if Bastion can bind a model object to the response's content successfully.
- *
+ * <p>
  * Technically, the assertions can be any executable code but it is strongly recommended that a user only performs
  * stateless checks on the provided model and response. If you would like to change the state of the current test
  * you can use the {@link Bastion#thenDo(Callback)} method using a {@link Callback}. You can also retrieve the returned
@@ -43,5 +45,21 @@ public interface Assertions<M> {
      * @throws AssertionError Thrown if the HTTP response does not pass the assertions.
      */
     void execute(int statusCode, ModelResponse<? extends M> response, M model) throws AssertionError;
+
+    /**
+     * Combine two {@linkplain Assertions} objects together by sequential composition. This function will return a new
+     * {@linkplain Assertions} object which will first execute this {@linkplain Assertions} objects and then execute the
+     * {@linkplain Assertions} object given as an argument.
+     *
+     * @param after The second {@linkplain Assertions} to execute after this one.
+     * @return A new {@linkplain Assertions} object which executes this and the given argument in sequence.
+     */
+    default Assertions<M> and(Assertions<M> after) {
+        Objects.requireNonNull(after);
+        return (statusCode, response, model) -> {
+            this.execute(statusCode, response, model);
+            after.execute(statusCode, response, model);
+        };
+    }
 
 }
