@@ -6,7 +6,8 @@ package rocks.bastion.core;
  *
  * Technically, the assertions can be any executable code but it is strongly recommended that a user only performs
  * stateless checks on the provided model and response. If you would like to change the state of the current test
- * you can use the {@link Bastion#thenDo(Callback)} method using a {@link Callback}.
+ * you can use the {@link Bastion#thenDo(Callback)} method using a {@link Callback}. You can also retrieve the returned
+ * object using the {@link Bastion#getModel()} and {@link Bastion#getResponse()} methods.
  *
  * @param <M> The type of response model the assertions will apply for.
  */

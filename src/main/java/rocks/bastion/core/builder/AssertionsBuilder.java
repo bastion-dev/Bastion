@@ -1,12 +1,32 @@
 package rocks.bastion.core.builder;
 
 import rocks.bastion.core.Assertions;
+import rocks.bastion.core.Callback;
 
 /**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ * Defines the operations which a user can perform on a Bastion builder before any {@link Assertions assertions} object is added to the test.
+ * At this point, a user may perform one of the following:
+ * <ul>
+ * <li>{@link #withAssertions(Assertions)}: Specify what test assertions to apply to the response. We recommend supplying the
+ * assertions as a lambda or using one of the available subclass implementations of {@link Assertions}.</li>
+ * <li>{@link #thenDo(Callback)}: Specify a callback function to execute when the response is received and it passes its assertions. We
+ * recommend supplying the {@link Callback} as a lambda function.</li>
+ * <li>{@link #call()}: Starts the Bastion test by executing the HTTP request.</li>
+ * </ul>
+ *
+ * After using the {@linkplain #call()} method, the user may obtain the response, for further use in the ongoing test, using
+ * methods defined in the {@link PostExecutionBuilder} interface.
  */
 public interface AssertionsBuilder<MODEL> extends CallbackBuilder<MODEL> {
 
+    /**
+     * Add an assertions object which determines whether the received response is as expected. We recommend
+     * supplying the {@linkplain Assertions} object as a lambda or using one of the convenience implementations of {@linkplain Assertions}
+     * that will take care of the most common verifications that a user would want to perform on a request.
+     *
+     * @param assertions A non-{@literal null} {@linkplain Assertions} object
+     * @return A fluent-builder which will allow you to add callbacks, execute the HTTP request and retrieve the response information
+     */
     CallbackBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions);
 
 }
