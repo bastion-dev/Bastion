@@ -4,8 +4,8 @@ import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import rocks.bastion.core.Assertions;
-import rocks.bastion.core.BasicRequest;
 import rocks.bastion.core.Bastion;
+import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.junit.BastionRunner;
@@ -33,7 +33,7 @@ public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
                 ).ignoreValuesForProperties("id")
         ).call().getModel();
 
-        Bastion.request("Get Sushi", BasicRequest.get("http://localhost:9876/sushi/" + createdSushi.getId()))
+        Bastion.request("Get Sushi", GeneralRequest.get("http://localhost:9876/sushi/" + createdSushi.getId()))
                 .bind(Sushi.class).withAssertions((Assertions<Sushi>) (statusCode, response, model) -> {
             assertThat(statusCode).describedAs("Status Code").isEqualTo(200);
             assertThat(response.getContentType().isPresent()).describedAs("Content Type Header exists").isTrue();

@@ -2,8 +2,8 @@ package rocks.bastion.support;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import rocks.bastion.core.BasicRequest;
 import rocks.bastion.core.Bastion;
+import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.junit.BastionRunner;
@@ -34,7 +34,7 @@ public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
                                     .call()
                                     .getModel();
 
-        Sushi gottenSushi = Bastion.request("Get Sushi", BasicRequest.get(BASE_URL + "/" + createdSushi.getId()))
+        Sushi gottenSushi = Bastion.request("Get Sushi", GeneralRequest.get(BASE_URL + "/" + createdSushi.getId()))
                                    .bind(Sushi.class)
                                    .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreValuesForProperties("/id"))
                                    .call()
