@@ -25,30 +25,6 @@ import static java.lang.String.format;
  */
 public class JsonRequest implements Request {
 
-    private String name;
-    private String url;
-    private HttpMethod method;
-    private ContentType contentType;
-    private Collection<ApiHeader> headers;
-    private Collection<ApiQueryParam> queryParams;
-    private String body;
-
-    private JsonRequest(HttpMethod method, String url, String json) throws InvalidJsonException {
-        Objects.requireNonNull(method);
-        Objects.requireNonNull(url);
-        Objects.requireNonNull(json);
-
-        this.method = method;
-        this.url = url;
-        this.name = method.getValue() + " " + url;
-        this.contentType = ContentType.APPLICATION_JSON;
-        this.headers = new LinkedList<>();
-        this.queryParams = new LinkedList<>();
-        this.body = json;
-
-        validateJson();
-    }
-
     /**
      * Construct an HTTP request containing a JSON body from the given JSON string. Initially, the request will have
      * the "application/json" HTTP header and no other additional headers and no query parameters. It will also have
@@ -140,12 +116,28 @@ public class JsonRequest implements Request {
         return fromFile(HttpMethod.PUT, url, jsonFile);
     }
 
-    private void validateJson() throws InvalidJsonException {
-        try {
-            new JsonParser().parse(body);
-        } catch (JsonParseException parseException) {
-            throw new InvalidJsonException(parseException, this.body);
-        }
+    private String name;
+    private String url;
+    private HttpMethod method;
+    private ContentType contentType;
+    private Collection<ApiHeader> headers;
+    private Collection<ApiQueryParam> queryParams;
+    private String body;
+
+    private JsonRequest(HttpMethod method, String url, String json) throws InvalidJsonException {
+        Objects.requireNonNull(method);
+        Objects.requireNonNull(url);
+        Objects.requireNonNull(json);
+
+        this.method = method;
+        this.url = url;
+        this.name = method.getValue() + " " + url;
+        this.contentType = ContentType.APPLICATION_JSON;
+        this.headers = new LinkedList<>();
+        this.queryParams = new LinkedList<>();
+        this.body = json;
+
+        validateJson();
     }
 
     /**
@@ -218,5 +210,13 @@ public class JsonRequest implements Request {
     @Override
     public Object body() {
         return body;
+    }
+
+    private void validateJson() throws InvalidJsonException {
+        try {
+            new JsonParser().parse(body);
+        } catch (JsonParseException parseException) {
+            throw new InvalidJsonException(parseException, this.body);
+        }
     }
 }

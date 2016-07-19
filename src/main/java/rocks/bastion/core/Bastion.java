@@ -15,6 +15,10 @@ import static java.lang.String.format;
 
 public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
+    public static BastionBuilder<String> request(String message, Request request) {
+        return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
+    }
+
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
     private Collection<ResponseDecoder> modelConverters;
@@ -39,53 +43,8 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
         this.callback = Callback.noCallback();
     }
 
-    public static BastionBuilder<String> request(String message, Request request) {
-        return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
-    }
-
     public void addBastionListener(BastionListener newListener) {
         bastionListenerCollection.add(newListener);
-    }
-
-    private String getDescriptiveText() {
-        if (Strings.isNullOrEmpty(message)) {
-            return request.name();
-        } else {
-            return request.name() + " - " + message;
-        }
-    }
-
-    private void callInternal() {
-
-    }
-
-    private void executeCallback(ModelResponse<MODEL> modelResponse) {
-        callback.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
-    }
-
-    private void executeAssertions(ModelResponse<MODEL> modelResponse) {
-        if (!suppressAssertions) {
-            assertions.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
-        }
-    }
-
-    private MODEL decodeModel(Response response) {
-        MODEL model;
-        DecodingHints decodingHints = new DecodingHints(modelType);
-        Object decodedResponseModel = null;
-        for (ResponseDecoder converter : modelConverters) {
-            decodedResponseModel = converter.decode(response, decodingHints).orElse(null);
-            if (decodedResponseModel != null) {
-                break;
-            }
-        }
-        if (modelInstanceOfRequiredType(decodedResponseModel)) {
-            //noinspection unchecked
-            model = (MODEL) decodedResponseModel;
-        } else {
-            throw new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()));
-        }
-        return model;
     }
 
     /**
@@ -97,10 +56,6 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
      */
     public void setSuppressAssertions(boolean suppressAssertions) {
         this.suppressAssertions = suppressAssertions;
-    }
-
-    private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
-        return modelType == null || (decodedResponseModel != null && modelType.isAssignableFrom(decodedResponseModel.getClass()));
     }
 
     @Override
@@ -191,5 +146,50 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     public void registerModelConverter(ResponseDecoder decoder) {
         Objects.requireNonNull(decoder);
         modelConverters.add(decoder);
+    }
+
+    private String getDescriptiveText() {
+        if (Strings.isNullOrEmpty(message)) {
+            return request.name();
+        } else {
+            return request.name() + " - " + message;
+        }
+    }
+
+    private void callInternal() {
+
+    }
+
+    private void executeCallback(ModelResponse<MODEL> modelResponse) {
+        callback.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
+    }
+
+    private void executeAssertions(ModelResponse<MODEL> modelResponse) {
+        if (!suppressAssertions) {
+            assertions.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
+        }
+    }
+
+    private MODEL decodeModel(Response response) {
+        MODEL model;
+        DecodingHints decodingHints = new DecodingHints(modelType);
+        Object decodedResponseModel = null;
+        for (ResponseDecoder converter : modelConverters) {
+            decodedResponseModel = converter.decode(response, decodingHints).orElse(null);
+            if (decodedResponseModel != null) {
+                break;
+            }
+        }
+        if (modelInstanceOfRequiredType(decodedResponseModel)) {
+            //noinspection unchecked
+            model = (MODEL) decodedResponseModel;
+        } else {
+            throw new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()));
+        }
+        return model;
+    }
+
+    private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
+        return modelType == null || (decodedResponseModel != null && modelType.isAssignableFrom(decodedResponseModel.getClass()));
     }
 }

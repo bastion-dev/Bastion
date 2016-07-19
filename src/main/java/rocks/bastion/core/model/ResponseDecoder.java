@@ -20,7 +20,7 @@ public interface ResponseDecoder {
      * Attempts to decode the given HTTP response to a Java object. If this decoder is unable to decode the
      * HTTP response, then it should return an {@link Optional#empty() empty Optional}. Otherwise, it should return
      * an {@link Optional#of(Object) Optional container containing the decoded object}.
-     *
+     * <p>
      * A user might have supplied a <i>target</i> object type it wants the decoded information bound to. In this case,
      * the target model type to bind to will be given in the {@code hints} parameter, accessible using the
      * {@link DecodingHints#getModelType()} method.

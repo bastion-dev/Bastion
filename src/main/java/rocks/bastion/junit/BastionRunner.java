@@ -38,23 +38,6 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     }
 
     @Override
-    protected Description describeChild(FrameworkMethod method) {
-        Description description = methodDescriptions.get(method);
-        if (description == null) {
-            description = Description.createSuiteDescription(testName(method), method.getAnnotations());
-            methodDescriptions.putIfAbsent(method, description);
-        }
-        return description;
-    }
-
-    @Override
-    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-        runningTestCase = describeChild(method);
-        currentNotifier = notifier;
-        super.runChild(method, notifier);
-    }
-
-    @Override
     public void callStarted(BastionStartedEvent event) {
         runningBastionRequest = Description.createTestDescription(runningTestCase.getDisplayName(), event.getRequestMessage());
         runningTestCase.addChild(runningBastionRequest);
@@ -87,6 +70,23 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
         } else {
             throw new RuntimeException(event.getThrowable());
         }
+    }
+
+    @Override
+    protected Description describeChild(FrameworkMethod method) {
+        Description description = methodDescriptions.get(method);
+        if (description == null) {
+            description = Description.createSuiteDescription(testName(method), method.getAnnotations());
+            methodDescriptions.putIfAbsent(method, description);
+        }
+        return description;
+    }
+
+    @Override
+    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+        runningTestCase = describeChild(method);
+        currentNotifier = notifier;
+        super.runChild(method, notifier);
     }
 
 }

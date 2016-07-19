@@ -29,16 +29,16 @@ public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
         File responseFile = new File(CreateAndGetSushiFromFileTest.class.getResource("/json/create_sushi_response.json").toURI());
 
         Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromFile(BASE_URL, requestFile))
-                                    .bind(Sushi.class)
-                                    .withAssertions(JsonResponseAssertions.fromFile(201, responseFile).ignoreValuesForProperties("/id"))
-                                    .call()
-                                    .getModel();
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromFile(201, responseFile).ignoreValuesForProperties("/id"))
+                .call()
+                .getModel();
 
         Sushi gottenSushi = Bastion.request("Get Sushi", GeneralRequest.get(BASE_URL + "/" + createdSushi.getId()))
-                                   .bind(Sushi.class)
-                                   .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreValuesForProperties("/id"))
-                                   .call()
-                                   .getModel();
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreValuesForProperties("/id"))
+                .call()
+                .getModel();
 
         assertThat(gottenSushi.getId()).isEqualTo(createdSushi.getId());
     }

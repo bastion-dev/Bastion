@@ -32,6 +32,19 @@ import static java.lang.String.format;
  */
 public class JsonResponseAssertions implements Assertions<Object> {
 
+    public static JsonResponseAssertions fromString(int expectedStatusCode, String expectedJson) {
+        return new JsonResponseAssertions(expectedStatusCode, expectedJson);
+    }
+
+    public static JsonResponseAssertions fromFile(int expectedStatusCode, File expectedJsonFile) {
+        try {
+            Objects.requireNonNull(expectedJsonFile);
+            return new JsonResponseAssertions(expectedStatusCode, Files.asCharSource(expectedJsonFile, Charset.defaultCharset()).read());
+        } catch (IOException e) {
+            throw new RuntimeException(format("An error occurred while reading a file %s", expectedJsonFile), e);
+        }
+    }
+
     private int expectedStatusCode;
     private ContentType contentType;
     private String expectedJson;
@@ -46,26 +59,6 @@ public class JsonResponseAssertions implements Assertions<Object> {
         this.ignoredFieldsValue = new HashSet<>();
 
         validateExpectedJson();
-    }
-
-    public static JsonResponseAssertions fromString(int expectedStatusCode, String expectedJson) {
-        return new JsonResponseAssertions(expectedStatusCode, expectedJson);
-    }
-
-    public static JsonResponseAssertions fromFile(int expectedStatusCode, File expectedJsonFile) {
-        try {
-            Objects.requireNonNull(expectedJsonFile);
-            return new JsonResponseAssertions(expectedStatusCode, Files.asCharSource(expectedJsonFile, Charset.defaultCharset()).read());
-        } catch (IOException e) {
-            throw new RuntimeException(format("An error occurred while reading a file %s", expectedJsonFile), e);
-        }
-    }
-
-    private static void assertJsonPatchIsEmpty(JsonNode jsonPatch) {
-        if (jsonPatch.size() != 0) {
-            Assert.fail(format("Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need " +
-                    "to perform to transform the actual response body into the expected response body:\n %s", jsonPatch.toString()));
-        }
     }
 
     /**
@@ -83,19 +76,6 @@ public class JsonResponseAssertions implements Assertions<Object> {
         Objects.requireNonNull(fields);
         Arrays.stream(fields).forEach(this::ignoreValueForProperty);
         return this;
-    }
-
-    private void ignoreValueForProperty(String field) {
-        Objects.requireNonNull(field);
-        field = sanitizePropertyName(field);
-        ignoredFieldsValue.add(field);
-    }
-
-    private String sanitizePropertyName(String field) {
-        if (!field.startsWith("/")) {
-            return "/" + field;
-        }
-        return field;
     }
 
     /**
@@ -122,6 +102,26 @@ public class JsonResponseAssertions implements Assertions<Object> {
         } catch (IOException e) {
             throw new RuntimeException("An error occurred while parsing JSON text", e);
         }
+    }
+
+    private static void assertJsonPatchIsEmpty(JsonNode jsonPatch) {
+        if (jsonPatch.size() != 0) {
+            Assert.fail(format("Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need " +
+                    "to perform to transform the actual response body into the expected response body:\n %s", jsonPatch.toString()));
+        }
+    }
+
+    private void ignoreValueForProperty(String field) {
+        Objects.requireNonNull(field);
+        field = sanitizePropertyName(field);
+        ignoredFieldsValue.add(field);
+    }
+
+    private String sanitizePropertyName(String field) {
+        if (!field.startsWith("/")) {
+            return "/" + field;
+        }
+        return field;
     }
 
     private void validateExpectedJson() throws InvalidJsonException {

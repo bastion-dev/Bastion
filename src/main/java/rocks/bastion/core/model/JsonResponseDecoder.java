@@ -13,13 +13,6 @@ public class JsonResponseDecoder implements ResponseDecoder {
 
     private static ObjectMapper jsonObjectMapper = null;
 
-    private synchronized static ObjectMapper getObjectMapper() {
-        if (jsonObjectMapper == null) {
-            jsonObjectMapper = new ObjectMapper();
-        }
-        return jsonObjectMapper;
-    }
-
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {
         ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
@@ -34,6 +27,13 @@ public class JsonResponseDecoder implements ResponseDecoder {
         }
         Optional<?> decodedModel = decodeTreeUsingHints(decodedJsonTree, hints);
         return decodedModel;
+    }
+
+    private synchronized static ObjectMapper getObjectMapper() {
+        if (jsonObjectMapper == null) {
+            jsonObjectMapper = new ObjectMapper();
+        }
+        return jsonObjectMapper;
     }
 
     private Optional<?> decodeTreeUsingHints(JsonNode decodedJsonTree, DecodingHints hints) {

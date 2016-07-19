@@ -11,7 +11,7 @@ import java.util.Objects;
  * An HTTP request which takes any arbitrary text string as its content body. The {@linkplain GeneralRequest} will not perform
  * any conversions or validation on any user-supplied body content. Use the static factory methods, such as {@link #get(String)}
  * or {@link #post(String, String)} to initialise a new {@linkplain GeneralRequest}.
- *
+ * <p>
  * By default, this request will contain no headers (except for the content-type) and no query parameters. Use the {@link #addHeader(String, String)}
  * and {@link #addQueryParam(String, String)}} to add them. Also, initially, the request will have the "text/plain" content-type MIME
  * (which is automatically added to the HTTP headers by Bastion): you can change this content-type by calling the {@link #setContentType(ContentType)}

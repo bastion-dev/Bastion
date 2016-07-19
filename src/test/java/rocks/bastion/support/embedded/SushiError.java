@@ -22,6 +22,7 @@ public enum SushiError {
 
     /**
      * Returns a response for this error code and sets the HTTP status code for the given Spark response.
+     *
      * @param response the Spark response to set the HTTP status for
      * @return An error response object with the default error reason.
      */
@@ -32,8 +33,9 @@ public enum SushiError {
 
     /**
      * Returns a response for this error code with a custom reason and sets the HTTP status code for the given Spark response.
+     *
      * @param response the Spark response to set the HTTP status for
-     * @param reason the reason for the error
+     * @param reason   the reason for the error
      * @return An error response object with a custom error reason.
      */
     public SushiOrderErrorResponse toResponse(Response response, String reason) {

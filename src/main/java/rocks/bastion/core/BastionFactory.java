@@ -11,7 +11,6 @@ import java.util.Objects;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
-    private boolean suppressAssertions = false;
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
@@ -38,6 +37,8 @@ public abstract class BastionFactory {
         Objects.requireNonNull(defaultBastionFactory, "The default Bastion factory cannot be null");
         BastionFactory.defaultBastionFactory = defaultBastionFactory;
     }
+
+    private boolean suppressAssertions = false;
 
     /**
      * Construct and initialise a new instance of the {@link Bastion} builder. By default, the returned builder

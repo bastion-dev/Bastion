@@ -7,10 +7,15 @@ import java.math.BigDecimal;
  */
 public class Sushi {
 
+    public static Builder newSushi() {
+        return new Builder();
+    }
+
     private long id;
     private String name;
     private BigDecimal price;
     private Type type;
+
     protected Sushi() {
         // required for deserialization
     }
@@ -20,10 +25,6 @@ public class Sushi {
         name = builder.name;
         price = builder.price;
         type = builder.type;
-    }
-
-    public static Builder newSushi() {
-        return new Builder();
     }
 
     public long getId() {

@@ -85,20 +85,6 @@ public class JsonRequestTest {
         JsonRequest request = JsonRequest.putFromFile("http://test.test", new File("inexistant.json"));
     }
 
-    private void assertJsonRequestAttributes(JsonRequest request, String expectedName, HttpMethod expectedMethod, String expectedBody) {
-        assertThat(request.name()).describedAs("Request Name").isEqualTo(expectedName);
-        assertThat(request.url()).describedAs("Request URL").isEqualTo("http://test.test");
-        assertThat(request.method()).describedAs("Request Method").isEqualTo(expectedMethod);
-        assertThat(request.contentType()).describedAs("Request Content-type").isEqualTo(ContentType.APPLICATION_JSON);
-        assertThat(request.headers()).describedAs("Request Headers").isEmpty();
-        assertThat(request.queryParams()).describedAs("Request Query Parameters").isEmpty();
-        assertThat(request.body()).describedAs("Request Body").isEqualTo(expectedBody);
-    }
-
-    private File getValidJsonFile() throws URISyntaxException {
-        return new File(JsonRequestTest.class.getResource("/rocks/bastion/core/request/test-body.json").toURI());
-    }
-
     @Test
     public void overrideContentType() throws Exception {
         JsonRequest request = JsonRequest.fromString(HttpMethod.POST, "http://test.test", "{ \"key\":\"value\", \"array\":[ \"1\", \"test\" ] }");
@@ -122,6 +108,20 @@ public class JsonRequestTest {
         request.addQueryParam("query2", "value2");
         assertThat(request.queryParams()).hasSize(2);
         assertThat(request.queryParams()).containsExactly(new ApiQueryParam("query1", "value1"), new ApiQueryParam("query2", "value2"));
+    }
+
+    private void assertJsonRequestAttributes(JsonRequest request, String expectedName, HttpMethod expectedMethod, String expectedBody) {
+        assertThat(request.name()).describedAs("Request Name").isEqualTo(expectedName);
+        assertThat(request.url()).describedAs("Request URL").isEqualTo("http://test.test");
+        assertThat(request.method()).describedAs("Request Method").isEqualTo(expectedMethod);
+        assertThat(request.contentType()).describedAs("Request Content-type").isEqualTo(ContentType.APPLICATION_JSON);
+        assertThat(request.headers()).describedAs("Request Headers").isEmpty();
+        assertThat(request.queryParams()).describedAs("Request Query Parameters").isEmpty();
+        assertThat(request.body()).describedAs("Request Body").isEqualTo(expectedBody);
+    }
+
+    private File getValidJsonFile() throws URISyntaxException {
+        return new File(JsonRequestTest.class.getResource("/rocks/bastion/core/request/test-body.json").toURI());
     }
 
 }
