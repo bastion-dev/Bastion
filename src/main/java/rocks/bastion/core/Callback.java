@@ -12,7 +12,7 @@ public interface Callback<M> {
     /**
      * The empty callback which does nothing.
      */
-    Callback NO_OPERATION_CALLBACK = (statusCode, response, context) -> {
+    Callback<?> NO_OPERATION_CALLBACK = (statusCode, response, context) -> {
     };
 
     /**

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Creates and configures an instance of the {@link BastionBuilderImpl} fluent builder. A single factory can be designated as the
  * <i>Default</i> factory which is used by the {@link Bastion#request(String, HttpRequest)} method. Subclasses will generally
- * implement the {@link BastionFactory#prepareBastion(BastionBuilder)} to further configure the instance with any additional
+ * implement the {@link BastionFactory#prepareBastion(BastionBuilderImpl)} to further configure the instance with any additional
  * features necessary.
  */
 public abstract class BastionFactory {
@@ -21,7 +21,7 @@ public abstract class BastionFactory {
      *
      * @return A non-null factory instance which is considered to be the "Default."
      */
-    public synchronized static BastionFactory getDefaultBastionFactory() {
+    public static synchronized BastionFactory getDefaultBastionFactory() {
         if (defaultBastionFactory == null) {
             setDefaultBastionFactory(new DefaultBastionFactory());
         }

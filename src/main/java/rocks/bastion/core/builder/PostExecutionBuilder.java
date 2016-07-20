@@ -17,7 +17,7 @@ public interface PostExecutionBuilder<MODEL> {
 
     /**
      * Returns the model object that was decoded from the received HTTP response. If a type has been bound to this builder
-     * using {@link BindBuilder#bind(Class)}, then the model given by {@link #getModel()}
+     * using {@link BindBuilder#bind(Class)}, then the model given by this method
      * will be of the specified type. Otherwise, the type of model will be determined by Bastion itself depending on the content-type
      * of the response.
      *

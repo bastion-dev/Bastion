@@ -15,11 +15,12 @@ import rocks.bastion.core.event.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BastionRunner extends BlockJUnit4ClassRunner implements BastionListener {
 
-    private ConcurrentHashMap<FrameworkMethod, Description> methodDescriptions = new ConcurrentHashMap<FrameworkMethod, Description>();
+    private Map<FrameworkMethod, Description> methodDescriptions = new ConcurrentHashMap<>();
 
     private Description runningTestCase;
 
@@ -62,13 +63,14 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     @Override
     public void callError(BastionErrorEvent event) {
-        currentNotifier.fireTestFailure(new Failure(runningBastionRequest, event.getThrowable()));
-        if (event.getThrowable() instanceof RuntimeException) {
-            throw (RuntimeException) event.getThrowable();
-        } else if (event.getThrowable() instanceof Error) {
-            throw (Error) event.getThrowable();
+        Throwable throwable = event.getThrowable();
+        currentNotifier.fireTestFailure(new Failure(runningBastionRequest, throwable));
+        if (throwable instanceof RuntimeException) {
+            throw (RuntimeException) throwable;
+        } else if (throwable instanceof Error) {
+            throw (Error) throwable;
         } else {
-            throw new RuntimeException(event.getThrowable());
+            throw new RuntimeException(throwable);
         }
     }
 

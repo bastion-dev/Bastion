@@ -19,8 +19,8 @@ public interface Assertions<M> {
     /**
      * The constant representing the assertions which always pass.
      */
-    Assertions<?> NO_ASSERTIONS = ((statusCode, response, model) -> {
-    });
+    Assertions<?> NO_ASSERTIONS = (statusCode, response, model) -> {
+    };
 
     /**
      * Returns a typed no-op assertion which always passes.
@@ -57,7 +57,7 @@ public interface Assertions<M> {
     default Assertions<M> and(Assertions<M> after) {
         Objects.requireNonNull(after);
         return (statusCode, response, model) -> {
-            this.execute(statusCode, response, model);
+            execute(statusCode, response, model);
             after.execute(statusCode, response, model);
         };
     }

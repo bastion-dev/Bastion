@@ -20,7 +20,7 @@ public class StringResponseDecoder implements ResponseDecoder {
         try {
             Charset responseCharset = response.getContentType().map(ContentType::getCharset).orElse(Consts.ISO_8859_1);
             return Optional.of(CharStreams.toString(new InputStreamReader(response.getBody(), responseCharset)));
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             return Optional.empty();
         }
     }

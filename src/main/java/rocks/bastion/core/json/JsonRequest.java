@@ -124,18 +124,18 @@ public class JsonRequest implements HttpRequest {
     private Collection<ApiQueryParam> queryParams;
     private String body;
 
-    private JsonRequest(HttpMethod method, String url, String json) throws InvalidJsonException {
+    protected JsonRequest(HttpMethod method, String url, String json) throws InvalidJsonException {
         Objects.requireNonNull(method);
         Objects.requireNonNull(url);
         Objects.requireNonNull(json);
 
         this.method = method;
         this.url = url;
-        this.name = method.getValue() + " " + url;
-        this.contentType = ContentType.APPLICATION_JSON;
-        this.headers = new LinkedList<>();
-        this.queryParams = new LinkedList<>();
-        this.body = json;
+        name = method.getValue() + ' ' + url;
+        contentType = ContentType.APPLICATION_JSON;
+        headers = new LinkedList<>();
+        queryParams = new LinkedList<>();
+        body = json;
 
         validateJson();
     }
@@ -161,7 +161,7 @@ public class JsonRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public JsonRequest addHeader(String name, String value) {
-        this.headers.add(new ApiHeader(name, value));
+        headers.add(new ApiHeader(name, value));
         return this;
     }
 
@@ -173,7 +173,7 @@ public class JsonRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public JsonRequest addQueryParam(String name, String value) {
-        this.queryParams.add(new ApiQueryParam(name, value));
+        queryParams.add(new ApiQueryParam(name, value));
         return this;
     }
 
@@ -216,7 +216,7 @@ public class JsonRequest implements HttpRequest {
         try {
             new JsonParser().parse(body);
         } catch (JsonParseException parseException) {
-            throw new InvalidJsonException(parseException, this.body);
+            throw new InvalidJsonException(parseException, body);
         }
     }
 }

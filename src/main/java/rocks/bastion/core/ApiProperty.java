@@ -61,12 +61,18 @@ public class ApiProperty {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
 
         ApiProperty that = (ApiProperty) o;
 
-        if (!getName().equals(that.getName())) return false;
+        if (!getName().equals(that.getName())) {
+            return false;
+        }
         return getValue().equals(that.getValue());
 
     }
@@ -74,7 +80,7 @@ public class ApiProperty {
     @Override
     public int hashCode() {
         int result = getName().hashCode();
-        result = 31 * result + getValue().hashCode();
+        result = (31 * result) + getValue().hashCode();
         return result;
     }
 }

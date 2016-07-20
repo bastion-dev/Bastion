@@ -40,10 +40,10 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         modelConverters = new LinkedList<>();
         this.message = message;
         this.request = request;
-        this.modelType = null;
-        this.suppressAssertions = false;
-        this.assertions = Assertions.noAssertions();
-        this.callback = Callback.noCallback();
+        modelType = null;
+        suppressAssertions = false;
+        assertions = Assertions.noAssertions();
+        callback = Callback.noCallback();
     }
 
     public void addBastionListener(BastionListener newListener) {
@@ -69,25 +69,25 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     @Override
     public void notifyListenersCallStarted(BastionStartedEvent event) {
         Objects.requireNonNull(event);
-        bastionListenerCollection.forEach((listener) -> listener.callStarted(event));
+        bastionListenerCollection.forEach(listener -> listener.callStarted(event));
     }
 
     @Override
     public void notifyListenersCallFailed(BastionFailureEvent event) {
         Objects.requireNonNull(event);
-        bastionListenerCollection.forEach((listener) -> listener.callFailed(event));
+        bastionListenerCollection.forEach(listener -> listener.callFailed(event));
     }
 
     @Override
     public void notifyListenersCallError(BastionErrorEvent event) {
         Objects.requireNonNull(event);
-        bastionListenerCollection.forEach((listener) -> listener.callError(event));
+        bastionListenerCollection.forEach(listener -> listener.callError(event));
     }
 
     @Override
     public void notifyListenersCallFinished(BastionFinishedEvent event) {
         Objects.requireNonNull(event);
-        bastionListenerCollection.forEach((listener) -> listener.callFinished(event));
+        bastionListenerCollection.forEach(listener -> listener.callFinished(event));
     }
 
     @Override
@@ -159,10 +159,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         }
     }
 
-    private void callInternal() {
-
-    }
-
     private void executeCallback(ModelResponse<MODEL> modelResponse) {
         callback.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
     }
@@ -174,7 +170,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     }
 
     private MODEL decodeModel(Response response) {
-        MODEL model;
         DecodingHints decodingHints = new DecodingHints(modelType);
         Object decodedResponseModel = null;
         for (ResponseDecoder converter : modelConverters) {
@@ -183,7 +178,8 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
                 break;
             }
         }
-        if (modelInstanceOfRequiredType(decodedResponseModel)) {
+        MODEL model;
+        if (isModelInstanceOfRequiredType(decodedResponseModel)) {
             //noinspection unchecked
             model = (MODEL) decodedResponseModel;
         } else {
@@ -192,7 +188,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         return model;
     }
 
-    private boolean modelInstanceOfRequiredType(Object decodedResponseModel) {
-        return modelType == null || (decodedResponseModel != null && modelType.isAssignableFrom(decodedResponseModel.getClass()));
+    private boolean isModelInstanceOfRequiredType(Object decodedResponseModel) {
+        return (modelType == null) || ((decodedResponseModel != null) && modelType.isAssignableFrom(decodedResponseModel.getClass()));
     }
 }

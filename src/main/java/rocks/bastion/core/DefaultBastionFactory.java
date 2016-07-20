@@ -3,6 +3,7 @@ package rocks.bastion.core;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.JsonResponseDecoder;
 import rocks.bastion.core.model.ResponseDecoder;
+import rocks.bastion.core.model.ResponseDecodersRegistrar;
 import rocks.bastion.core.model.StringResponseDecoder;
 
 /**
@@ -36,12 +37,13 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
 
     @Override
     public void callError(BastionErrorEvent event) {
-        if (event.getThrowable() instanceof RuntimeException) {
-            throw (RuntimeException) event.getThrowable();
-        } else if (event.getThrowable() instanceof Error) {
-            throw (Error) event.getThrowable();
+        Throwable throwable = event.getThrowable();
+        if (throwable instanceof RuntimeException) {
+            throw (RuntimeException) throwable;
+        } else if (throwable instanceof Error) {
+            throw (Error) throwable;
         } else {
-            throw new RuntimeException(event.getThrowable());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -51,7 +53,7 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
         bastion.registerListener(this);
     }
 
-    protected void registerModelConverters(BastionBuilderImpl<?> bastion) {
+    protected void registerModelConverters(ResponseDecodersRegistrar bastion) {
         bastion.registerModelConverter(new JsonResponseDecoder());
         bastion.registerModelConverter(new StringResponseDecoder());
     }

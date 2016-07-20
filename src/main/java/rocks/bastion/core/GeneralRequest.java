@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class GeneralRequest implements HttpRequest {
 
-    public static String EMPTY_BODY = "";
+    public static final String EMPTY_BODY = "";
 
     /**
      * Construct an HTTP request, using the GET method, to be sent on the specified URL. It will also have
@@ -29,7 +29,7 @@ public class GeneralRequest implements HttpRequest {
      * @param url A non-{@literal null} URL to send the request on
      * @return An HTTP request using the get method
      */
-    public static GeneralRequest get(String url) {
+    public static HttpRequest get(String url) {
         return new GeneralRequest(HttpMethod.GET, url, EMPTY_BODY);
     }
 
@@ -101,16 +101,16 @@ public class GeneralRequest implements HttpRequest {
     private Collection<ApiQueryParam> queryParams;
     private String body;
 
-    private GeneralRequest(HttpMethod method, String url, String body) throws InvalidJsonException {
+    protected GeneralRequest(HttpMethod method, String url, String body) throws InvalidJsonException {
         Objects.requireNonNull(method);
         Objects.requireNonNull(url);
 
         this.method = method;
         this.url = url;
-        this.name = method.getValue() + " " + url;
-        this.contentType = ContentType.TEXT_PLAIN;
-        this.headers = new LinkedList<>();
-        this.queryParams = new LinkedList<>();
+        name = method.getValue() + ' ' + url;
+        contentType = ContentType.TEXT_PLAIN;
+        headers = new LinkedList<>();
+        queryParams = new LinkedList<>();
         setBody(body);
     }
 
@@ -134,7 +134,7 @@ public class GeneralRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public GeneralRequest addHeader(String name, String value) {
-        this.headers.add(new ApiHeader(name, value));
+        headers.add(new ApiHeader(name, value));
         return this;
     }
 
@@ -146,7 +146,7 @@ public class GeneralRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public GeneralRequest addQueryParam(String name, String value) {
-        this.queryParams.add(new ApiQueryParam(name, value));
+        queryParams.add(new ApiQueryParam(name, value));
         return this;
     }
 

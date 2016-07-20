@@ -19,7 +19,7 @@ public interface Response {
      * Gets the response's body, ready for reading. The implementation does not guarantee that it will always return the
      * state of the input stream
      *
-     * @return
+     * @return The body content sent by the remote end during this HTTP call
      */
     InputStream getBody();
 }

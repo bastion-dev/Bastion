@@ -20,7 +20,7 @@ public class RequestExecutor {
     public RequestExecutor(HttpRequest bastionHttpRequest) {
         Objects.requireNonNull(bastionHttpRequest);
         this.bastionHttpRequest = bastionHttpRequest;
-        this.executableHttpRequest = identifyHttpRequest();
+        executableHttpRequest = identifyHttpRequest();
     }
 
     public Response execute() {

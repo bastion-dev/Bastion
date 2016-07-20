@@ -50,13 +50,13 @@ public class JsonResponseAssertions implements Assertions<Object> {
     private String expectedJson;
     private Collection<String> ignoredFieldsValue;
 
-    private JsonResponseAssertions(int expectedStatusCode, String expectedJson) {
+    protected JsonResponseAssertions(int expectedStatusCode, String expectedJson) {
         Objects.requireNonNull(expectedJson);
 
         this.expectedStatusCode = expectedStatusCode;
-        this.contentType = ContentType.APPLICATION_JSON;
+        contentType = ContentType.APPLICATION_JSON;
         this.expectedJson = expectedJson;
-        this.ignoredFieldsValue = new HashSet<>();
+        ignoredFieldsValue = new HashSet<>();
 
         validateExpectedJson();
     }
@@ -113,13 +113,12 @@ public class JsonResponseAssertions implements Assertions<Object> {
 
     private void ignoreValueForProperty(String field) {
         Objects.requireNonNull(field);
-        field = sanitizePropertyName(field);
-        ignoredFieldsValue.add(field);
+        ignoredFieldsValue.add(sanitizePropertyName(field));
     }
 
     private String sanitizePropertyName(String field) {
         if (!field.startsWith("/")) {
-            return "/" + field;
+            return '/' + field;
         }
         return field;
     }
@@ -128,11 +127,11 @@ public class JsonResponseAssertions implements Assertions<Object> {
         try {
             new JsonParser().parse(expectedJson);
         } catch (JsonParseException parseException) {
-            throw new InvalidJsonException(parseException, this.expectedJson);
+            throw new InvalidJsonException(parseException, expectedJson);
         }
     }
 
-    private void assertContentTypeHeader(ModelResponse<?> response) {
+    private void assertContentTypeHeader(Response response) {
         Assert.assertTrue("Content-type exists in response", response.getContentType().isPresent());
         Assert.assertEquals("Content-type MIME type", contentType.getMimeType(), response.getContentType().get().getMimeType());
     }
@@ -147,7 +146,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
         return jsonPatch;
     }
 
-    private void removeReplaceOpsForIgnoredFields(JsonNode jsonPatch) {
+    private void removeReplaceOpsForIgnoredFields(Iterable jsonPatch) {
         Iterator<JsonNode> patchIterator = jsonPatch.iterator();
         while (patchIterator.hasNext()) {
             JsonNode patchOperation = patchIterator.next();

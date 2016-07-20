@@ -1,6 +1,7 @@
 package rocks.bastion.core.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.entity.ContentType;
@@ -16,27 +17,26 @@ public class JsonResponseDecoder implements ResponseDecoder {
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {
         ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
-        if (!supportsContentType(responseContentType)) {
+        if (!isSupportsContentType(responseContentType)) {
             return Optional.empty();
         }
         JsonNode decodedJsonTree;
         try {
             decodedJsonTree = getObjectMapper().readTree(response.getBody());
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             return Optional.empty();
         }
-        Optional<?> decodedModel = decodeTreeUsingHints(decodedJsonTree, hints);
-        return decodedModel;
+        return decodeTreeUsingHints(decodedJsonTree, hints);
     }
 
-    private synchronized static ObjectMapper getObjectMapper() {
+    private static synchronized ObjectMapper getObjectMapper() {
         if (jsonObjectMapper == null) {
             jsonObjectMapper = new ObjectMapper();
         }
         return jsonObjectMapper;
     }
 
-    private Optional<?> decodeTreeUsingHints(JsonNode decodedJsonTree, DecodingHints hints) {
+    private Optional<?> decodeTreeUsingHints(TreeNode decodedJsonTree, DecodingHints hints) {
         return Optional.of(hints.getModelType().<Object>map(modelType -> {
             try {
                 return getObjectMapper().treeToValue(decodedJsonTree, modelType);
@@ -46,7 +46,7 @@ public class JsonResponseDecoder implements ResponseDecoder {
         }).orElse(decodedJsonTree));
     }
 
-    private boolean supportsContentType(ContentType responseContentType) {
+    private boolean isSupportsContentType(ContentType responseContentType) {
         return responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType());
     }
 }
