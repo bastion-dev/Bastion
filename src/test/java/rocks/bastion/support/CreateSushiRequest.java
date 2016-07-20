@@ -5,13 +5,13 @@ import org.apache.http.entity.ContentType;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
 import rocks.bastion.core.HttpMethod;
-import rocks.bastion.core.Request;
+import rocks.bastion.core.HttpRequest;
 import rocks.bastion.support.embedded.Sushi;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class CreateSushiRequest implements Request {
+public class CreateSushiRequest implements HttpRequest {
 
     @Override
     public String name() {

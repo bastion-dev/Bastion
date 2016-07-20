@@ -3,7 +3,6 @@ package rocks.bastion.core;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
 import java.io.InputStream;
@@ -15,13 +14,13 @@ import java.util.stream.Collectors;
  */
 public class RequestExecutor {
 
-    private Request bastionRequest;
-    private HttpRequest executableRequest;
+    private HttpRequest bastionHttpRequest;
+    private com.mashape.unirest.request.HttpRequest executableHttpRequest;
 
-    public RequestExecutor(Request bastionRequest) {
-        Objects.requireNonNull(bastionRequest);
-        this.bastionRequest = bastionRequest;
-        this.executableRequest = identifyHttpRequest();
+    public RequestExecutor(HttpRequest bastionHttpRequest) {
+        Objects.requireNonNull(bastionHttpRequest);
+        this.bastionHttpRequest = bastionHttpRequest;
+        this.executableHttpRequest = identifyHttpRequest();
     }
 
     public Response execute() {
@@ -36,46 +35,46 @@ public class RequestExecutor {
         }
     }
 
-    private HttpRequest identifyHttpRequest() {
-        switch (bastionRequest.method().getValue()) {
+    private com.mashape.unirest.request.HttpRequest identifyHttpRequest() {
+        switch (bastionHttpRequest.method().getValue()) {
             case "GET":
-                return Unirest.get(bastionRequest.url());
+                return Unirest.get(bastionHttpRequest.url());
             case "POST":
-                return Unirest.post(bastionRequest.url());
+                return Unirest.post(bastionHttpRequest.url());
             case "PATCH":
-                return Unirest.patch(bastionRequest.url());
+                return Unirest.patch(bastionHttpRequest.url());
             case "DELETE":
-                return Unirest.delete(bastionRequest.url());
+                return Unirest.delete(bastionHttpRequest.url());
             case "PUT":
-                return Unirest.put(bastionRequest.url());
+                return Unirest.put(bastionHttpRequest.url());
             case "OPTIONS":
-                return Unirest.options(bastionRequest.url());
+                return Unirest.options(bastionHttpRequest.url());
             case "HEAD":
-                return Unirest.head(bastionRequest.url());
+                return Unirest.head(bastionHttpRequest.url());
             default:
                 return null;
         }
     }
 
     private void applyHeaders() {
-        if (!bastionRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type"))) {
-            executableRequest.header("Content-type", bastionRequest.contentType().toString());
+        if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type"))) {
+            executableHttpRequest.header("Content-type", bastionHttpRequest.contentType().toString());
         }
-        bastionRequest.headers().stream().forEach(header -> executableRequest.header(header.getName(), header.getValue()));
+        bastionHttpRequest.headers().stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
     }
 
     private void applyQueryParameters() {
-        bastionRequest.queryParams().stream().forEach(queryParam -> executableRequest.queryString(queryParam.getName(), queryParam.getValue()));
+        bastionHttpRequest.queryParams().stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
     }
 
     private void applyBody() {
-        if (executableRequest instanceof HttpRequestWithBody) {
-            ((HttpRequestWithBody) executableRequest).body(bastionRequest.body().toString());
+        if (executableHttpRequest instanceof HttpRequestWithBody) {
+            ((HttpRequestWithBody) executableHttpRequest).body(bastionHttpRequest.body().toString());
         }
     }
 
     private HttpResponse<InputStream> performRequest() throws UnirestException {
-        return executableRequest.asBinary();
+        return executableHttpRequest.asBinary();
     }
 
     private Response convertToRawResponse(HttpResponse<InputStream> httpResponse) {

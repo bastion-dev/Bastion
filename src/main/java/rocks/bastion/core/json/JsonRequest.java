@@ -7,7 +7,7 @@ import org.apache.http.entity.ContentType;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
 import rocks.bastion.core.HttpMethod;
-import rocks.bastion.core.Request;
+import rocks.bastion.core.HttpRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import static java.lang.String.format;
  * classpath. Automatically sets the correct content type to use. This request will verify that the provided JSON body
  * contains valid JSON.
  */
-public class JsonRequest implements Request {
+public class JsonRequest implements HttpRequest {
 
     /**
      * Construct an HTTP request containing a JSON body from the given JSON string. Initially, the request will have

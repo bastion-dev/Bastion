@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * Defines an HTTP request for Bastion to send as part of a test.
  */
-public interface Request {
+public interface HttpRequest {
 
     /**
      * Returns a descriptive name for the contents of this request object.

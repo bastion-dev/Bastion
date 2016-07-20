@@ -15,14 +15,14 @@ import static java.lang.String.format;
 
 public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
-    public static BastionBuilder<String> request(String message, Request request) {
+    public static BastionBuilder<String> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
     private Collection<ResponseDecoder> modelConverters;
-    private Request request;
+    private HttpRequest request;
     private Class<MODEL> modelType;
     private boolean suppressAssertions;
     private Assertions<? super MODEL> assertions;
@@ -30,7 +30,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     private MODEL model;
     private ModelResponse<MODEL> modelResponse;
 
-    Bastion(String message, Request request) {
+    Bastion(String message, HttpRequest request) {
         Objects.requireNonNull(message);
         Objects.requireNonNull(request);
         bastionListenerCollection = new LinkedList<>();
