@@ -13,11 +13,7 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
-
-    public static BastionBuilder<String> request(String message, HttpRequest request) {
-        return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
-    }
+public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
@@ -30,7 +26,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     private MODEL model;
     private ModelResponse<MODEL> modelResponse;
 
-    Bastion(String message, HttpRequest request) {
+    BastionBuilderImpl(String message, HttpRequest request) {
         Objects.requireNonNull(message);
         Objects.requireNonNull(request);
         bastionListenerCollection = new LinkedList<>();
@@ -113,7 +109,7 @@ public class Bastion<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRe
     @SuppressWarnings("unchecked")
     public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
         Objects.requireNonNull(modelType);
-        Bastion<T> castedBuilder = (Bastion<T>) this;
+        BastionBuilderImpl<T> castedBuilder = (BastionBuilderImpl<T>) this;
         castedBuilder.modelType = modelType;
         return castedBuilder;
     }

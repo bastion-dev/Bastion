@@ -7,7 +7,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import rocks.bastion.core.Bastion;
+import rocks.bastion.core.BastionBuilderImpl;
 import rocks.bastion.core.BastionFactory;
 import rocks.bastion.core.DefaultBastionFactory;
 import rocks.bastion.core.Response;
@@ -30,7 +30,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
         super(testClass);
         BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory() {
             @Override
-            protected void prepareBastion(Bastion<?> bastion) {
+            protected void prepareBastion(BastionBuilderImpl<?> bastion) {
                 registerModelConverters(bastion);
                 bastion.registerListener(BastionRunner.this);
             }

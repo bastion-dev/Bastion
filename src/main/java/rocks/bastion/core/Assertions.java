@@ -8,8 +8,8 @@ import java.util.Objects;
  * <p>
  * Technically, the assertions can be any executable code but it is strongly recommended that a user only performs
  * stateless checks on the provided model and response. If you would like to change the state of the current test
- * you can use the {@link Bastion#thenDo(Callback)} method using a {@link Callback}. You can also retrieve the returned
- * object using the {@link Bastion#getModel()} and {@link Bastion#getResponse()} methods.
+ * you can use the {@link BastionBuilderImpl#thenDo(Callback)} method using a {@link Callback}. You can also retrieve the returned
+ * object using the {@link BastionBuilderImpl#getModel()} and {@link BastionBuilderImpl#getResponse()} methods.
  *
  * @param <M> The type of response model the assertions will apply for.
  */

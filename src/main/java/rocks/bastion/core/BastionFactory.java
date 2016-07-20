@@ -1,11 +1,13 @@
 package rocks.bastion.core;
 
+import rocks.bastion.Bastion;
+
 import java.util.Objects;
 
 /**
- * Creates and configures an instance of the {@link Bastion} fluent builder. A single factory can be designated as the
+ * Creates and configures an instance of the {@link BastionBuilderImpl} fluent builder. A single factory can be designated as the
  * <i>Default</i> factory which is used by the {@link Bastion#request(String, HttpRequest)} method. Subclasses will generally
- * implement the {@link BastionFactory#prepareBastion(Bastion)} to further configure the instance with any additional
+ * implement the {@link BastionFactory#prepareBastion(BastionBuilderImpl)} to further configure the instance with any additional
  * features necessary.
  */
 public abstract class BastionFactory {
@@ -41,7 +43,7 @@ public abstract class BastionFactory {
     private boolean suppressAssertions = false;
 
     /**
-     * Construct and initialise a new instance of the {@link Bastion} builder. By default, the returned builder
+     * Construct and initialise a new instance of the {@link BastionBuilderImpl} builder. By default, the returned builder
      * will bind the response to a {@linkplain String} model. Also, the returned builder will use the specified
      * {@code message} (for informational purposes) and {@code request}.
      *
@@ -49,20 +51,20 @@ public abstract class BastionFactory {
      *                This message will typically be used and displayed on a UI or test reports for informational
      *                purposes.
      * @param request A non-{@literal null} instance of a {@linkplain HttpRequest} which will be performed by Bastion.
-     * @return A fully configured instance of the {@link Bastion} fluent builder which can be used directly by
+     * @return A fully configured instance of the {@link BastionBuilderImpl} fluent builder which can be used directly by
      * the user to construct Bastion tests.
      */
-    public Bastion<String> getBastion(String message, HttpRequest request) {
-        Bastion<String> bastion = new Bastion<>(message, request);
+    public BastionBuilderImpl<String> getBastion(String message, HttpRequest request) {
+        BastionBuilderImpl<String> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
         prepareBastion(bastion);
         return bastion;
     }
 
     /**
-     * Configures whether {@link Bastion} objects returned by this factory should be configured to suppress assertions or
+     * Configures whether {@link BastionBuilderImpl} objects returned by this factory should be configured to suppress assertions or
      * not. When set to suppress assertions, Bastion will execute the HTTP request as normal as well as any callbacks provided
-     * but will skip executing any assertions provided to the {@link Bastion#withAssertions(Assertions)} method.
+     * but will skip executing any assertions provided to the {@link BastionBuilderImpl#withAssertions(Assertions)} method.
      *
      * @param suppressAssertions {@literal true} to suppress assertions; {@literal false}, otherwise.
      */
@@ -71,12 +73,12 @@ public abstract class BastionFactory {
     }
 
     /**
-     * Configures the specified instance of the {@link Bastion} builder. Factory subclasses must override this method to
+     * Configures the specified instance of the {@link BastionBuilderImpl} builder. Factory subclasses must override this method to
      * configure the builder for use with external systems/libraries. An implementation will typically register event listeners
      * or model converters to be used by Bastion.
      *
      * @param bastion The builder instance to configure.
      */
-    protected abstract void prepareBastion(Bastion<?> bastion);
+    protected abstract void prepareBastion(BastionBuilderImpl<?> bastion);
 
 }

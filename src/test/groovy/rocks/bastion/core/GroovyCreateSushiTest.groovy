@@ -2,6 +2,7 @@ package rocks.bastion.core
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import rocks.bastion.Bastion
 import rocks.bastion.core.json.JsonRequest
 import rocks.bastion.core.json.JsonResponseAssertions
 import rocks.bastion.junit.BastionRunner

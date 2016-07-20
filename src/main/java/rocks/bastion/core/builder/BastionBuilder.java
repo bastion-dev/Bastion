@@ -1,7 +1,7 @@
 package rocks.bastion.core.builder;
 
+import rocks.bastion.Bastion;
 import rocks.bastion.core.Assertions;
-import rocks.bastion.core.Bastion;
 import rocks.bastion.core.Callback;
 import rocks.bastion.core.HttpRequest;
 

@@ -1,9 +1,9 @@
 package rocks.bastion.core.event;
 
-import rocks.bastion.core.Bastion;
+import rocks.bastion.core.BastionBuilderImpl;
 
 /**
- * Interface that {@link Bastion} will use to notify implementors of call status.
+ * Interface that {@link BastionBuilderImpl} will use to notify implementors of call status.
  */
 public interface BastionListener {
 

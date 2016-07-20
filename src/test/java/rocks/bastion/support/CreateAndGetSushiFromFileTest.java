@@ -2,7 +2,7 @@ package rocks.bastion.support;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import rocks.bastion.core.Bastion;
+import rocks.bastion.Bastion;
 import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;

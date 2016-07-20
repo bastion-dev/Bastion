@@ -46,12 +46,12 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
     }
 
     @Override
-    protected void prepareBastion(Bastion<?> bastion) {
+    protected void prepareBastion(BastionBuilderImpl<?> bastion) {
         registerModelConverters(bastion);
         bastion.registerListener(this);
     }
 
-    protected void registerModelConverters(Bastion<?> bastion) {
+    protected void registerModelConverters(BastionBuilderImpl<?> bastion) {
         bastion.registerModelConverter(new JsonResponseDecoder());
         bastion.registerModelConverter(new StringResponseDecoder());
     }

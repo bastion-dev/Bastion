@@ -4,7 +4,7 @@ package rocks.bastion.core;
  * Performs an action after an API request has occurred and passed its assertions. Users can use {@code Callback}s
  * to extract information from response recieved by an API. This information can be used for later Bastion requests.
  * <p>
- * By default, a {@link Bastion} builders start with the {@link Callback#noCallback() empty callback}.
+ * By default, a {@link BastionBuilderImpl} builders start with the {@link Callback#noCallback() empty callback}.
  */
 @FunctionalInterface
 public interface Callback<M> {

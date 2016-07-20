@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Responsible for executing a Bastion remote request built using the {@link Bastion} builder and prepare a response object.
+ * Responsible for executing a Bastion remote request built using the {@link BastionBuilderImpl} builder and prepare a response object.
  */
 public class RequestExecutor {
 
