@@ -13,6 +13,13 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
+/**
+ * The standard implementation of the {@link BastionBuilder}. Will keep state of the various attributes that a user supplies to Bastion
+ * when specifying a request. Bastion users will not typically have to deal with this class directly but will instead interact with
+ * Bastion through the various builder interfaces and the front facing {@link rocks.bastion.Bastion Bastion facade}.
+ *
+ * @param <MODEL> The response model type currently bound to the builder
+ */
 public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
     private String message;

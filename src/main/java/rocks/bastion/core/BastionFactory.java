@@ -1,13 +1,14 @@
 package rocks.bastion.core;
 
 import rocks.bastion.Bastion;
+import rocks.bastion.core.builder.BastionBuilder;
 
 import java.util.Objects;
 
 /**
  * Creates and configures an instance of the {@link BastionBuilderImpl} fluent builder. A single factory can be designated as the
  * <i>Default</i> factory which is used by the {@link Bastion#request(String, HttpRequest)} method. Subclasses will generally
- * implement the {@link BastionFactory#prepareBastion(BastionBuilderImpl)} to further configure the instance with any additional
+ * implement the {@link BastionFactory#prepareBastion(BastionBuilder)} to further configure the instance with any additional
  * features necessary.
  */
 public abstract class BastionFactory {
@@ -54,7 +55,7 @@ public abstract class BastionFactory {
      * @return A fully configured instance of the {@link BastionBuilderImpl} fluent builder which can be used directly by
      * the user to construct Bastion tests.
      */
-    public BastionBuilderImpl<String> getBastion(String message, HttpRequest request) {
+    public BastionBuilder<String> getBastion(String message, HttpRequest request) {
         BastionBuilderImpl<String> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
         prepareBastion(bastion);
