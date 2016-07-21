@@ -8,7 +8,7 @@ import rocks.bastion.core.HttpRequest;
 /**
  * The first interface for the Bastion fluent-builder allowing the user to {@link #bind(Class) bind} a model type, apply {@link #withAssertions(Assertions) assertions},
  * apply a {@link #thenDo(Callback) callback} function and {@link #call() initiate} the test. This interface serves to group together all the options for Bastion users
- * immediately after invoking the Bastion building using {@link Bastion#request(String, HttpRequest)}. Using this builder, a user can:
+ * immediately after invoking the Bastion builder using {@link Bastion#request(String, HttpRequest)}. Using this builder, a user can:
  * <ul>
  * <li>{@link #bind(Class)}: Specify which class type to use when constructing a model of the received response. Bastion will
  * interpret and decode the received response object into an instance of whatever type is supplied to this method.</li>
