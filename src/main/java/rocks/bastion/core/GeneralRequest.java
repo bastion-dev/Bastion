@@ -19,6 +19,9 @@ import java.util.Objects;
  */
 public class GeneralRequest implements HttpRequest {
 
+    /**
+     * Represents an empty HTTP content body.
+     */
     public static final String EMPTY_BODY = "";
 
     /**

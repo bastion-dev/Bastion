@@ -142,12 +142,27 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * Groovy is easy to set up for your project. After you have set up Groovy to run automated tests, simply add Bastion to
  * your project's dependencies (as explained above) and create your tests as normal. With Groovy, you can supply long strings
  * using alternate string delimiters including so-called multiline strings. These will improve the readability of your code
- * greatly when suppying strings to Bastion. See the <a href="https://bastion.rocks">Bastion User Guide</a>
+ * greatly when supplying strings to Bastion. See the <a href="https://bastion.rocks">Bastion User Guide</a>
  * for an example of how a Bastion test would look like in Groovy.
  * </p>
  */
 public final class Bastion {
 
+    /**
+     * <p>
+     * Starts building a single Bastion test which will execute the specified HTTP request. The first parameter is a descriptive
+     * string that appears in test reports and any UI running your tests. The method will return a fluent-builder object which
+     * will let you specify the test further.
+     * </p>
+     * <p>
+     * The request you specify in this method can be an instance of one of the in-built {@link HttpRequest request types}
+     * provided with Bastion itself. You can also supply your own implementation of a request by subclassing {@link HttpRequest}.
+     * </p>
+     *
+     * @param message A descriptive message for this Bastion test.
+     * @param request The HTTP request that Bastion will execute for this test.
+     * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
+     */
     public static BastionBuilder<String> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }

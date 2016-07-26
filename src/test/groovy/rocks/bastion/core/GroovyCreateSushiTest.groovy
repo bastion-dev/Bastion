@@ -21,11 +21,11 @@ public class GroovyCreateSushiTest extends TestWithEmbeddedServer {
             }'''
         )).withAssertions(JsonResponseAssertions.fromString(201,
                 '''{
-               "id":5,
-               "name":"sashimi",
-               "price":5.60,
-               "type":"SASHIMI"
-            }'''
+                   "id":5,
+                   "name":"sashimi",
+                   "price":5.60,
+                   "type":"SASHIMI"
+                }'''
         ).ignoreValuesForProperties("/id")
         ).call()
     }

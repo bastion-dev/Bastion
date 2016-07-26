@@ -39,20 +39,6 @@ public class JsonRequestTest {
     }
 
     @Test
-    public void fromFile_invalidFile_shouldThrowException() throws Exception {
-        JsonRequest request = JsonRequest.fromFile(HttpMethod.POST, "http://test.test", getValidJsonFile());
-        assertJsonRequestAttributes(request, "POST http://test.test", HttpMethod.POST, "{\n" +
-                "  \"name\": \"john\",\n" +
-                "  \"timestamp\": \"2016-10-15T20:00:25+0100\",\n" +
-                "  \"favourites\": {\n" +
-                "    \"food\": \"apples\",\n" +
-                "    \"colours\": [\"blue\", \"red\"],\n" +
-                "    \"number\": 23\n" +
-                "  }\n" +
-                "}");
-    }
-
-    @Test
     public void fromFile_validJson_shouldReturnARequest() throws Exception {
         JsonRequest request = JsonRequest.fromFile(HttpMethod.POST, "http://test.test", getValidJsonFile());
         assertJsonRequestAttributes(request, "POST http://test.test", HttpMethod.POST, "{\n" +
