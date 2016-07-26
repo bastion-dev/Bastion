@@ -3,6 +3,8 @@ package rocks.bastion.core;
 import java.util.Objects;
 
 /**
+ * Represents an HTTP method that can be sent with HTTP requests. The standard HTTP methods are available as constants
+ * such as the {@link #GET}, {@link #POST}, etc.
  */
 public class HttpMethod {
 

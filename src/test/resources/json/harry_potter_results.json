@@ -1,0 +1,723 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 557,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "szF_pLGmJTQC",
+      "etag": "RTbUvoa6WW8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/szF_pLGmJTQC",
+      "volumeInfo": {
+        "title": "Baptizing Harry Potter",
+        "subtitle": "A Christian Reading of J.K. Rowling",
+        "authors": [
+          "Luke Bell"
+        ],
+        "publisher": "Paulist Press",
+        "publishedDate": "2010",
+        "description": "The scope and tragedy of the thing : the structure of the series -- More things in heaven and earth : going beyond the normal -- As if a man were author of himself : good against evil -- Be absolute for death : life and death -- Power is made perfect in weakness : power and weakness -- To lay down one's life for one's friends : love and sacrifice -- It is essential that you understand this : freedom and determination -- A pretty boring life : the hidden and the ostentatious -- Telling it like it is : the struggle for truth -- They will see God : purity of heart and purity of blood.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781616431150"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1616431156"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 224,
+        "printType": "BOOK",
+        "categories": [
+          "Children"
+        ],
+        "averageRating": 3.0,
+        "ratingsCount": 2,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.0.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=szF_pLGmJTQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=szF_pLGmJTQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=szF_pLGmJTQC&printsec=frontcover&dq=harry+potter&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=szF_pLGmJTQC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Baptizing_Harry_Potter.html?hl=&id=szF_pLGmJTQC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Baptizing_Harry_Potter-sample-pdf.acsm?id=szF_pLGmJTQC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=szF_pLGmJTQC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "The scope and tragedy of the thing : the structure of the series -- More things in heaven and earth : going beyond the normal -- As if a man were author of himself : good against evil -- Be absolute for death : life and death -- Power is ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "wrOQLV6xB-wC",
+      "etag": "3lJl01VhR1w",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/wrOQLV6xB-wC",
+      "volumeInfo": {
+        "title": "Harry Potter and the Sorcerer's Stone",
+        "authors": [
+          "J.K. Rowling",
+          "Olly Moss"
+        ],
+        "publisher": "Pottermore",
+        "publishedDate": "1997-06-26",
+        "description": "\"Turning the envelope over, his hand trembling, Harry saw a purple wax seal bearing a coat of arms; a lion, an eagle, a badger and a snake surrounding a large letter 'H'.\" Harry Potter has never even heard of Hogwarts when the letters start dropping on the doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment with a purple seal, they are swiftly confiscated by his grisly aunt and uncle. Then, on Harry's eleventh birthday, a great beetle-eyed giant of a man called Rubeus Hagrid bursts in with some astonishing news: Harry Potter is a wizard, and he has a place at Hogwarts School of Witchcraft and Wizardry. An incredible adventure is about to begin!",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781781100486"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1781100489"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 309,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "averageRating": 4.5,
+        "ratingsCount": 292,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.13.11.0.preview.2",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=wrOQLV6xB-wC&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=wrOQLV6xB-wC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=wrOQLV6xB-wC&dq=harry+potter&hl=&cd=2&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=wrOQLV6xB-wC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_and_the_Sorcerer_s_Stone.html?hl=&id=wrOQLV6xB-wC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=wrOQLV6xB-wC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&quot;Turning the envelope over, his hand trembling, Harry saw a purple wax seal bearing a coat of arms; a lion, an eagle, a badger and a snake surrounding a large letter &#39;H&#39;.&quot; Harry Potter has never even heard of Hogwarts when the letters start ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "u3iZWziJPwMC",
+      "etag": "mpnHNbANQkQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/u3iZWziJPwMC",
+      "volumeInfo": {
+        "title": "Broken Wand (Or, How J.K. Rowling Killed Harry Potter)",
+        "authors": [
+          "Timothy A. Wolf"
+        ],
+        "publisher": "Strategic Book Publishing",
+        "publishedDate": "2011-02",
+        "description": "Broken Wand: Or How J.K. Rowling Killed Harry Potter is a detailed critique by Timothy A. Wolf of Harry Potter and the Deathly Hallows, the last book in Rowling's acclaimed series, and how he believes she disregarded everything she wrote in her previous novels. For Harry Potter fans, Broken Wand is must-have reading! Using the actual texts, the author finds issues with Rowling's continuity. Like the Trace Charm that would have made it impossible for the teenage Voldemort to get away with killing his Muggle relatives. Or the idea of Harry carrying a piece of Voldemort's soul inside him from the start, when the Dark Lord couldn't even touch him for the first four books. Or \"wandlore,\" which has no consistency to it at all. Citing plot elements like: questioning Harry's account of the murder in the previous book, the Ministry taking over Hogwarts, Snape's Pensieve memories, and Dumbledore explaining his mistakes; Broken Wand maintains that Rowling's Deathly Hallows is essentially just a bad copy of the fifth book in the series, Harry Potter and the Order of the Phoenix. Wolf also contends that Dumbledore, Snape, Lily Potter, and Voldemort are completely out of character, and Harry merely repeats the same emotional journey he went through before. Plus, there are many questions and plots left unresolved. About the Author: Timothy A. Wolf spent two years researching and writing Broken Wand. As a science fiction reader his entire life and an adult fan of the Harry Potter novels, he wanted to bring the problems he found with the final book to light. He lives in Franklin, Wisconsin. Publisher's website: http: //www.strategicpublishinggroup.com/title/BrokenWand-OrHowJKRowlingKilledHarryPotter.html",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781612040202"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1612040209"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 182,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Criticism"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.0.2.0.preview.2",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=u3iZWziJPwMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=u3iZWziJPwMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=u3iZWziJPwMC&printsec=frontcover&dq=harry+potter&hl=&cd=3&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=u3iZWziJPwMC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Broken_Wand_Or_How_J_K_Rowling_Killed_Ha.html?hl=&id=u3iZWziJPwMC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Broken_Wand_Or_How_J_K_Rowling_Killed_Ha-sample-epub.acsm?id=u3iZWziJPwMC&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=u3iZWziJPwMC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Broken Wand: Or How J.K. Rowling Killed Harry Potter is a detailed critique by Timothy A. Wolf of Harry Potter and the Deathly Hallows, the last book in Rowling&#39;s acclaimed series, and how he believes she disregarded everything she wrote in ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "DKcWE3WXoj8C",
+      "etag": "O+tkKSTksa4",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/DKcWE3WXoj8C",
+      "volumeInfo": {
+        "title": "Harry Potter and International Relations",
+        "authors": [
+          "Daniel H. Nexon",
+          "Iver B. Neumann"
+        ],
+        "publisher": "Rowman & Littlefield",
+        "publishedDate": "2006-01-01",
+        "description": "Drawing on a range of historical and sociological sources, this work shows how aspects of Harry's world contain aspects of our own. It also includes chapters on the political economy of the franchise, and on the problems of studying popular culture.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0742539598"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780742539594"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 245,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Criticism"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 7,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=DKcWE3WXoj8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=DKcWE3WXoj8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=DKcWE3WXoj8C&printsec=frontcover&dq=harry+potter&hl=&cd=4&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=DKcWE3WXoj8C&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_and_International_Relations.html?hl=&id=DKcWE3WXoj8C"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Harry_Potter_and_International_Relations-sample-pdf.acsm?id=DKcWE3WXoj8C&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=DKcWE3WXoj8C&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Drawing on a range of historical and sociological sources, this work shows how aspects of Harry&#39;s world contain aspects of our own."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "-__ICQemqaEC",
+      "etag": "IGh4vWRHGks",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/-__ICQemqaEC",
+      "volumeInfo": {
+        "title": "Reading Harry Potter",
+        "subtitle": "Critical Essays",
+        "authors": [
+          "Giselle Liza Anatol"
+        ],
+        "publisher": "Greenwood Publishing Group",
+        "publishedDate": "2003",
+        "description": "The tropes and themes of J. K. Rowling's massively popular series are interpreted within the context of its audience.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0313320675"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780313320675"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 217,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Criticism"
+        ],
+        "averageRating": 5.0,
+        "ratingsCount": 8,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "0.1.2.0.preview.3",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=-__ICQemqaEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=-__ICQemqaEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=-__ICQemqaEC&printsec=frontcover&dq=harry+potter&hl=&cd=5&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=-__ICQemqaEC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Reading_Harry_Potter.html?hl=&id=-__ICQemqaEC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Reading_Harry_Potter-sample-epub.acsm?id=-__ICQemqaEC&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Reading_Harry_Potter-sample-pdf.acsm?id=-__ICQemqaEC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=-__ICQemqaEC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "The tropes and themes of J. K. Rowling&#39;s massively popular series are interpreted within the context of its audience."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "C63mayArNqoC",
+      "etag": "yyJpZW1YlSg",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/C63mayArNqoC",
+      "volumeInfo": {
+        "title": "A Parent's Guide to Harry Potter",
+        "authors": [
+          "Gina Burkart"
+        ],
+        "publisher": "InterVarsity Press",
+        "publishedDate": "2009-08-20",
+        "description": "Harry Potter has captivated the imagination of millions of children. And Harry Potter has caused controversy in churches and schools. What's a parent to do with the magical, mystical world of Harry and his friends? Gina Burkart chose to read the books with her own children. As they read together, she discovered many parallels between Christian faith and the themes of these books. Indeed, the escapades of Harry Potter sparked significant conversation between Burkart and her kids. In this helpful, entertaining guide, Burkart shows how Harry Potter fits into the tradition of fairy tale writing and how this type of literature aids in building a moral framework. She highlights specific situations and emotions from Harry's world that children face in their own life, such as fear, anger, bullies, diversity and the choice of good over evil. Instead of magic words or easy answers, Burkart offers solid, practical advice for helping parents and children navigate Harry Potter's world--and our own--together.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780830874323"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0830874321"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 112,
+        "printType": "BOOK",
+        "categories": [
+          "Family & Relationships"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "2.0.0.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=C63mayArNqoC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=C63mayArNqoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=C63mayArNqoC&pg=PA102&dq=harry+potter&hl=&cd=6&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=C63mayArNqoC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/A_Parent_s_Guide_to_Harry_Potter.html?hl=&id=C63mayArNqoC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=C63mayArNqoC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "HARRY MEETS JESUS The best way to incorporate God into your \u003cb\u003eHarry Potter\u003c/b\u003e \u003cbr\u003e\ndiscussions is by turning to Scripture. Harry has not yet found God. Ask your \u003cbr\u003e\nchildren what Jesus teaches about the various situations you encounter in the \u003cbr\u003e\nstories."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "uCKvLmFfc84C",
+      "etag": "DIpnNW+yZDU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/uCKvLmFfc84C",
+      "volumeInfo": {
+        "title": "Harry Potter handbook, movie magic",
+        "authors": [
+          "Scholastic Inc"
+        ],
+        "publisher": "Scholastic Inc.",
+        "publishedDate": "2011",
+        "description": "Presents a guide to the Harry Potter film series, including information on the actors, characters, settings, and special effects of the films.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780545296656"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "054529665X"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 64,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Nonfiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=uCKvLmFfc84C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=uCKvLmFfc84C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=uCKvLmFfc84C&printsec=frontcover&dq=harry+potter&hl=&cd=7&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=uCKvLmFfc84C&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_handbook_movie_magic.html?hl=&id=uCKvLmFfc84C"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED_FOR_ACCESSIBILITY",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=uCKvLmFfc84C&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Presents a guide to the Harry Potter film series, including information on the actors, characters, settings, and special effects of the films."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "06FgsmilUXAC",
+      "etag": "TmXZrpkmc3g",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/06FgsmilUXAC",
+      "volumeInfo": {
+        "title": "Harry Potter Collector's Handbook",
+        "authors": [
+          "William Silvester"
+        ],
+        "publisher": "F+W Media, Inc",
+        "publishedDate": "2010-08-19",
+        "description": "Action Figures, Books, Ornaments, Costumes, Calendars, Art, Coins, Dolls, Jewelry, Lunch Boxes, Toys, Movies Harry Potter Casts His Spell on Collectors Welcome, Muggles, to the magic, mystery, and merchandise of the wonderful wizarding world of Harry Potter! Harry Potter Collector's Handbook will bewitch you with colorful images and current values of licensed products based on the famous boy wizard and his charming chums and nefarious foes. Just for you, we've conjured: 1,000+ spellbinding listings, pictures, and secondary market values. Information arranged—magically!—in alphabetical order to make it easy to find what you're looking for. A diverse array of collectibles from rare first editions of books worth thousands of dollars to items worth slightly fewer galleons. If you're mesmerized by \"Pottermania,\" you'll never want to depart the enchanting world of witchcraft and wizardry presented in Harry Potter Collector's Handbook.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781440216268"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1440216266"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 272,
+        "printType": "BOOK",
+        "categories": [
+          "Antiques & Collectibles"
+        ],
+        "averageRating": 5.0,
+        "ratingsCount": 7,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "0.3.3.0.preview.3",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=06FgsmilUXAC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=06FgsmilUXAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=06FgsmilUXAC&printsec=frontcover&dq=harry+potter&hl=&cd=8&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=06FgsmilUXAC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_Collector_s_Handbook.html?hl=&id=06FgsmilUXAC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=06FgsmilUXAC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Harry Potter Collector&#39;s Handbook will bewitch you with colorful images and current values of licensed products based on the famous boy wizard and his charming chums and nefarious foes."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "WV8pZj_oNBwC",
+      "etag": "19PopYTEmso",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/WV8pZj_oNBwC",
+      "volumeInfo": {
+        "title": "Harry Potter Power",
+        "authors": [
+          "Julie-Anne Sykley"
+        ],
+        "publisher": "Interactive Publications",
+        "publishedDate": "2010",
+        "description": "Uses motifs and situations from the popular 'Harry Potter' series and links them to theories and strategies designed to help young people overcome anxiety, anger, depression and grief.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781921479311"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1921479310"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 268,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Nonfiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.0.0.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=WV8pZj_oNBwC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=WV8pZj_oNBwC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=WV8pZj_oNBwC&printsec=frontcover&dq=harry+potter&hl=&cd=9&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=WV8pZj_oNBwC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_Power.html?hl=&id=WV8pZj_oNBwC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=WV8pZj_oNBwC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Uses motifs and situations from the popular &#39;Harry Potter&#39; series and links them to theories and strategies designed to help young people overcome anxiety, anger, depression and grief."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "XyQOzxb7seQC",
+      "etag": "HIJL7PcmPx8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/XyQOzxb7seQC",
+      "volumeInfo": {
+        "title": "Harry Potter and Philosophy",
+        "subtitle": "If Aristotle Ran Hogwarts",
+        "authors": [
+          "Shawn Klein",
+          "William Irwin"
+        ],
+        "publisher": "Open Court",
+        "publishedDate": "2013-08-21",
+        "description": "Harry Potter has put a spell on millions of readers, and they all want to find out more about the deeper meaning of his adventures. In Harry Potter and Philosophy, 17 experts in the field of philosophy unlock some of Hogwarts' secret panels, uncovering surprising insights that are enlightening both for wizards and for the most discerning muggles. Individual chapters look at such topics as life revealed in the Mirror of Erised; the ethics of magic; Moaning Myrtle, Nearly Headless Nick, and the relation of the mind to the brain; and the character of Hermione as a case of \"sublimated feminism.\" Also examined in this witty collection are how Aristotle would have run a school for wizards; whether the Potter stories undermine religion and morality; how to tell good people from evil ones through the characters in these novels; and what dementors and boggarts can teach readers about happiness, fear, and the soul.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780812696974"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0812696972"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 255,
+        "printType": "BOOK",
+        "categories": [
+          "LITERARY CRITICISM"
+        ],
+        "averageRating": 3.5,
+        "ratingsCount": 4,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "0.4.4.0.preview.3",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=XyQOzxb7seQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=XyQOzxb7seQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=XyQOzxb7seQC&printsec=frontcover&dq=harry+potter&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=XyQOzxb7seQC&dq=harry+potter&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Harry_Potter_and_Philosophy.html?hl=&id=XyQOzxb7seQC"
+      },
+      "saleInfo": {
+        "country": "MT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "MT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Harry_Potter_and_Philosophy-sample-epub.acsm?id=XyQOzxb7seQC&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Harry_Potter_and_Philosophy-sample-pdf.acsm?id=XyQOzxb7seQC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=XyQOzxb7seQC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&quot; Also examined in this witty collection are how Aristotle would have run a school for wizards; whether the Potter stories undermine religion and morality; how to tell good people from evil ones through the characters in these novels; and ..."
+      }
+    }
+  ]
+}
