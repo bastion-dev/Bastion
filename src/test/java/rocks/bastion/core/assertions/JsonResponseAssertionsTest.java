@@ -9,7 +9,6 @@ import rocks.bastion.core.json.InvalidJsonException;
 import rocks.bastion.core.json.JsonResponseAssertions;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.Collections;
 
 /**
@@ -47,7 +46,7 @@ public class JsonResponseAssertionsTest {
     @Test
     public void execute_fromFileJsonMismatches_shouldThrowErrorWithDiff() throws Exception {
         try {
-            JsonResponseAssertions assertions = JsonResponseAssertions.fromFile(200, new File(JsonResponseAssertions.class.getResource("/rocks/bastion/core/assertions/test-body.json").toURI()));
+            JsonResponseAssertions assertions = JsonResponseAssertions.fromResource(200, "classpath:/rocks/bastion/core/assertions/test-body.json");
             ModelResponse<String> response = prepareModelResponse("{\n" +
                     "  \"name\": \"john\",\n" +
                     "  \"timestamp1\": \"2016-10-15T20:00:25+0100\",\n" +

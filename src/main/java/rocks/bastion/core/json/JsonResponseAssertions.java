@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonDiff;
-import com.google.common.io.Files;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import org.apache.http.entity.ContentType;
@@ -12,10 +11,9 @@ import org.junit.Assert;
 import rocks.bastion.core.Assertions;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.Response;
+import rocks.bastion.core.resource.ResourceLoader;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -36,13 +34,9 @@ public class JsonResponseAssertions implements Assertions<Object> {
         return new JsonResponseAssertions(expectedStatusCode, expectedJson);
     }
 
-    public static JsonResponseAssertions fromFile(int expectedStatusCode, File expectedJsonFile) {
-        try {
-            Objects.requireNonNull(expectedJsonFile);
-            return new JsonResponseAssertions(expectedStatusCode, Files.asCharSource(expectedJsonFile, Charset.defaultCharset()).read());
-        } catch (IOException e) {
-            throw new RuntimeException(format("An error occurred while reading a file %s", expectedJsonFile), e);
-        }
+    public static JsonResponseAssertions fromResource(int expectedStatusCode, String expectedJsonSource) {
+        Objects.requireNonNull(expectedJsonSource);
+        return new JsonResponseAssertions(expectedStatusCode, new ResourceLoader(expectedJsonSource).load());
     }
 
     private int expectedStatusCode;

@@ -10,7 +10,6 @@ import rocks.bastion.junit.BastionRunner;
 import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithEmbeddedServer;
 
-import java.io.File;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,22 +20,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(BastionRunner.class)
 public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
 
-    private final static String BASE_URL = "http://localhost:9876/sushi";
+    private static final String BASE_URL = "http://localhost:9876/sushi";
 
     @Test
     public void createAndGetSameSushi_Success() throws URISyntaxException {
-        File requestFile = new File(CreateAndGetSushiFromFileTest.class.getResource("/json/create_sushi_request.json").toURI());
-        File responseFile = new File(CreateAndGetSushiFromFileTest.class.getResource("/json/create_sushi_response.json").toURI());
-
-        Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromFile(BASE_URL, requestFile))
+        Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromResource(BASE_URL, "classpath:/json/create_sushi_request.json"))
                 .bind(Sushi.class)
-                .withAssertions(JsonResponseAssertions.fromFile(201, responseFile).ignoreValuesForProperties("/id"))
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
                 .call()
                 .getModel();
 
         Sushi gottenSushi = Bastion.request("Get Sushi", GeneralRequest.get(BASE_URL + "/" + createdSushi.getId()))
                 .bind(Sushi.class)
-                .withAssertions(JsonResponseAssertions.fromFile(200, responseFile).ignoreValuesForProperties("/id"))
+                .withAssertions(JsonResponseAssertions.fromResource(200, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
                 .call()
                 .getModel();
 

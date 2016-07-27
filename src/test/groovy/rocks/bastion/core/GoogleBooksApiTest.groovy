@@ -12,7 +12,7 @@ class GoogleBooksApiTest {
     @Test
     public void searchHarryPotter() {
         Bastion.request("Query 'Harry Potter'", GeneralRequest.get("https://www.googleapis.com/books/v1/volumes").addQueryParam("q", "harry potter"))
-                .withAssertions(JsonResponseAssertions.fromFile(200, new File(GoogleBooksApiTest.class.getResource("/json/harry_potter_results.json").toURI())))
+                .withAssertions(JsonResponseAssertions.fromResource(200, "classpath:/json/harry_potter_results.json"))
                 .call()
     }
 

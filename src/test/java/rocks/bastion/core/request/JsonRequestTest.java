@@ -7,8 +7,8 @@ import rocks.bastion.core.ApiQueryParam;
 import rocks.bastion.core.HttpMethod;
 import rocks.bastion.core.json.InvalidJsonException;
 import rocks.bastion.core.json.JsonRequest;
+import rocks.bastion.core.resource.ResourceNotFoundException;
 
-import java.io.File;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +54,7 @@ public class JsonRequestTest {
 
     @Test
     public void postFromFile_validJson_shouldReturnARequest() throws Exception {
-        JsonRequest request = JsonRequest.postFromFile("http://test.test", getValidJsonFile());
+        JsonRequest request = JsonRequest.postFromResource("http://test.test", getValidJsonFile());
         assertJsonRequestAttributes(request, "POST http://test.test", HttpMethod.POST, "{\n" +
                 "  \"name\": \"john\",\n" +
                 "  \"timestamp\": \"2016-10-15T20:00:25+0100\",\n" +
@@ -66,9 +66,9 @@ public class JsonRequestTest {
                 "}");
     }
 
-    @Test(expected = RuntimeException.class)
-    public void putFromFile_validJson_shouldReturnARequest() throws Exception {
-        JsonRequest request = JsonRequest.putFromFile("http://test.test", new File("inexistant.json"));
+    @Test(expected = ResourceNotFoundException.class)
+    public void putFromFile_inexistantFile_shouldThrowAnException() throws Exception {
+        JsonRequest request = JsonRequest.putFromResource("http://test.test", "inexistant.json");
     }
 
     @Test
@@ -106,8 +106,8 @@ public class JsonRequestTest {
         assertThat(request.body()).describedAs("Request Body").isEqualTo(expectedBody);
     }
 
-    private File getValidJsonFile() throws URISyntaxException {
-        return new File(JsonRequestTest.class.getResource("/rocks/bastion/core/request/test-body.json").toURI());
+    private String getValidJsonFile() throws URISyntaxException {
+        return "classpath:/rocks/bastion/core/request/test-body.json";
     }
 
 }
