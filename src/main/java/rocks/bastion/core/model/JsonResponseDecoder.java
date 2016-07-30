@@ -10,6 +10,15 @@ import rocks.bastion.core.Response;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * A {@link ResponseDecoder} which will interpret an HTTP response containing JSON content body. This implementation uses
+ * the Jackson library's {@link ObjectMapper} to perform the decoding operation.
+ * <p>
+ * The decoder uses the following strategy when attempting to construct the model object for the response: first, it
+ * parses the HTTP response's JSON content into an {@link JsonNode abstract syntax tree representing the given JSON}
+ * (known as a JSON tree). Then, if the user has supplied a target model type, it binds the JSON tree into an instance
+ * of that type. Otherwise, it immediately returns the decoded JSON tree as an object of type {@link JsonNode}.
+ */
 public class JsonResponseDecoder implements ResponseDecoder {
 
     private static ObjectMapper jsonObjectMapper = null;
@@ -23,8 +32,10 @@ public class JsonResponseDecoder implements ResponseDecoder {
         JsonNode decodedJsonTree;
         try {
             decodedJsonTree = getObjectMapper().readTree(response.getBody());
-        } catch (IOException ignored) {
+        } catch (JsonProcessingException ignored) {
             return Optional.empty();
+        } catch (IOException exception) {
+            throw new IllegalStateException("An unexpected error occurred while reading JSON data", exception);
         }
         return decodeTreeUsingHints(decodedJsonTree, hints);
     }

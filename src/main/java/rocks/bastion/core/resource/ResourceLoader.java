@@ -26,8 +26,8 @@ public class ResourceLoader {
     public ResourceLoader(String source) {
         Objects.requireNonNull(source);
         this.source = source;
-        validateResource();
         resource = new DefaultResourceLoader().getResource(source);
+        validateResource();
         byte[] resourceData = getResourceData();
         resourceContent = new String(resourceData, Charset.defaultCharset());
     }
