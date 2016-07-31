@@ -18,6 +18,7 @@ import java.util.Optional;
  * parses the HTTP response's JSON content into an {@link JsonNode abstract syntax tree representing the given JSON}
  * (known as a JSON tree). Then, if the user has supplied a target model type, it binds the JSON tree into an instance
  * of that type. Otherwise, it immediately returns the decoded JSON tree as an object of type {@link JsonNode}.
+ * </p>
  */
 public class JsonResponseDecoder implements ResponseDecoder {
 
@@ -26,7 +27,7 @@ public class JsonResponseDecoder implements ResponseDecoder {
     @Override
     public Optional<?> decode(Response response, DecodingHints hints) {
         ContentType responseContentType = response.getContentType().orElse(ContentType.DEFAULT_TEXT);
-        if (!isSupportsContentType(responseContentType)) {
+        if (!supportsContentType(responseContentType)) {
             return Optional.empty();
         }
         JsonNode decodedJsonTree;
@@ -57,7 +58,7 @@ public class JsonResponseDecoder implements ResponseDecoder {
         }).orElse(decodedJsonTree));
     }
 
-    private boolean isSupportsContentType(ContentType responseContentType) {
+    private boolean supportsContentType(ContentType responseContentType) {
         return responseContentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType());
     }
 }

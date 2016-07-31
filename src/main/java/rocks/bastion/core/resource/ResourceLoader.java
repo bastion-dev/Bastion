@@ -9,13 +9,14 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
+ * <p>
  * Loads resource data which is identified by a string. This string can take many forms: source strings may start with
  * a "{@code classpath:}" prefix or any other URL (such as "{@code file:}") to load a resource from a classpath file or
  * any other URL respectively.
+ * </p>
  * <p>
  * Internally, this implementation uses the Spring {@link DefaultResourceLoader} class to load resources.
- *
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ * </p>
  */
 public class ResourceLoader {
 

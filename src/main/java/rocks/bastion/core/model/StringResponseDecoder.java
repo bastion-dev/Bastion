@@ -11,7 +11,10 @@ import java.nio.charset.Charset;
 import java.util.Optional;
 
 /**
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
+ * A {@link ResponseDecoder} which will take the HTTP response content-body and put it in to a {@link String}. This should be
+ * the last decoder which gets executed in the decoder chain. If none of the other decoders Bastion execute could decode
+ * the HTTP response body, then this final decoder will just take the content body data and initialise a string using it.
+ * This ensures that all Bastion tests contain some sort of model object decoded from the response.
  */
 public class StringResponseDecoder implements ResponseDecoder {
 

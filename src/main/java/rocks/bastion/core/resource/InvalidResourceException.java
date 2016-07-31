@@ -3,7 +3,6 @@ package rocks.bastion.core.resource;
 /**
  * Thrown by the {@link ResourceLoader resource loader} by the specified resource is invalid. Typically, subclasses of
  * this exception will be thrown.
- * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
 public class InvalidResourceException extends RuntimeException {
 
