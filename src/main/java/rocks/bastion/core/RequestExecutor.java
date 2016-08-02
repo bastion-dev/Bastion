@@ -23,10 +23,16 @@ public class RequestExecutor {
         executableHttpRequest = identifyHttpRequest();
     }
 
+    /**
+     * Executes the given HTTP request and retrieves the response.
+     *
+     * @return The HTTP response retrieved from the remote server.
+     */
     public Response execute() {
         try {
             applyHeaders();
             applyQueryParameters();
+            applyRouteParameters();
             applyBody();
             HttpResponse<InputStream> httpResponse = performRequest();
             return convertToRawResponse(httpResponse);
@@ -52,7 +58,7 @@ public class RequestExecutor {
             case "HEAD":
                 return Unirest.head(bastionHttpRequest.url());
             default:
-                return null;
+                throw new UnsupportedOperationException(String.format("We cannot perform a request of type %s.", bastionHttpRequest.method().getValue()));
         }
     }
 
@@ -65,6 +71,10 @@ public class RequestExecutor {
 
     private void applyQueryParameters() {
         bastionHttpRequest.queryParams().stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
+    }
+
+    private void applyRouteParameters() {
+        bastionHttpRequest.routeParams().stream().forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
     }
 
     private void applyBody() {

@@ -58,6 +58,20 @@ public interface HttpRequest {
     Collection<ApiQueryParam> queryParams();
 
     /**
+     * A collection of route parameter assignments that will be replaced in the URL. For example, the following URL:
+     * </p>
+     * <p>
+     * {@code http://sushi.test/{id}/ingredients}
+     * <p>
+     * The URL above contains one route parameter called "id" which can be assigned a numerical value which will be replaced
+     * when the actual HTTP takes place.
+     * </p>
+     *
+     * @return A non-null collection of route parameters for this request.
+     */
+    Collection<RouteParam> routeParams();
+
+    /**
      * An object that will serve as a content body for this request. Can be {@literal null} if this request will not send
      * a body. Bastion may use the content-type of this request, returned by the {@link #contentType()} method, as well as
      * the runtime type of the object returned by this method to determine how best to serialize the returned object into

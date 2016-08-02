@@ -2,10 +2,7 @@ package rocks.bastion.support;
 
 import com.google.gson.Gson;
 import org.apache.http.entity.ContentType;
-import rocks.bastion.core.ApiHeader;
-import rocks.bastion.core.ApiQueryParam;
-import rocks.bastion.core.HttpMethod;
-import rocks.bastion.core.HttpRequest;
+import rocks.bastion.core.*;
 import rocks.bastion.support.embedded.Sushi;
 
 import java.util.Collection;
@@ -40,6 +37,11 @@ public class CreateSushiRequest implements HttpRequest {
 
     @Override
     public Collection<ApiQueryParam> queryParams() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<RouteParam> routeParams() {
         return Collections.emptyList();
     }
 

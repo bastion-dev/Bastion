@@ -1,10 +1,8 @@
 package rocks.bastion.core;
 
 import org.apache.http.entity.ContentType;
-import rocks.bastion.core.json.InvalidJsonException;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -96,25 +94,14 @@ public class GeneralRequest implements HttpRequest {
         return new GeneralRequest(HttpMethod.PATCH, url, body);
     }
 
-    private String name;
-    private String url;
-    private HttpMethod method;
-    private ContentType contentType;
-    private Collection<ApiHeader> headers;
-    private Collection<ApiQueryParam> queryParams;
-    private String body;
+    private CommonRequestAttributes requestAttributes;
 
-    protected GeneralRequest(HttpMethod method, String url, String body) throws InvalidJsonException {
+    protected GeneralRequest(HttpMethod method, String url, String body) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(url);
 
-        this.method = method;
-        this.url = url;
-        name = method.getValue() + ' ' + url;
-        contentType = ContentType.TEXT_PLAIN;
-        headers = new LinkedList<>();
-        queryParams = new LinkedList<>();
-        setBody(body);
+        requestAttributes = new CommonRequestAttributes(method, url, body);
+        requestAttributes.setContentType(ContentType.TEXT_PLAIN);
     }
 
     /**
@@ -125,7 +112,7 @@ public class GeneralRequest implements HttpRequest {
      */
     public GeneralRequest setContentType(ContentType contentType) {
         Objects.requireNonNull(contentType);
-        this.contentType = contentType;
+        requestAttributes.setContentType(contentType);
         return this;
     }
 
@@ -137,7 +124,9 @@ public class GeneralRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public GeneralRequest addHeader(String name, String value) {
-        headers.add(new ApiHeader(name, value));
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(value);
+        requestAttributes.addHeader(name, value);
         return this;
     }
 
@@ -149,7 +138,26 @@ public class GeneralRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public GeneralRequest addQueryParam(String name, String value) {
-        queryParams.add(new ApiQueryParam(name, value));
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(value);
+        requestAttributes.addQueryParam(name, value);
+        return this;
+    }
+
+    /**
+     * Add a new HTTP route parameter that will be sent with this request. Put a placeholder for the route parameter in
+     * the request URL by surrounding a parameter's name using braces (eg. {@code http://sushi.test/{id}/ingredients}).
+     * The URL in the previous example contains one route param which can be replaced with a numerical value using
+     * {@code addRouteParam("id", "53")}, for example.
+     *
+     * @param name  A non-{@literal null} name for the new route parameter
+     * @param value A non-{@literal null} value for the new route parameter
+     * @return This request (for method chaining)
+     */
+    public GeneralRequest addRouteParam(String name, String value) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(value);
+        requestAttributes.addRouteParam(name, value);
         return this;
     }
 
@@ -162,42 +170,47 @@ public class GeneralRequest implements HttpRequest {
      */
     public GeneralRequest setBody(String body) {
         Objects.requireNonNull(body);
-        this.body = body;
+        requestAttributes.setBody(body);
         return this;
     }
 
     @Override
     public String name() {
-        return name;
+        return requestAttributes.name();
     }
 
     @Override
     public String url() {
-        return url;
+        return requestAttributes.url();
     }
 
     @Override
     public HttpMethod method() {
-        return method;
+        return requestAttributes.method();
     }
 
     @Override
     public ContentType contentType() {
-        return contentType;
+        return requestAttributes.contentType();
     }
 
     @Override
     public Collection<ApiHeader> headers() {
-        return headers;
+        return requestAttributes.headers();
     }
 
     @Override
     public Collection<ApiQueryParam> queryParams() {
-        return queryParams;
+        return requestAttributes.queryParams();
+    }
+
+    @Override
+    public Collection<RouteParam> routeParams() {
+        return requestAttributes.routeParams();
     }
 
     @Override
     public Object body() {
-        return body;
+        return requestAttributes.body();
     }
 }
