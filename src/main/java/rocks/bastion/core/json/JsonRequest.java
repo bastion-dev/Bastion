@@ -93,6 +93,7 @@ public class JsonRequest implements HttpRequest {
     }
 
     /**
+     * <p>
      * Construct an HTTP request, using the POST method, containing a JSON body that is read from the given resource. The resource source
      * is specified as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
      * are not limited to):
@@ -121,6 +122,7 @@ public class JsonRequest implements HttpRequest {
     }
 
     /**
+     * <p>
      * Construct an HTTP request, using the PUT method, containing a JSON body that is read from the given resource. The resource source
      * is specified as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
      * are not limited to):

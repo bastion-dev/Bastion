@@ -58,10 +58,12 @@ public interface HttpRequest {
     Collection<ApiQueryParam> queryParams();
 
     /**
+     * <p>
      * A collection of route parameter assignments that will be replaced in the URL. For example, the following URL:
      * </p>
      * <p>
      * {@code http://sushi.test/{id}/ingredients}
+     * </p>
      * <p>
      * The URL above contains one route parameter called "id" which can be assigned a numerical value which will be replaced
      * when the actual HTTP takes place.

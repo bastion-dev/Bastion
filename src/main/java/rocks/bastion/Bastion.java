@@ -10,7 +10,6 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
 
 /**
  * The main starting point for creating a Bastion test using the library.
- * <p>
  * <h1>Overview</h1>
  * <p>
  * Bastion is a library that eases the development of end-to-end tests for HTTP APIs. A typical user would write tests using
