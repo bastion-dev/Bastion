@@ -6,29 +6,30 @@
 
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-BETA</version>
 
     <name>Bastion</name>
     <description>A Java library for testing HTTP API endpoints.</description>
     <url>https://github.com/KPull/Bastion</url>
+
     <developers>
         <developer>
             <id>KPull</id>
             <name>Kyle Pullicino</name>
         </developer>
-        <developer>
-            <id>FrelliBB</id>
-            <name>Francesco Elia Borg Bonaci</name>
-        </developer>
-        <developer>
-            <id>maria-camenzuli</id>
-            <name>Maria Camenzuli</name>
-        </developer>
-        <developer>
-            <id>chiarafelicesc</id>
-            <name>Chiara Felice Sant Cassia</name>
-        </developer>
     </developers>
+
+    <contributors>
+        <contributor>
+            <name>Francesco Elia Borg Bonaci</name>
+        </contributor>
+        <contributor>
+            <name>Maria Camenzuli</name>
+        </contributor>
+        <contributor>
+            <name>Chiara Felice Sant Cassia</name>
+        </contributor>
+    </contributors>
 
     <distributionManagement>
         <snapshotRepository>
@@ -36,6 +37,20 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License</name>
+            <url>https://github.com/KPull/Bastion/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/KPull/Bastion.git</connection>
+        <tag>master</tag>
+        <url>https://github.com/KPull/Bastion</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -64,11 +79,6 @@
             <version>1.4.5</version>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>2.4.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.jglue.fluent-json</groupId>
             <artifactId>fluent-json</artifactId>
             <version>2.0.0</version>
@@ -79,6 +89,12 @@
             <version>4.12</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.4.6</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
