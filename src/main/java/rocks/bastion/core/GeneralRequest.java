@@ -112,7 +112,6 @@ public class GeneralRequest implements HttpRequest {
      * @return This request (for method chaining)
      */
     public GeneralRequest setContentType(ContentType contentType) {
-        Objects.requireNonNull(contentType);
         requestAttributes.setContentType(contentType);
         return this;
     }
@@ -192,7 +191,7 @@ public class GeneralRequest implements HttpRequest {
 
     @Override
     public Optional<ContentType> contentType() {
-        return Optional.ofNullable(requestAttributes.contentType());
+        return requestAttributes.contentType();
     }
 
     @Override

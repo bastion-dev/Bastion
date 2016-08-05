@@ -10,6 +10,7 @@ import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.resource.ResourceNotFoundException;
 
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,7 +76,7 @@ public class JsonRequestTest {
     public void overrideContentType() throws Exception {
         JsonRequest request = JsonRequest.fromString(HttpMethod.POST, "http://test.test", "{ \"key\":\"value\", \"array\":[ \"1\", \"test\" ] }");
         request.overrideContentType(ContentType.TEXT_PLAIN);
-        assertThat(request.contentType()).isEqualTo(ContentType.TEXT_PLAIN);
+        assertThat(request.contentType()).isEqualTo(Optional.ofNullable(ContentType.TEXT_PLAIN));
     }
 
     @Test

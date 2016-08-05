@@ -5,6 +5,7 @@ import org.apache.http.entity.ContentType;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <p>
@@ -64,6 +65,16 @@ public class CommonRequestAttributes {
         queryParams = new LinkedList<>();
         routeParams = new LinkedList<>();
         setBody(body);
+    }
+
+    /**
+     * Change the HTTP method used by a request.
+     *
+     * @param method A non-{@literal null} HTTP method.
+     */
+    public void setMethod(HttpMethod method) {
+        Objects.requireNonNull(method);
+        this.method = method;
     }
 
     /**
@@ -172,10 +183,11 @@ public class CommonRequestAttributes {
     /**
      * See {@link HttpRequest#contentType()} for information about this method.
      *
-     * @return The content-type header to use for a request
+     * @return The content-type header, inside an {@link Optional#ofNullable(Object) Optional container} to use for a request.
+     * An {@link Optional#empty() empty optional} is returned if no content type was set.
      */
-    public ContentType contentType() {
-        return contentType;
+    public Optional<ContentType> contentType() {
+        return Optional.ofNullable(contentType);
     }
 
     /**

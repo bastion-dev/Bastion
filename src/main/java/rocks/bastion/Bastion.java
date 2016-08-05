@@ -167,6 +167,7 @@ public final class Bastion {
     }
 
     private Bastion() {
+        // This class should not be instantiated.
     }
 
 }

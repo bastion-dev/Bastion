@@ -238,7 +238,7 @@ public class JsonRequest implements HttpRequest {
 
     @Override
     public Optional<ContentType> contentType() {
-        return Optional.ofNullable(requestAttributes.contentType());
+        return requestAttributes.contentType();
     }
 
     @Override
