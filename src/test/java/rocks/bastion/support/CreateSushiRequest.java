@@ -7,6 +7,7 @@ import rocks.bastion.support.embedded.Sushi;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 public class CreateSushiRequest implements HttpRequest {
 
@@ -26,8 +27,8 @@ public class CreateSushiRequest implements HttpRequest {
     }
 
     @Override
-    public ContentType contentType() {
-        return ContentType.APPLICATION_JSON;
+    public Optional<ContentType> contentType() {
+        return Optional.of(ContentType.APPLICATION_JSON);
     }
 
     @Override

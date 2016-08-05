@@ -63,8 +63,8 @@ public class RequestExecutor {
     }
 
     private void applyHeaders() {
-        if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type"))) {
-            executableHttpRequest.header("Content-type", bastionHttpRequest.contentType().toString());
+        if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
+            executableHttpRequest.header("Content-type", bastionHttpRequest.contentType().get().toString());
         }
         bastionHttpRequest.headers().stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
     }

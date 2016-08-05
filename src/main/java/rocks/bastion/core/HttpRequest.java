@@ -3,6 +3,7 @@ package rocks.bastion.core;
 import org.apache.http.entity.ContentType;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Defines an HTTP request for Bastion to send as part of a test.
@@ -35,9 +36,10 @@ public interface HttpRequest {
      * The content type header to use for this request. This includes the MIME type of the content body, an optional character
      * set of the request and other parameters, if necessary (such as quality parameter).
      *
-     * @return A non-null content type to use for this request
+     * @return An {@link Optional#of(Object) optional content type} to use for this request. Return an {@link Optional#empty()
+     * empty Optional} if you would like to leave the content-type header undefined for this request.
      */
-    ContentType contentType();
+    Optional<ContentType> contentType();
 
     /**
      * A collection of HTTP headers that will be included with this request. Note that Bastion will automatically include the

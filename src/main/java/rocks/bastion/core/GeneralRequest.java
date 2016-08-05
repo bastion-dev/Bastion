@@ -4,6 +4,7 @@ import org.apache.http.entity.ContentType;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An HTTP request which takes any arbitrary text string as its content body. The {@linkplain GeneralRequest} will not perform
@@ -190,8 +191,8 @@ public class GeneralRequest implements HttpRequest {
     }
 
     @Override
-    public ContentType contentType() {
-        return requestAttributes.contentType();
+    public Optional<ContentType> contentType() {
+        return Optional.ofNullable(requestAttributes.contentType());
     }
 
     @Override

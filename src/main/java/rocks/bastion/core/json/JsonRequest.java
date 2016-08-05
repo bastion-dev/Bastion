@@ -10,6 +10,7 @@ import rocks.bastion.core.resource.UnreadableResourceException;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A JSON request for use during Bastion tests. The JSON body is supplied either inline or from a JSON file on the
@@ -167,11 +168,10 @@ public class JsonRequest implements HttpRequest {
      * Override the content-type that will be used for this request. Initially, the content-type for a {@code JSONRequest}
      * is "application/json" but you can override what is sent using this method.
      *
-     * @param contentType A non-{@literal null} content-type to use for this request
+     * @param contentType A content-type to use for this request. Can be {@literal null}.
      * @return This request (for method chaining)
      */
     public JsonRequest overrideContentType(ContentType contentType) {
-        Objects.requireNonNull(contentType);
         requestAttributes.setContentType(contentType);
         return this;
     }
@@ -237,8 +237,8 @@ public class JsonRequest implements HttpRequest {
     }
 
     @Override
-    public ContentType contentType() {
-        return requestAttributes.contentType();
+    public Optional<ContentType> contentType() {
+        return Optional.ofNullable(requestAttributes.contentType());
     }
 
     @Override

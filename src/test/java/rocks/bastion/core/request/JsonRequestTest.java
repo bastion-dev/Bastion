@@ -100,7 +100,8 @@ public class JsonRequestTest {
         assertThat(request.name()).describedAs("Request Name").isEqualTo(expectedName);
         assertThat(request.url()).describedAs("Request URL").isEqualTo("http://test.test");
         assertThat(request.method()).describedAs("Request Method").isEqualTo(expectedMethod);
-        assertThat(request.contentType()).describedAs("Request Content-type").isEqualTo(ContentType.APPLICATION_JSON);
+        assertThat(request.contentType().isPresent()).describedAs("Request Content-type is present").isTrue();
+        assertThat(request.contentType().get()).describedAs("Request Content-type").isEqualTo(ContentType.APPLICATION_JSON);
         assertThat(request.headers()).describedAs("Request Headers").isEmpty();
         assertThat(request.queryParams()).describedAs("Request Query Parameters").isEmpty();
         assertThat(request.body()).describedAs("Request Body").isEqualTo(expectedBody);
