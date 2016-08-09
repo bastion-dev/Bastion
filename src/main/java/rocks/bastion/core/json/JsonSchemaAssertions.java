@@ -55,7 +55,7 @@ public class JsonSchemaAssertions implements Assertions<Object> {
         }
     }
 
-    private JsonNode convertResponseToJsonNode(final ModelResponse<?> response) throws IOException {
+    private JsonNode convertResponseToJsonNode(ModelResponse<?> response) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonFactory factory = mapper.getFactory();
         return factory.createParser(response.getBody()).readValueAsTree();
