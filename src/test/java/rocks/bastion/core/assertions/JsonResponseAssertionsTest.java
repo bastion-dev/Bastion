@@ -2,14 +2,9 @@ package rocks.bastion.core.assertions;
 
 import org.junit.Assert;
 import org.junit.Test;
-import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ModelResponse;
-import rocks.bastion.core.RawResponse;
 import rocks.bastion.core.json.InvalidJsonException;
 import rocks.bastion.core.json.JsonResponseAssertions;
-
-import java.io.ByteArrayInputStream;
-import java.util.Collections;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
@@ -24,7 +19,7 @@ public class JsonResponseAssertionsTest {
     @Test
     public void execute_ignoredField_shouldAssertSuccessfully() throws Exception {
         JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }").ignoreValuesForProperties("/key");
-        ModelResponse<String> response = prepareModelResponse("{ \"key\":\"kyle1\", \"surname\":\"pullicino\" }");
+        ModelResponse<String> response = TestModelResponse.prepare("{ \"key\":\"kyle1\", \"surname\":\"pullicino\" }");
         assertions.execute(200, response, response.getModel());
     }
 
@@ -32,7 +27,7 @@ public class JsonResponseAssertionsTest {
     public void execute_fromStringJsonMismatches_shouldThrowErrorWithDiff() throws Exception {
         try {
             JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }");
-            ModelResponse<String> response = prepareModelResponse("{ \"key\":\"kyle1\", \"surname\":\"pullicino\", \"array\":[1, 2] }");
+            ModelResponse<String> response = TestModelResponse.prepare("{ \"key\":\"kyle1\", \"surname\":\"pullicino\", \"array\":[1, 2] }");
             assertions.execute(200, response, response.getModel());
         } catch (AssertionError assertionError) {
             Assert.assertEquals("Assertion Failed Message", assertionError.getMessage(), "Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:" +
@@ -47,7 +42,7 @@ public class JsonResponseAssertionsTest {
     public void execute_fromFileJsonMismatches_shouldThrowErrorWithDiff() throws Exception {
         try {
             JsonResponseAssertions assertions = JsonResponseAssertions.fromResource(200, "classpath:/rocks/bastion/core/assertions/test-body.json");
-            ModelResponse<String> response = prepareModelResponse("{\n" +
+            ModelResponse<String> response = TestModelResponse.prepare("{\n" +
                     "  \"name\": \"john\",\n" +
                     "  \"timestamp1\": \"2016-10-15T20:00:25+0100\",\n" +
                     "  \"colours\": [\"blue\"],\n" +
@@ -66,8 +61,4 @@ public class JsonResponseAssertionsTest {
         Assert.fail("An assertion error should have been thrown by the JSON Response Assertions");
     }
 
-    private ModelResponse<String> prepareModelResponse(String jsonContent) {
-        return new ModelResponse<>(new RawResponse(200, "OK", Collections.singletonList(new ApiHeader("Content-type", "application/json")), new ByteArrayInputStream(jsonContent.getBytes())),
-                jsonContent);
-    }
 }

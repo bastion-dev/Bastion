@@ -5,8 +5,8 @@
     "id": {
       "type": "integer"
     },
-    "price": {
-      "type": "number"
+    "name": {
+      "type": "string"
     }
   },
   "required": [

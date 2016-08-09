@@ -3,6 +3,7 @@ package rocks.bastion.core.json;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonschema.core.exceptions.InvalidSchemaException;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
@@ -22,44 +23,58 @@ import java.util.stream.StreamSupport;
  */
 public class JsonSchemaAssertions implements Assertions<Object> {
 
-    final String expectedSchema;
+    private String expectedSchema;
 
-    public JsonSchemaAssertions(final String expectedSchema) {
+    protected JsonSchemaAssertions(String expectedSchema) {
         Objects.requireNonNull(expectedSchema);
         this.expectedSchema = expectedSchema;
     }
 
-    public static JsonSchemaAssertions fromString(final String expectedSchemaJson) {
+    public static JsonSchemaAssertions fromString(String expectedSchemaJson) {
         return new JsonSchemaAssertions(expectedSchemaJson);
     }
 
-    public static JsonSchemaAssertions fromResource(final String expectedSchemaSource) {
+    public static JsonSchemaAssertions fromResource(String expectedSchemaSource) {
         Objects.requireNonNull(expectedSchemaSource);
         return new JsonSchemaAssertions(new ResourceLoader(expectedSchemaSource).load());
     }
 
     @Override
-    public void execute(final int statusCode,
-                        final ModelResponse<?> response,
-                        final Object model) throws AssertionError {
+    public void execute(int statusCode,
+                        ModelResponse<?> response,
+                        Object model) throws AssertionError {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonFactory factory = mapper.getFactory();
-            JsonNode actualJsonTree = factory.createParser(response.getBody()).readValueAsTree();
-
-            final ProcessingReport validationReport = JsonSchemaFactory.byDefault()
-                                                               .getJsonSchema(mapper.readTree(expectedSchema)).validate(actualJsonTree);
-            if (!validationReport.isSuccess()) {
-                final String messages = StreamSupport.stream(validationReport.spliterator(), false)
-                                                    .map(ProcessingMessage::getMessage)
-                                                    .collect(Collectors.joining(", "));
-                Assert.fail(String.format("Actual response body is not as specified. The following message(s) where produced during validation; %s.", messages));
-            }
+            JsonNode jsonNodeOfResponse = convertResponseToJsonNode(response);
+            assertResponseConformsToSchema(jsonNodeOfResponse);
         } catch (IOException e) {
             throw new RuntimeException("An error occurred while parsing JSON text", e);
+        } catch (InvalidSchemaException e) {
+            throw new InvalidJsonException("The given text is not a valid JSON schema", e, expectedSchema);
         } catch (ProcessingException e) {
-            throw new RuntimeException("An error occurred while obtaining JSON schema", e);
+            throw new RuntimeException("An unknown error occurred while processing the JSON schema and API response", e);
         }
+    }
+
+    private JsonNode convertResponseToJsonNode(final ModelResponse<?> response) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonFactory factory = mapper.getFactory();
+        return factory.createParser(response.getBody()).readValueAsTree();
+    }
+
+    private void assertResponseConformsToSchema(JsonNode response) throws ProcessingException, IOException {
+        ProcessingReport validationReport = JsonSchemaFactory.byDefault()
+                                                             .getJsonSchema(getExpectedSchema()).validate(response);
+        if (!validationReport.isSuccess()) {
+            String messages = StreamSupport.stream(validationReport.spliterator(), false)
+                                           .map(ProcessingMessage::getMessage)
+                                           .collect(Collectors.joining(", "));
+            Assert.fail(String.format("Actual response body is not as specified. The following message(s) where produced during validation; %s.", messages));
+        }
+    }
+
+    private JsonNode getExpectedSchema() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readTree(expectedSchema);
     }
 
 }
