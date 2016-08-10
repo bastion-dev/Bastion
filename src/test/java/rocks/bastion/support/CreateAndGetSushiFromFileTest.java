@@ -6,6 +6,7 @@ import rocks.bastion.Bastion;
 import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
+import rocks.bastion.core.json.JsonSchemaAssertions;
 import rocks.bastion.junit.BastionRunner;
 import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithEmbeddedServer;
@@ -38,4 +39,13 @@ public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
 
         assertThat(gottenSushi.getId()).isEqualTo(createdSushi.getId());
     }
+
+    @Test
+    public void createSushiRequest_ValidateJsonSchemaOfResponse_Success() {
+        Bastion.request("Valid Response JSON Schema", new CreateSushiRequest())
+               .bind(Sushi.class)
+               .withAssertions(JsonSchemaAssertions.fromResource("classpath:/json/create_sushi_response_schema.json"))
+               .call();
+    }
+
 }
