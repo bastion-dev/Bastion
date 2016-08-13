@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import org.apache.http.entity.ContentType;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FormUrlEncodedRequestTest {
@@ -21,6 +23,31 @@ public class FormUrlEncodedRequestTest {
         FormUrlEncodedRequest request = FormUrlEncodedRequest.put("http://test.test");
         request.addDataParameters(Lists.newArrayList(new ApiDataParameter("name", "John"), new ApiDataParameter("surname", "Doe")));
         assertFormUrlEncodedRequestAttributes(request, "PUT http://test.test", HttpMethod.PUT, "name=John&surname=Doe");
+    }
+
+    @Test
+    public void overrideContentType() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.POST, "http://test.test");
+        request.overrideContentType(ContentType.TEXT_PLAIN);
+        assertThat(request.contentType()).isEqualTo(Optional.ofNullable(ContentType.TEXT_PLAIN));
+    }
+
+    @Test
+    public void addHeader() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.POST, "http://test.test");
+        request.addHeader("header1", "value1");
+        request.addHeader("header2", "value2");
+        assertThat(request.headers()).hasSize(2);
+        assertThat(request.headers()).containsExactly(new ApiHeader("header1", "value1"), new ApiHeader("header2", "value2"));
+    }
+
+    @Test
+    public void addQueryParam() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.POST, "http://test.test");
+        request.addQueryParam("query1", "value1");
+        request.addQueryParam("query2", "value2");
+        assertThat(request.queryParams()).hasSize(2);
+        assertThat(request.queryParams()).containsExactly(new ApiQueryParam("query1", "value1"), new ApiQueryParam("query2", "value2"));
     }
 
     private void assertFormUrlEncodedRequestAttributes(FormUrlEncodedRequest request, String expectedName, HttpMethod expectedMethod, String expectedBody) {
