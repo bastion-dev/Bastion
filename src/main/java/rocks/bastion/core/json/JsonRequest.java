@@ -88,7 +88,7 @@ public class JsonRequest implements HttpRequest {
      * @throws UnreadableResourceException Thrown if the specified resource exists but cannot be read (because it is a directory, for example)
      * @throws ResourceNotFoundException   Thrown if the specified resource does not exist
      */
-    public static JsonRequest fromFile(HttpMethod method, String url, String jsonSource) throws InvalidJsonException, UnreadableResourceException, ResourceNotFoundException {
+    public static JsonRequest fromResource(HttpMethod method, String url, String jsonSource) throws InvalidJsonException, UnreadableResourceException, ResourceNotFoundException {
         Objects.requireNonNull(jsonSource);
         return new JsonRequest(method, url, new ResourceLoader(jsonSource).load());
     }
@@ -119,7 +119,7 @@ public class JsonRequest implements HttpRequest {
      * @throws ResourceNotFoundException   Thrown if the specified resource does not exist
      */
     public static JsonRequest postFromResource(String url, String jsonSource) throws InvalidJsonException, UnreadableResourceException, ResourceNotFoundException {
-        return fromFile(HttpMethod.POST, url, jsonSource);
+        return fromResource(HttpMethod.POST, url, jsonSource);
     }
 
     /**
@@ -148,7 +148,7 @@ public class JsonRequest implements HttpRequest {
      * @throws ResourceNotFoundException   Thrown if the specified resource does not exist
      */
     public static JsonRequest putFromResource(String url, String jsonSource) throws InvalidJsonException, UnreadableResourceException, ResourceNotFoundException {
-        return fromFile(HttpMethod.PUT, url, jsonSource);
+        return fromResource(HttpMethod.PUT, url, jsonSource);
     }
 
     private CommonRequestAttributes requestAttributes;
