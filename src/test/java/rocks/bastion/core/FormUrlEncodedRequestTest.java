@@ -26,6 +26,27 @@ public class FormUrlEncodedRequestTest {
     }
 
     @Test
+    public void delete_withDataParameters_shouldReturnARequest() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.delete("http://test.test");
+        request.addDataParameters(Lists.newArrayList(new ApiDataParameter("name", "John"), new ApiDataParameter("surname", "Doe")));
+        assertFormUrlEncodedRequestAttributes(request, "DELETE http://test.test", HttpMethod.DELETE, "name=John&surname=Doe");
+    }
+
+    @Test
+    public void patch_withDataParameters_shouldReturnARequest() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.patch("http://test.test");
+        request.addDataParameters(Lists.newArrayList(new ApiDataParameter("name", "John"), new ApiDataParameter("surname", "Doe")));
+        assertFormUrlEncodedRequestAttributes(request, "PATCH http://test.test", HttpMethod.PATCH, "name=John&surname=Doe");
+    }
+
+    @Test
+    public void withMethod_withDataParameters_shouldReturnARequest() throws Exception {
+        FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.POST, "http://test.test");
+        request.addDataParameters(Lists.newArrayList(new ApiDataParameter("name", "John"), new ApiDataParameter("surname", "Doe")));
+        assertFormUrlEncodedRequestAttributes(request, "POST http://test.test", HttpMethod.POST, "name=John&surname=Doe");
+    }
+
+    @Test
     public void overrideContentType() throws Exception {
         FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.POST, "http://test.test");
         request.overrideContentType(ContentType.TEXT_PLAIN);

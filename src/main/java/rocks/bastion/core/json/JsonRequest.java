@@ -16,6 +16,9 @@ import java.util.Optional;
  * A JSON request for use during Bastion tests. The JSON body is supplied either inline or from a JSON file on the
  * classpath. Automatically sets the correct content type to use. This request will verify that the provided JSON body
  * contains valid JSON.
+ *
+ * Initially, the request is configured to send "application/json" as its Content-type header but this
+ * can be overriden by the user by calling the {@link #overrideContentType(ContentType)} method.
  */
 public class JsonRequest implements HttpRequest {
 
