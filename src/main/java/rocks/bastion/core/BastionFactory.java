@@ -2,6 +2,7 @@ package rocks.bastion.core;
 
 import rocks.bastion.Bastion;
 import rocks.bastion.core.builder.BastionBuilder;
+import rocks.bastion.core.configuration.Configuration;
 
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
+    private static Configuration configuration;
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
@@ -43,6 +45,14 @@ public abstract class BastionFactory {
 
     private boolean suppressAssertions = false;
 
+    public static void setConfiguration(Configuration configuration) {
+        BastionFactory.configuration = configuration;
+    }
+
+    public static Configuration getConfiguration() {
+        return configuration;
+    }
+
     /**
      * Construct and initialise a new instance of the {@link BastionBuilderImpl} builder. By default, the returned builder
      * will bind the response to a plain {@linkplain Object} model. Also, the returned builder will use the specified
@@ -58,6 +68,7 @@ public abstract class BastionFactory {
     public BastionBuilder<Object> getBastion(String message, HttpRequest request) {
         BastionBuilderImpl<Object> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
+        bastion.setConfiguration(configuration);
         prepareBastion(bastion);
         return bastion;
     }

@@ -13,7 +13,7 @@ public class RequestExecutorTest extends TestWithEmbeddedServer {
 
     @Test
     public void testPostExecute() {
-        Response response = new RequestExecutor(new CreateSushiRequest()).execute();
+        Response response = new RequestExecutor(new CreateSushiRequest(), null).execute();
         assertEquals(201, response.getStatusCode());
     }
 }

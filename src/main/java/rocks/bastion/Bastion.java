@@ -7,6 +7,7 @@ import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.builder.PostExecutionBuilder;
+import rocks.bastion.core.configuration.ConfigurationProvider;
 
 /**
  * The main starting point for creating a Bastion test using the library.
@@ -167,6 +168,10 @@ public final class Bastion {
      */
     public static BastionBuilder<Object> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
+    }
+
+    public static void configure(ConfigurationProvider configurationProvider) {
+        BastionFactory.setConfiguration(configurationProvider.get());
     }
 
     private Bastion() {

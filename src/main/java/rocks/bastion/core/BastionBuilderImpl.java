@@ -2,6 +2,7 @@ package rocks.bastion.core;
 
 import com.google.common.base.Strings;
 import rocks.bastion.core.builder.*;
+import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
 import rocks.bastion.core.model.ResponseDecoder;
@@ -32,6 +33,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     private Callback<? super MODEL> callback;
     private MODEL model;
     private ModelResponse<MODEL> modelResponse;
+    private Configuration configuration;
 
     BastionBuilderImpl(String message, HttpRequest request) {
         Objects.requireNonNull(message);
@@ -95,7 +97,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         modelResponse = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(request));
-            Response response = new RequestExecutor(request).execute();
+            Response response = new RequestExecutor(request, configuration).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
@@ -190,5 +192,13 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
 
     private boolean isModelInstanceOfRequiredType(Object decodedResponseModel) {
         return (modelType == null) || ((decodedResponseModel != null) && modelType.isAssignableFrom(decodedResponseModel.getClass()));
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }
