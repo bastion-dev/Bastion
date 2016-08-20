@@ -9,6 +9,7 @@ import rocks.bastion.core.resource.ResourceNotFoundException;
 import rocks.bastion.core.resource.UnreadableResourceException;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -149,6 +150,12 @@ public class JsonRequest implements HttpRequest {
      */
     public static JsonRequest putFromResource(String url, String jsonSource) throws InvalidJsonException, UnreadableResourceException, ResourceNotFoundException {
         return fromResource(HttpMethod.PUT, url, jsonSource);
+    }
+
+    public static JsonRequest fromTemplate(HttpMethod method, String url, String jsonTemplateSource, Map<String, String> variableAssignments) {
+        TemplateContentCompiler compiler = new TemplateContentCompiler(new ResourceLoader(jsonTemplateSource).load());
+        compiler.addAllVariableAssignments(variableAssignments);
+        return new JsonRequest(method, url, compiler.getContent());
     }
 
     private CommonRequestAttributes requestAttributes;

@@ -10,6 +10,7 @@ import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.resource.ResourceNotFoundException;
 
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,6 +68,20 @@ public class JsonRequestTest {
                 "}");
     }
 
+    @Test
+    public void fromTemplate_validJson_shouldReturnARequest() throws Exception {
+        JsonRequest request = JsonRequest.fromTemplate(HttpMethod.POST, "http://test.test", getValidJsonTemplateFile(), Collections.singletonMap("food", "apples"));
+        assertJsonRequestAttributes(request, "POST http://test.test", HttpMethod.POST, "{\n" +
+                "  \"name\": \"john\",\n" +
+                "  \"timestamp\": \"2016-10-15T20:00:25+0100\",\n" +
+                "  \"favourites\": {\n" +
+                "    \"food\": \"apples\",\n" +
+                "    \"colours\": [\"blue\", \"red\"],\n" +
+                "    \"number\": 23\n" +
+                "  }\n" +
+                "}");
+    }
+
     @Test(expected = ResourceNotFoundException.class)
     public void putFromFile_inexistantFile_shouldThrowAnException() throws Exception {
         JsonRequest request = JsonRequest.putFromResource("http://test.test", "inexistant.json");
@@ -110,6 +125,10 @@ public class JsonRequestTest {
 
     private String getValidJsonFile() throws URISyntaxException {
         return "classpath:/rocks/bastion/core/request/test-body.json";
+    }
+
+    private String getValidJsonTemplateFile() throws URISyntaxException {
+        return "classpath:/rocks/bastion/core/request/test-template-body.json";
     }
 
 }
