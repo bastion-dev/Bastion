@@ -1,6 +1,7 @@
 package rocks.bastion.core;
 
 import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.MustacheException.Context;
 import com.samskivert.mustache.Template;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public class TemplateContentCompiler {
 
     public TemplateContentCompiler(String template) {
         this.template = template;
-        compiledTemplate = getCompiler().compile(this.template);
+        compiledTemplate = compile();
         variableAssignments = new ConcurrentHashMap<>();
     }
 
@@ -44,7 +45,7 @@ public class TemplateContentCompiler {
     }
 
     public String getContent() {
-        return compiledTemplate.execute(variableAssignments);
+        return resolveTemplate();
     }
 
     private static Mustache.Compiler getCompiler() {
@@ -52,6 +53,18 @@ public class TemplateContentCompiler {
         compiler.escapeHTML(false);
         compiler.withDelims("{{ }}");
         return compiler;
+    }
+
+    private String resolveTemplate() {
+        try {
+            return compiledTemplate.execute(variableAssignments);
+        } catch (Context compilationException) {
+            throw new TemplateCompilationException(compilationException, template, variableAssignments);
+        }
+    }
+
+    private Template compile() throws TemplateCompilationException {
+        return getCompiler().compile(template);
     }
 
 }
