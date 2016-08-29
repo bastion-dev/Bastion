@@ -15,8 +15,7 @@ public class TemplateContentCompiler {
     private Map<String, Object> variableAssignments;
 
     public TemplateContentCompiler(String template) {
-        this.template = template;
-        compiledTemplate = compile();
+        setTemplate(template);
         variableAssignments = new ConcurrentHashMap<>();
     }
 
@@ -27,6 +26,7 @@ public class TemplateContentCompiler {
     public void setTemplate(String template) {
         Objects.requireNonNull(template);
         this.template = template;
+        compiledTemplate = compile();
     }
 
     public Map<String, ?> getVariableAssignments() {
