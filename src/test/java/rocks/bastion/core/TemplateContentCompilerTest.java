@@ -20,12 +20,4 @@ public class TemplateContentCompilerTest {
         compiler.getContent();
     }
 
-    @Test
-    public void setTemplate_returnsNewCompiledMessage() throws Exception {
-        TemplateContentCompiler compiler = new TemplateContentCompiler("{ \"name\": \"{{ name }}\" }");
-        compiler.addVariableAssignment("name", "john doe");
-        compiler.setTemplate("{ \"name1\": \"{{ name }}\" }");
-        String content = compiler.getContent();
-        assertThat(content).isEqualTo("{ \"name1\": \"john doe\" }");
-    }
 }
