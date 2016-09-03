@@ -8,10 +8,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import org.apache.http.entity.ContentType;
 import org.junit.Assert;
-import rocks.bastion.core.Assertions;
-import rocks.bastion.core.ModelResponse;
-import rocks.bastion.core.Response;
+import rocks.bastion.core.*;
 import rocks.bastion.core.resource.ResourceLoader;
+import rocks.bastion.core.resource.ResourceNotFoundException;
+import rocks.bastion.core.resource.UnreadableResourceException;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,13 +30,79 @@ import static java.lang.String.format;
  */
 public class JsonResponseAssertions implements Assertions<Object> {
 
+    /**
+     * Creates a {@code JsonResponseAssertions} object which expects the specified response HTTP status code and the specified JSON.
+     * The JSON passed in should be valid JSON.
+     *
+     * @param expectedStatusCode The expected HTTP status code
+     * @param expectedJson       The expected JSON object
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws InvalidJsonException Thrown if the given JSON text is not valid JSON text
+     */
     public static JsonResponseAssertions fromString(int expectedStatusCode, String expectedJson) {
         return new JsonResponseAssertions(expectedStatusCode, expectedJson);
     }
 
+    /**
+     * Creates a {@code JsonResponseAssertions} object which expects the specified response HTTP status code and JSON, which
+     * is loaded from the specified resource. The resource source is specified
+     * as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
+     * are not limited to):
+     * </p>
+     * <ul>
+     * <li>{@code classpath:/rocks/bastion/json/Sushi.json}</li>
+     * <li>{@code file:/home/user/Sushi.json}</li>
+     * </ul>
+     * <p>
+     * For more information about which resource URLs are accepted see the documentation for {@link ResourceLoader}.
+     * <p>
+     * The loaded JSON should be valid JSON.
+     *
+     * @param expectedStatusCode The expected HTTP status code
+     * @param expectedJsonSource The resource to load the expected JSON object from
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws InvalidJsonException        Thrown if the loaded JSON text is not valid JSON text
+     * @throws UnreadableResourceException Thrown if the specified resource exists but cannot be read (because it is a directory, for example)
+     * @throws ResourceNotFoundException   Thrown if the specified resource does not exist
+     */
     public static JsonResponseAssertions fromResource(int expectedStatusCode, String expectedJsonSource) {
         Objects.requireNonNull(expectedJsonSource);
         return new JsonResponseAssertions(expectedStatusCode, new ResourceLoader(expectedJsonSource).load());
+    }
+
+    /**
+     * Similar to the {@link #fromResource(int, String)} method but also supports template variable assignments.
+     * This allows you to store an expected JSON object's template as a JSON file where the template
+     * is written using <a href="https://mustache.github.io/">Mustache</a>. Each variable's value is supplied as the
+     * {@code variableAssignments} parameter in a map. If the template cannot resolve a variable, an exception is thrown.
+     * </p>
+     * <p>
+     * The template file is specified as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
+     * are not limited to):
+     * </p>
+     * <ul>
+     * <li>{@code classpath:/rocks/bastion/json/Sushi.json}</li>
+     * <li>{@code file:/home/user/Sushi.json}</li>
+     * </ul>
+     * <p>
+     * For more information about which resource URLs are accepted see the documentation for {@link ResourceLoader}.
+     * </p>
+     *
+     * @param expectedStatusCode  The expected HTTP status code
+     * @param expectedJsonSource  The resource to load the expected JSON object template from
+     * @param variableAssignments The values used when resolving variables in the loaded template
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws InvalidJsonException         Thrown if the loaded JSON text is not valid JSON text
+     * @throws UnreadableResourceException  Thrown if the specified resource exists but cannot be read (because it is a directory, for example)
+     * @throws ResourceNotFoundException    Thrown if the specified resource does not exist
+     * @throws TemplateCompilationException Thrown if a variable in the loaded template does not have an assignment in the {@code variableAssignments} map
+     */
+    public static JsonResponseAssertions fromTemplate(int expectedStatusCode, String expectedJsonSource, Map<String, String> variableAssignments) {
+        Objects.requireNonNull(expectedJsonSource);
+        Objects.requireNonNull(variableAssignments);
+        TemplateContentCompiler compiler = new TemplateContentCompiler(new ResourceLoader(expectedJsonSource).load());
+        compiler.addAllVariableAssignments(variableAssignments);
+        return new JsonResponseAssertions(expectedStatusCode, compiler.getContent());
     }
 
     private int expectedStatusCode;
