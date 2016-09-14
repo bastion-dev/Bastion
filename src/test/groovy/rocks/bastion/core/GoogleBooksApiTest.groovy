@@ -14,7 +14,7 @@ class GoogleBooksApiTest {
         Bastion.request("Query 'Harry Potter'", GeneralRequest.get("https://www.googleapis.com/books/v1/volumes/{id}")
                 .addRouteParam("id", "wrOQLV6xB-wC"))
                 .withAssertions(JsonResponseAssertions.fromResource(200, "classpath:/json/harry_potter_results.json")
-                .ignoreValuesForProperties("/etag", "/volumeInfo/imageLinks/thumbnail", "/volumeInfo/imageLinks/smallThumbnail"))
+                .ignoreValuesForProperties("/etag", "/volumeInfo/imageLinks/thumbnail", "/volumeInfo/imageLinks/smallThumbnail", "/volumeInfo/ratingsCount"))
                 .call()
     }
 
