@@ -32,7 +32,8 @@ public class JsonResponseAssertions implements Assertions<Object> {
 
     /**
      * Creates a {@code JsonResponseAssertions} object which expects the specified response HTTP status code and the specified JSON.
-     * The JSON passed in should be valid JSON.
+     * The supplied JSON must be syntactically correct; otherwise, an exception is thrown to indicate that the expected JSON string
+     * is invalid.
      *
      * @param expectedStatusCode The expected HTTP status code
      * @param expectedJson       The expected JSON object
@@ -56,7 +57,8 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * <p>
      * For more information about which resource URLs are accepted see the documentation for {@link ResourceLoader}.
      * <p>
-     * The loaded JSON should be valid JSON.
+     * The loaded JSON must be syntactically correct; otherwise, an exception is thrown to indicate that the expected JSON string
+     * is invalid.
      *
      * @param expectedStatusCode The expected HTTP status code
      * @param expectedJsonSource The resource to load the expected JSON object from
@@ -86,6 +88,10 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * </ul>
      * <p>
      * For more information about which resource URLs are accepted see the documentation for {@link ResourceLoader}.
+     * </p>
+     * <p>
+     * The loaded JSON, after variables are resolved, must be syntactically correct; otherwise, an exception is
+     * thrown to indicate that the expected JSON string is invalid.
      * </p>
      *
      * @param expectedStatusCode  The expected HTTP status code
