@@ -152,8 +152,48 @@
                     <footerHtmlFile>${project.basedir}/src/docs/md/footer.html</footerHtmlFile>
                     <inputDirectory>${project.basedir}/src/docs/md</inputDirectory>
                     <outputDirectory>${project.basedir}/docs</outputDirectory>
-                    <pegdownExtensions>TABLES,SMARTYPANTS,FENCED_CODE_BLOCKS,AUTOLINKS</pegdownExtensions>
+                    <pegdownExtensions>TABLES,SMARTYPANTS,FENCED_CODE_BLOCKS,AUTOLINKS,EXTANCHORLINKS</pegdownExtensions>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pegdown</groupId>
+                        <artifactId>pegdown</artifactId>
+                        <version>1.6.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>docs-toc</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>tocSrc</name>
+                                    <value>${project.basedir}/docs/index.html</value>
+                                </property>
+                            </properties>
+                            <scripts>
+                                <script>file:///${project.basedir}/src/docs/groovy/toc.groovy</script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>2.4.6</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
