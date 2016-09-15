@@ -57,8 +57,8 @@ public class TemplateContentCompiler {
     /**
      * Assign a new value to a particular variable name.
      *
-     * @param variable   A non-{@link null} variable name to assign a new value for.
-     * @param assignment A non-{@link null} value to assign to the given variable name.
+     * @param variable   A non-{@literal null} variable name to assign a new value for.
+     * @param assignment A non-{@literal null} value to assign to the given variable name.
      */
     public void addVariableAssignment(String variable, Object assignment) {
         Objects.requireNonNull(variable);
@@ -81,7 +81,7 @@ public class TemplateContentCompiler {
      * Returns the fully resolved template. The variables in the template are resolved using the variable assignment given
      * using the {@link #addVariableAssignment(String, Object)} and {@link #addAllVariableAssignments(Map)} methods.
      *
-     * @return A non-{@link null} string resulting from resolving the template using the variable assignment.
+     * @return A non-{@literal null} string resulting from resolving the template using the variable assignment.
      */
     public String getContent() {
         return resolveTemplate();

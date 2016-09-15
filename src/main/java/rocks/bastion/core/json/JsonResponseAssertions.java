@@ -49,12 +49,11 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * is loaded from the specified resource. The resource source is specified
      * as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
      * are not limited to):
-     * </p>
      * <ul>
      * <li>{@code classpath:/rocks/bastion/json/Sushi.json}</li>
      * <li>{@code file:/home/user/Sushi.json}</li>
      * </ul>
-     * <p>
+     *
      * For more information about which resource URLs are accepted see the documentation for {@link ResourceLoader}.
      * <p>
      * The loaded JSON must be syntactically correct; otherwise, an exception is thrown to indicate that the expected JSON string
@@ -77,7 +76,6 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * This allows you to store an expected JSON object's template as a JSON file where the template
      * is written using <a href="https://mustache.github.io/">Mustache</a>. Each variable's value is supplied as the
      * {@code variableAssignments} parameter in a map. If the template cannot resolve a variable, an exception is thrown.
-     * </p>
      * <p>
      * The template file is specified as a resource URL as described in {@link ResourceLoader}. Valid resource URLs include (but
      * are not limited to):
