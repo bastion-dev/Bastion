@@ -31,7 +31,7 @@ public class GeneralRequest implements HttpRequest {
      * @param url A non-{@literal null} URL to send the request on
      * @return An HTTP request using the get method
      */
-    public static HttpRequest get(String url) {
+    public static GeneralRequest get(String url) {
         return new GeneralRequest(HttpMethod.GET, url, EMPTY_BODY);
     }
 
