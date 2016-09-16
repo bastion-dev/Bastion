@@ -14,7 +14,7 @@ dependency to your POM file:
     <dependency>
         <groupId>rocks.bastion</groupId>
         <artifactId>bastion</artifactId>
-        <version>0.1-BETA</version>
+        <version>0.2.1-BETA</version>
         <scope>test</scope>
     <dependency>
 ```
