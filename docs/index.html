@@ -5,10 +5,48 @@
         <title>Bastion User Guide (0.2-SNAPSHOT)</title>
     </head>
     <body><h1><a href="#bastion-user-guide" name="bastion-user-guide"></a>Bastion User Guide</h1>
-<p><ul><li><a href='#what-is-bastion-'>What is Bastion?</a></li><li><a href='#getting-started'>Getting Started</a></li><li><a href='#features'>Features</a></li><ul><li><a href='#requests'>Requests</a></li><ul><li><a href='#general-request'>General Request</a></li><li><a href='#json-request'>JSON Request</a></li></ul><li><a href='#assertions'>Assertions</a></li><ul><li><a href='#json-assertion'>JSON Assertion</a></li><li><a href='#json-schema'>JSON Schema</a></li></ul></ul><li><a href='#contribute'>Contribute</a></li></ul></p>
-<h2><a href="#what-is-bastion-" name="what-is-bastion-"></a>What is Bastion?</h2>
-<p>Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service but the library provides in-built classes for testing JSON endpoints and validating JSON responses.</p>
+<p><ul><li><a href='#introduction'>Introduction</a></li><li><a href='#getting-started'>Getting Started</a></li><ul><li><a href='#maven-dependency'>Maven Dependency</a></li><li><a href='#groovy-grapes'>Groovy Grapes</a></li><li><a href='#writing-your-first-bastion-test'>Writing your first Bastion test</a></li></ul><li><a href='#features'>Features</a></li><ul><li><a href='#requests'>Requests</a></li><ul><li><a href='#general-request'>General Request</a></li><li><a href='#json-request'>JSON Request</a></li></ul><li><a href='#assertions'>Assertions</a></li><ul><li><a href='#json-assertion'>JSON Assertion</a></li><li><a href='#json-schema'>JSON Schema</a></li></ul></ul><li><a href='#contribute'>Contribute</a></li></ul></p>
+<h2><a href="#introduction" name="introduction"></a>Introduction</h2>
+<p>Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service but the library also provides in-built classes for testing JSON endpoints and validating JSON responses.</p>
+<p>This reference manual explains all the features of the Bastion library and how to use them. For a more detailed description of each the Bastion API, please see the <a href="http://bastion.rocks/javadocs/index.html">Bastion JavaDocs</a>.</p>
 <h2><a href="#getting-started" name="getting-started"></a>Getting Started</h2>
+<h3><a href="#maven-dependency" name="maven-dependency"></a>Maven Dependency</h3>
+<p>Using Bastion for your project is easily done by using a dependency management tool. Bastion is available on the Maven Central repository. For Java projects with a <code>pom.xml</code> file, you can add the following dependency to your <code>&lt;dependencies&gt;</code> section to download Bastion and make it available for your project&rsquo;s tests.</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;rocks.bastion&lt;/groupId&gt;
+    &lt;artifactId&gt;bastion&lt;/artifactId&gt;
+    &lt;version&gt;0.3-SNAPSHOT&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3><a href="#groovy-grapes" name="groovy-grapes"></a>Groovy Grapes</h3>
+<p>If you are using Groovy scripts for your tests, you can easily download Bastion directly from within your script files, using Grape. Add the following line to your <code>import</code> statement to download Bastion and make it available to your script.</p>
+<pre><code class="groovy">@Grapes(
+    @Grab(group=&#39;rocks.bastion&#39;, module=&#39;bastion&#39;, version=&#39;0.2-BETA&#39;)
+)
+import rocks.bastion.Bastion
+</code></pre>
+<h3><a href="#writing-your-first-bastion-test" name="writing-your-first-bastion-test"></a>Writing your first Bastion test</h3>
+<p>Bastion makes it very easy to write simple API tests. Let us look at a test for an API which returns JSON.</p>
+<pre><code class="java">@RunWith(BastionRunner.class)
+public class VatValidatorTest {
+    @Test
+    public void callValidateVatNumber_returnsAmazonVatData() {
+        Bastion.request(&quot;Validate Amazon&#39;s VAT Number&quot;, GeneralRequest.get(&quot;http://vatlayer.com/php_helper_scripts/vat_api.php&quot;)
+                .addQueryParam(&quot;secret_key&quot;, &quot;577b6fb6551df7f3532ecbd45ea07ddd&quot;)
+                .addQueryParam(&quot;vat_number&quot;, &quot;LU26375245&quot;)
+        ).withAssertions(JsonResponseAssertions.fromResource(200, &quot;classpath:/json/amazon_vat.json&quot;)).call();
+    }
+}
+</code></pre>
+<p>In this test, we make a simple <code>GET</code> request on the URL <code>http://vatlayer.com/php_helper_scripts/vat_api.php</code>. We add two query parameters to the request namely, <code>secret_key</code> and <code>vat_number</code>. We then expect a JSON response using a <code>JsonResponseAssertions</code> object. This assertions object will check that the status code is <code>200</code> (as specified by the user), and that the content-type header returned is indeed <code>application/json</code>. It will also check that the returned JSON content matches that found in the <code>json/amazon_vat.json</code> file.</p>
+<p>Notice that this JSON comparison is not a straight-up text equality comparison: instead, it structurally compares the actual received JSON to the expected JSON as if they were objects. Changing the order of properties in the response won&rsquo;t matter. Even better, say the test fails, Bastion will tell you exactly what operations you need to perform to the response to get the expected outcome. Here is an example of an error output when the <code>JsonResponseAssertions</code> fail:</p>
+<pre><code>java.lang.AssertionError: Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what 
+operations you need to perform to transform the actual response body into the expected response body:
+  [{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/country_code&quot;,&quot;value&quot;:&quot;MT&quot;}]
+</code></pre>
+<p>We can see how the error tells us to change the value in the <code>/country_code</code> property to <code>MT</code>.</p>
+<p>This is only a taste of what Bastion can do. In the sections below, we explain all the features of Bastion and how you can even extend the library to create your own requests and assertions depending on your domain.</p>
 <h2><a href="#features" name="features"></a>Features</h2>
 <h3><a href="#requests" name="requests"></a>Requests</h3>
 <h4><a href="#general-request" name="general-request"></a>General Request</h4>

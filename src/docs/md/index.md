@@ -63,7 +63,7 @@ It will also check that the returned JSON content matches that found in the `jso
 
 Notice that this JSON comparison is not a straight-up text equality comparison: instead, it structurally compares the actual received JSON to
 the expected JSON as if they were objects. Changing the order of properties in the response won't matter. Even better, say the test fails, Bastion
-will tell you exactly what operations to need to perform to the response to get the expected outcome. Here is an example of an error output when
+will tell you exactly what operations you need to perform to the response to get the expected outcome. Here is an example of an error output when
 the `JsonResponseAssertions` fail:
 
 ```
