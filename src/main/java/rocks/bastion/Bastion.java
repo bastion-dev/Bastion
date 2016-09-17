@@ -9,6 +9,8 @@ import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.builder.PostExecutionBuilder;
 import rocks.bastion.core.configuration.BastionConfigurationLoader;
 import rocks.bastion.core.configuration.Configuration;
+import rocks.bastion.core.configuration.GlobalRequestAttributes;
+import rocks.bastion.core.json.JsonRequest;
 
 import static java.util.Objects.requireNonNull;
 
@@ -178,9 +180,13 @@ public final class Bastion {
     }
 
     public static Configuration load(String resourceLocation) {
-        requireNonNull(resourceLocation,"The resource location cannot be null.");
+        requireNonNull(resourceLocation, "The resource location cannot be null.");
         Configuration config = BastionConfigurationLoader.load(resourceLocation);
         BastionFactory.setConfiguration(config);
         return BastionFactory.getConfiguration();
+    }
+
+    public static GlobalRequestAttributes globals() {
+        return BastionFactory.getConfiguration().getGlobalRequestAttributes();
     }
 }

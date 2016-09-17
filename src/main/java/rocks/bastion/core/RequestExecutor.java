@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 import rocks.bastion.core.configuration.Configuration;
 
 /**
- * Responsible for executing a Bastion remote request built using the {@link BastionBuilderImpl}
- * builder and prepare a response object.
+ * Responsible for executing a Bastion remote request built using the {@link BastionBuilderImpl} builder and prepare a response object.
  */
 public class RequestExecutor {
 

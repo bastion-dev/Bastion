@@ -1,13 +1,18 @@
 package rocks.bastion.core.configuration;
 
+import rocks.bastion.Bastion;
+
 /**
- * TODO document class
+ * <p>Contains all Bastion configuration settings.</p>
+ * <p>Bastion can be configured via a YAML file that can be loaded via the {@link BastionConfigurationLoader}, or programmatically via {@link Bastion#globals()}</p>
  */
 public class Configuration {
 
-    public Configuration() {}
-
     private GlobalRequestAttributes globalRequestAttributes;
+
+    public Configuration() {
+        globalRequestAttributes = new GlobalRequestAttributes();
+    }
 
     public GlobalRequestAttributes getGlobalRequestAttributes() {
         return globalRequestAttributes;

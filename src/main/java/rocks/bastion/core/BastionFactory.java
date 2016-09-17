@@ -50,6 +50,9 @@ public abstract class BastionFactory {
     }
 
     public static Configuration getConfiguration() {
+        if (configuration == null) {
+            configuration = new Configuration();
+        }
         return configuration;
     }
 
