@@ -1,20 +1,19 @@
 package rocks.bastion.core.configuration;
 
-import java.util.Collection;
-
-import rocks.bastion.core.ApiHeader;
-import rocks.bastion.core.ApiQueryParam;
-import rocks.bastion.core.RouteParam;
-
 /**
  * TODO document class
  */
-public interface Configuration {
+public class Configuration {
 
-    Collection<ApiHeader> globalHeaders();
+    public Configuration() {}
 
-    Collection<ApiQueryParam> globalQueryParams();
+    private GlobalRequestAttributes globalRequestAttributes;
 
-    Collection<RouteParam> globalRouteParams();
+    public GlobalRequestAttributes getGlobalRequestAttributes() {
+        return globalRequestAttributes;
+    }
 
+    public void setGlobalRequestAttributes(GlobalRequestAttributes globalRequestAttributes) {
+        this.globalRequestAttributes = globalRequestAttributes;
+    }
 }

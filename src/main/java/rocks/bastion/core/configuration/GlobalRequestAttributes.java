@@ -1,35 +1,36 @@
 package rocks.bastion.core.configuration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ApiQueryParam;
 import rocks.bastion.core.RouteParam;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * TODO document class
  */
-public class ConfigurationImpl implements Configuration {
+public class GlobalRequestAttributes {
 
     private Collection<ApiHeader> globalHeaders;
     private Collection<ApiQueryParam> globalQueryParams;
     private Collection<RouteParam> globalRouteParams;
+    private long globalRequestTimeout;
 
-    public ConfigurationImpl() {
-        this.globalHeaders = new ArrayList<>();
-        this.globalQueryParams = new ArrayList<>();
-        this.globalRouteParams = new ArrayList<>();
+    public GlobalRequestAttributes() {
+        globalHeaders = new ArrayList<>();
+        globalQueryParams = new ArrayList<>();
+        globalRouteParams = new ArrayList<>();
     }
 
-    public ConfigurationImpl(Collection<ApiHeader> globalHeaders, Collection<ApiQueryParam> globalQueryParams, Collection<RouteParam> globalRouteParams) {
+    public GlobalRequestAttributes(Collection<ApiHeader> globalHeaders, Collection<ApiQueryParam> globalQueryParams, Collection<RouteParam> globalRouteParams, long globalRequestTimeout) {
         this.globalHeaders = globalHeaders;
         this.globalQueryParams = globalQueryParams;
         this.globalRouteParams = globalRouteParams;
+        this.globalRequestTimeout = globalRequestTimeout;
     }
 
-    @Override
-    public Collection<ApiHeader> globalHeaders() {
+    public Collection<ApiHeader> getGlobalHeaders() {
         return globalHeaders;
     }
 
@@ -37,8 +38,7 @@ public class ConfigurationImpl implements Configuration {
         this.globalHeaders = globalHeaders;
     }
 
-    @Override
-    public Collection<ApiQueryParam> globalQueryParams() {
+    public Collection<ApiQueryParam> getGlobalQueryParams() {
         return globalQueryParams;
     }
 
@@ -46,12 +46,19 @@ public class ConfigurationImpl implements Configuration {
         this.globalQueryParams = globalQueryParams;
     }
 
-    @Override
-    public Collection<RouteParam> globalRouteParams() {
+    public Collection<RouteParam> getGlobalRouteParams() {
         return globalRouteParams;
     }
 
     public void setGlobalRouteParams(Collection<RouteParam> globalRouteParams) {
         this.globalRouteParams = globalRouteParams;
+    }
+
+    public long getGlobalRequestTimeout() {
+        return globalRequestTimeout;
+    }
+
+    public void setGlobalRequestTimeout(long globalRequestTimeout) {
+        this.globalRequestTimeout = globalRequestTimeout;
     }
 }

@@ -17,4 +17,8 @@ public class RouteParam extends ApiProperty {
     public RouteParam(String name, String value) {
         super(name, value);
     }
+
+    private RouteParam(){
+        // required for serialization
+    }
 }

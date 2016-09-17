@@ -87,24 +87,25 @@ public class RequestExecutor {
     }
 
     private void applyHeaders() {
-        headers = new LinkedList<>(configuration.globalHeaders());
+        headers = new LinkedList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
         if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
             executableHttpRequest.header("Content-Type", bastionHttpRequest.contentType().get().toString());
             headers.add(new ApiHeader("Content-Type", bastionHttpRequest.contentType().get().toString()));
         }
         bastionHttpRequest.headers().stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
+        ArrayList<ApiHeader> headers = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
         headers.addAll(bastionHttpRequest.headers());
     }
 
     private void applyQueryParameters() {
-        List<ApiQueryParam> apiQueryParams = new ArrayList<>(configuration.globalQueryParams());
+        List<ApiQueryParam> apiQueryParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalQueryParams());
         apiQueryParams.addAll(bastionHttpRequest.queryParams());
         apiQueryParams.stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();
     }
 
     private void applyRouteParameters() {
-        List<RouteParam> routeParams = new ArrayList<>(configuration.globalRouteParams());
+        List<RouteParam> routeParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalRouteParams());
         routeParams.addAll(bastionHttpRequest.routeParams());
         routeParams.stream().forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();

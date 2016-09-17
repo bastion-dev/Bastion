@@ -9,4 +9,8 @@ public class ApiQueryParam extends ApiProperty {
     public ApiQueryParam(String name, String value) {
         super(name, value);
     }
+
+    private ApiQueryParam(){
+        // required for serialization
+    }
 }

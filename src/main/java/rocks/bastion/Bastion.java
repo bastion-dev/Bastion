@@ -7,7 +7,10 @@ import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.builder.PostExecutionBuilder;
-import rocks.bastion.core.configuration.ConfigurationProvider;
+import rocks.bastion.core.configuration.BastionConfigurationLoader;
+import rocks.bastion.core.configuration.Configuration;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The main starting point for creating a Bastion test using the library.
@@ -170,12 +173,14 @@ public final class Bastion {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
-    public static void configure(ConfigurationProvider configurationProvider) {
-        BastionFactory.setConfiguration(configurationProvider.get());
-    }
-
     private Bastion() {
         // This class should not be instantiated.
     }
 
+    public static Configuration load(String resourceLocation) {
+        requireNonNull(resourceLocation,"The resource location cannot be null.");
+        Configuration config = BastionConfigurationLoader.load(resourceLocation);
+        BastionFactory.setConfiguration(config);
+        return BastionFactory.getConfiguration();
+    }
 }
