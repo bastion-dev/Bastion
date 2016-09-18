@@ -79,16 +79,53 @@ to create your own requests and assertions depending on your domain.
 
 ## Features
 
+### The Structure of a Bastion Test
+
+Bastion tests are implemented using the `Bastion` builder. This class provides a fluent-like interface for specifying tests. In the code snippet
+below, we show how all the methods of the builder would look like when executed together.
+
+```java
+Bastion.request(...)
+       .bind(...)
+       .withAssertions(...)
+       .thenDo(...)
+       .call()
+       .getModel()
+```
+
+This shows the basic structure of a Bastion test. Each one of the methods listed above (except `request()` and `call()`) is optional but they still
+must be specified in the order above. If you chose to skip `withAssertions()`, for example, you must call `bind()` before `call()`. The list below
+explains each one of these methods separately.
+
+* `request()`: This method is the main entry-point to create a Bastion test. You must specify a name which will identify this test in test reports
+and also provide a _request_ object that tells Bastion what kind of HTTP request to send. Bastion provides a number of different
+in-built requests you can use (eg. `JsonRequest`) but you can also implement your own request types. For a list of all in-built requests see 
+[Requests](#requests). The [Custom Requests](#custom-requests) section explains how to implement your own requests.
+* `bind()`: Tells Bastion which model class to use when interpreting the incoming HTTP entity. When Bastion receives a response from the remote
+server, it will decode the received entity data into an object of the given type. If this decoding process fails for some reason,
+the entire test is marked as failed. By providing a model class using the `bind()` method, you'll have this type information available
+for later on when calling the `withAssertions()`, `thenDo()` and `getModel()` methods.
+* `withAssertions()`: Takes an _assertions_ object which will verify that the response returned by the remote server is correct. Bastion provides a number of different 
+in-built assertion objects for common verifications you might want to do (eg. `JsonResponseAssertions`) but you can also
+implement your own assertions. For a list of all in-built assertions see [Assertions](#assertions). The 
+[Custom Assertions](#custom-assertions) section explains how to implement your own assertions.
+
 ### Requests
 
 #### General Request
 
 #### JSON Request
 
+#### Form URL Encoded Data Request
+
+#### Custom Requests
+
 ### Assertions
 
 #### JSON Assertion
 
 #### JSON Schema
+
+#### Custom Assertions
 
 ## Contribute

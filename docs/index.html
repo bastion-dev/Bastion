@@ -5,7 +5,7 @@
         <title>Bastion User Guide (0.2-SNAPSHOT)</title>
     </head>
     <body><h1><a href="#bastion-user-guide" name="bastion-user-guide"></a>Bastion User Guide</h1>
-<p><ul><li><a href='#introduction'>Introduction</a></li><li><a href='#getting-started'>Getting Started</a></li><ul><li><a href='#maven-dependency'>Maven Dependency</a></li><li><a href='#groovy-grapes'>Groovy Grapes</a></li><li><a href='#writing-your-first-bastion-test'>Writing your first Bastion test</a></li></ul><li><a href='#features'>Features</a></li><ul><li><a href='#requests'>Requests</a></li><ul><li><a href='#general-request'>General Request</a></li><li><a href='#json-request'>JSON Request</a></li></ul><li><a href='#assertions'>Assertions</a></li><ul><li><a href='#json-assertion'>JSON Assertion</a></li><li><a href='#json-schema'>JSON Schema</a></li></ul></ul><li><a href='#contribute'>Contribute</a></li></ul></p>
+<p><ul><li><a href='#introduction'>Introduction</a></li><li><a href='#getting-started'>Getting Started</a></li><ul><li><a href='#maven-dependency'>Maven Dependency</a></li><li><a href='#groovy-grapes'>Groovy Grapes</a></li><li><a href='#writing-your-first-bastion-test'>Writing your first Bastion test</a></li></ul><li><a href='#features'>Features</a></li><ul><li><a href='#the-structure-of-a-bastion-test'>The Structure of a Bastion Test</a></li><li><a href='#requests'>Requests</a></li><ul><li><a href='#general-request'>General Request</a></li><li><a href='#json-request'>JSON Request</a></li><li><a href='#form-url-encoded-data-request'>Form URL Encoded Data Request</a></li><li><a href='#custom-requests'>Custom Requests</a></li></ul><li><a href='#assertions'>Assertions</a></li><ul><li><a href='#json-assertion'>JSON Assertion</a></li><li><a href='#json-schema'>JSON Schema</a></li><li><a href='#custom-assertions'>Custom Assertions</a></li></ul></ul><li><a href='#contribute'>Contribute</a></li></ul></p>
 <h2><a href="#introduction" name="introduction"></a>Introduction</h2>
 <p>Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service but the library also provides in-built classes for testing JSON endpoints and validating JSON responses.</p>
 <p>This reference manual explains all the features of the Bastion library and how to use them. For a more detailed description of each the Bastion API, please see the <a href="http://bastion.rocks/javadocs/index.html">Bastion JavaDocs</a>.</p>
@@ -48,11 +48,29 @@ operations you need to perform to transform the actual response body into the ex
 <p>We can see how the error tells us to change the value in the <code>/country_code</code> property to <code>MT</code>.</p>
 <p>This is only a taste of what Bastion can do. In the sections below, we explain all the features of Bastion and how you can even extend the library to create your own requests and assertions depending on your domain.</p>
 <h2><a href="#features" name="features"></a>Features</h2>
+<h3><a href="#the-structure-of-a-bastion-test" name="the-structure-of-a-bastion-test"></a>The Structure of a Bastion Test</h3>
+<p>Bastion tests are implemented using the <code>Bastion</code> builder. This class provides a fluent-like interface for specifying tests. In the code snippet below, we show how all the methods of the builder would look like when executed together.</p>
+<pre><code class="java">Bastion.request(...)
+       .bind(...)
+       .withAssertions(...)
+       .thenDo(...)
+       .call()
+       .getModel()
+</code></pre>
+<p>This shows the basic structure of a Bastion test. Each one of the methods listed above (except <code>request()</code> and <code>call()</code>) is optional but they still must be specified in the order above. If you chose to skip <code>withAssertions()</code>, for example, you must call <code>bind()</code> before <code>call()</code>. The list below explains each one of these methods separately.</p>
+<ul>
+  <li><code>request()</code>: This method is the main entry-point to create a Bastion test. You must specify a name which will identify this test in test reports and also provide a <em>request</em> object that tells Bastion what kind of HTTP request to send. Bastion provides a number of different in-built requests you can use (eg. <code>JsonRequest</code>) but you can also implement your own request types. For a list of all in-built requests see <a href="#requests">Requests</a>. The <a href="#custom-requests">Custom Requests</a> section explains how to implement your own requests.</li>
+  <li><code>bind()</code>: Tells Bastion which model class to use when interpreting the incoming HTTP entity. When Bastion receives a response from the remote server, it will decode the received entity data into an object of the given type. If this decoding process fails for some reason, the entire test is marked as failed. By providing a model class using the <code>bind()</code> method, you&rsquo;ll have this type information available for later on when calling the <code>withAssertions()</code>, <code>thenDo()</code> and <code>getModel()</code> methods.</li>
+  <li><code>withAssertions()</code>: Takes an <em>assertions</em> object which will verify that the response returned by the remote server is correct. Bastion provides a number of different in-built assertion objects for common verifications you might want to do (eg. <code>JsonResponseAssertions</code>) but you can also implement your own assertions. For a list of all in-built assertions see <a href="#assertions">Assertions</a>. The <a href="#custom-assertions">Custom Assertions</a> section explains how to implement your own assertions.</li>
+</ul>
 <h3><a href="#requests" name="requests"></a>Requests</h3>
 <h4><a href="#general-request" name="general-request"></a>General Request</h4>
 <h4><a href="#json-request" name="json-request"></a>JSON Request</h4>
+<h4><a href="#form-url-encoded-data-request" name="form-url-encoded-data-request"></a>Form URL Encoded Data Request</h4>
+<h4><a href="#custom-requests" name="custom-requests"></a>Custom Requests</h4>
 <h3><a href="#assertions" name="assertions"></a>Assertions</h3>
 <h4><a href="#json-assertion" name="json-assertion"></a>JSON Assertion</h4>
 <h4><a href="#json-schema" name="json-schema"></a>JSON Schema</h4>
+<h4><a href="#custom-assertions" name="custom-assertions"></a>Custom Assertions</h4>
 <h2><a href="#contribute" name="contribute"></a>Contribute</h2>    </body>
 </html>
