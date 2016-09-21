@@ -39,7 +39,11 @@ class Depth {
 }
 
 def userGuideHtmlFile = new File((String) tocSrc)
+def pomFileSrc = new File((String) pomSrc)
 def page = new XmlSlurper(new SAXParser()).parse(userGuideHtmlFile)
+def pom = new XmlSlurper(new SAXParser()).parse(pomFileSrc)
+def pomVersion = pom.'BODY'.'PROJECT'.'VERSION'.text()
+
 def depth = new Depth(new StringBuilder());
 page.depthFirst().each { node ->
     if (['H2', 'H3', 'H4'].contains(node.name())) {
@@ -61,5 +65,5 @@ page.depthFirst().each { node ->
 }
 depth.adjust(1)
 def htmlWithoutToc = userGuideHtmlFile.getText('UTF-8')
-def htmlWithToc = htmlWithoutToc.replace('[TOC]', depth.output.toString())
+def htmlWithToc = htmlWithoutToc.replace('[TOC]', depth.output.toString()).replace('[VERSION]', pomVersion);
 userGuideHtmlFile.write(htmlWithToc, 'UTF-8')

@@ -179,6 +179,10 @@
                                     <name>tocSrc</name>
                                     <value>${project.basedir}/docs/index.html</value>
                                 </property>
+                                <property>
+                                    <name>pomSrc</name>
+                                    <value>${project.basedir}/pom.xml</value>
+                                </property>
                             </properties>
                             <scripts>
                                 <script>file:///${project.basedir}/src/docs/groovy/toc.groovy</script>

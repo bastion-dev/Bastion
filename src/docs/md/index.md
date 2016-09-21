@@ -22,7 +22,7 @@ it available for your project's tests.
 <dependency>
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>[VERSION]</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -34,7 +34,7 @@ the following line to your `import` statement to download Bastion and make it av
 
 ```groovy
 @Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='0.2-BETA')
+    @Grab(group='rocks.bastion', module='bastion', version='[VERSION]')
 )
 import rocks.bastion.Bastion
 ```
