@@ -5,7 +5,7 @@
 ## Introduction
 
 Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service
-but the library also provides in-built classes for testing JSON endpoints and validating JSON responses.
+but the library also provides built-in classes for testing JSON endpoints and validating JSON responses.
 
 This reference manual explains all the features of the Bastion library and how to use them. For a more detailed description of each
 the Bastion API, please see the [Bastion JavaDocs](http://bastion.rocks/javadocs/index.html).
@@ -99,18 +99,37 @@ explains each one of these methods separately.
 
 * `request()`: This method is the main entry-point to create a Bastion test. You must specify a name which will identify this test in test reports
 and also provide a _request_ object that tells Bastion what kind of HTTP request to send. Bastion provides a number of different
-in-built requests you can use (eg. `JsonRequest`) but you can also implement your own request types. For a list of all in-built requests see 
+built-in requests you can use (eg. `JsonRequest`) but you can also implement your own request types. For a list of all built-in requests see 
 [Requests](#requests). The [Custom Requests](#custom-requests) section explains how to implement your own requests.
 * `bind()`: Tells Bastion which model class to use when interpreting the incoming HTTP entity. When Bastion receives a response from the remote
 server, it will decode the received entity data into an object of the given type. If this decoding process fails for some reason,
 the entire test is marked as failed. By providing a model class using the `bind()` method, you'll have this type information available
-for later on when calling the `withAssertions()`, `thenDo()` and `getModel()` methods.
-* `withAssertions()`: Takes an _assertions_ object which will verify that the response returned by the remote server is correct. Bastion provides a number of different 
-in-built assertion objects for common verifications you might want to do (eg. `JsonResponseAssertions`) but you can also
-implement your own assertions. For a list of all in-built assertions see [Assertions](#assertions). The 
+for later on when calling the `withAssertions()`, `thenDo()`, `getModel()` and `getResponse().getModel()` methods.
+* `withAssertions()`: Takes an _assertions_ object which will verify that the response returned by the remote server is correct.
+Bastion provides a number of different built-in assertion objects for common verifications you might want to do (eg. `JsonResponseAssertions`) but you can also
+implement your own assertions. For a list of all built-in assertions see [Assertions](#assertions). The 
 [Custom Assertions](#custom-assertions) section explains how to implement your own assertions.
+* `thenDo()`: Takes a _Callback_ object which will be executed when the response is received and the assertions pass. This is useful if you would
+like to perform specific actions after Bastion requests. This could be logging the response, for example, or saving authentication data for future
+Bastion requests.
+* `call()`: Executes the API request configured with the previous commands. Any assertions will be applied on the received response. The call operation
+will fail if Bastion is unable to bind the received response to a model or the assertions fail.
+* `getResponse()`: After the `call()` method is executed, you can get the HTTP response object received using the `getResponse()` method. The returned
+response object will contain the bound model obtained from the response data.
+* `getModel()`: After the `call()` method is executed, you can get the bound model obtained from the response data.
 
 ### Requests
+
+_Request_ objects are passed to the `request()` method which is the first builder method invoked when using the `Bastion` builder. A `Request` object
+defines the HTTP data that is sent to the remote server while the test is executing. We suggest using one of the built-in `Request` subclasses when
+supplying your request data. Alternatively, if none of the built-in request subclasses are useful, you can create your own `Request` subclass
+as explained in the section [Custom Requests](#custom-requests).
+
+Bastion provides the following list of in-built `Request` subclasses:
+
+* [GeneralRequest](#general-request): A simple HTTP request which allows for any arbitrary entity data.
+* [JsonRequest](#json-request): An HTTP request which takes a JSON string as its entity data.
+* [FormUrlEncodedRequest](#form-url-encoded-request): An HTTP request which takes data in the form of a map which is then sent as a form URL encoded request.
 
 #### General Request
 
