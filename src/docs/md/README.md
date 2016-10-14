@@ -10,25 +10,13 @@ to test the overall process of calling these APIs.
 ## Test
 
 * Simple Get Request:
-```java
-Bastion.request("Get the Restaurant's Name", GeneralRequest.get("http://localhost:9876/restaurant"))
-        .withAssertions((statusCode, response, model) -> assertThat(model).isEqualTo("The Sushi Parlour"))
-        .call();
-```
+[ex:general-get-example]
 
 * Simple Post Request:
-```java
-Bastion.request("Change the Restaurant's Name", GeneralRequest.post("http://localhost:9876/restaurant", "The Fish Parlour"))
-        .withAssertions((statusCode, response, model) -> assertThat(model).isEqualTo("The Fish Parlour"))
-        .call();
-```
+[ex:general-post-example]
 
 * Simple JSON Assertion: (property order in response does not affect test)
-```java
-Bastion.request("Get Nigiri Info", GeneralRequest.get("http://localhost:9876/nigiri"))
-        .withAssertions(JsonResponseAssertions.fromString(200, "{ \"id\":5, \"name\":\"Salmon Nigiri\", \"price\":23.55 }"))
-        .call();
-```
+[ex:simple-json-assertion]
 
 ## Dependency
 
@@ -38,7 +26,7 @@ dependency to your POM file:
 <dependency>
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>[VERSION]</version>
     <scope>test</scope>
 <dependency>
 ```

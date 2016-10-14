@@ -13,7 +13,6 @@ public abstract class TestWithEmbeddedServer {
 
     private static final String host = "http://localhost";
     private static final int port = 9876;
-    private static final String path = "/sushi";
 
     private static SushiService sushiService;
 
@@ -28,7 +27,7 @@ public abstract class TestWithEmbeddedServer {
         sushiService.stop();
     }
 
-    protected String getUrl() {
-        return format("%s:%s%s", host, port, path);
+    protected String getUrl(String resourcePath) {
+        return format("%s:%s%s", host, port, resourcePath);
     }
 }

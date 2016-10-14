@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import spark.ResponseTransformer;
 import spark.Spark;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -24,6 +25,7 @@ public class SushiService {
     private Map<Long, Sushi> sushiRepository = new HashMap<>();
     private AtomicLong nextId = new AtomicLong();
     private int port;
+    private String restaurantName = "Sushi on the Bastions";
 
     public SushiService(int port) {
         this.port = port;
@@ -38,9 +40,20 @@ public class SushiService {
         port(port);
 
         before("/protected/*", (req, res) -> res.body(json.render(NOT_AUTHENTICATED.toResponse(res))));
-        after((req, res) -> res.header("Content-Type", "application/json"));
+
+        get("/restaurant", (req, res) -> {
+            res.header("Content-type", "plain/text");
+            return restaurantName;
+        });
+
+        post("/restaurant", (req, res) -> {
+            res.header("Content-type", "plain/text");
+            restaurantName = req.body();
+            return restaurantName;
+        });
 
         post("/sushi", (req, res) -> {
+            res.header("Content-type", "application/json");
             Sushi newSushi = json.fromJson(req.body(), Sushi.class);
             long id = nextId.incrementAndGet();
             newSushi.setId(id);
@@ -50,6 +63,7 @@ public class SushiService {
         }, json);
 
         get("/sushi", (req, res) -> {
+            res.header("Content-type", "application/json");
             String nameFilter = req.queryParams("name");
             if (nameFilter == null) {
                 return sushiRepository.values();
@@ -59,6 +73,7 @@ public class SushiService {
         }, json);
 
         get("/sushi/:id", (req, res) -> {
+            res.header("Content-type", "application/json");
             long id = Integer.parseInt(req.params("id"));
             Sushi sushi = sushiRepository.get(id);
             if (sushi == null) {
@@ -67,7 +82,17 @@ public class SushiService {
             return sushi;
         }, json);
 
+        get("/nigiri", (req, res) -> {
+            res.header("Content-type", "application/json");
+            Sushi sushi = new Sushi();
+            sushi.setId(5L);
+            sushi.setName("Salmon Nigiri");
+            sushi.setPrice(new BigDecimal("23.55"));
+            return sushi;
+        }, json);
+
         delete("/sushi/:id", (req, res) -> {
+            res.header("Content-type", "application/json");
             long id = Integer.parseInt(req.params("id"));
             Sushi removed = sushiRepository.remove(id);
             if (removed == null) {
@@ -76,8 +101,14 @@ public class SushiService {
             return removed;
         });
 
-        exception(RuntimeException.class, (ex, req, res) -> res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res, getRootCauseMessage(ex)))));
-        exception(JsonParseException.class, (ex, req, res) -> res.body(json.render(INVALID_ENTITY.toResponse(res, getRootCauseMessage(ex)))));
+        exception(RuntimeException.class, (ex, req, res) -> {
+            res.header("Content-type", "application/json");
+            res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res, getRootCauseMessage(ex))));
+        });
+        exception(JsonParseException.class, (ex, req, res) -> {
+            res.header("Content-type", "application/json");
+            res.body(json.render(INVALID_ENTITY.toResponse(res, getRootCauseMessage(ex))));
+        });
     }
 
     public void stop() {
