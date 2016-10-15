@@ -19,6 +19,7 @@ public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void createAndGetSameSushi_Success() {
+        // docs:bound-data
         Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
                 "\"name\":\"sashimi\", " +
                 "\"price\":\"5.60\", " +
@@ -32,6 +33,7 @@ public class CreateAndGetSushiTest extends TestWithEmbeddedServer {
                         "}"
                 ).ignoreValuesForProperties("id")
         ).call().getModel();
+        // docs:bound-data
 
         Bastion.request("Get Sushi", GeneralRequest.get("http://localhost:9876/sushi/" + createdSushi.getId()))
                 .bind(Sushi.class).withAssertions((Assertions<Sushi>) (statusCode, response, model) -> {

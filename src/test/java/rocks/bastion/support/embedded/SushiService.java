@@ -25,7 +25,7 @@ public class SushiService {
     private Map<Long, Sushi> sushiRepository = new HashMap<>();
     private AtomicLong nextId = new AtomicLong();
     private int port;
-    private String restaurantName = "Sushi on the Bastions";
+    private String restaurantName = "The Sushi Parlour";
 
     public SushiService(int port) {
         this.port = port;
@@ -100,6 +100,15 @@ public class SushiService {
             }
             return removed;
         });
+
+        post("/sashimi", (req, res) -> {
+            res.header("Content-type", "application/json");
+            Sushi sushi = new Sushi();
+            sushi.setId(5L);
+            sushi.setName("Sashimi");
+            sushi.setPrice(new BigDecimal("5.95"));
+            return sushi;
+        }, json);
 
         exception(RuntimeException.class, (ex, req, res) -> {
             res.header("Content-type", "application/json");

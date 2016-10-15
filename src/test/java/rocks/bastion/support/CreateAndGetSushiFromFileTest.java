@@ -41,6 +41,15 @@ public class CreateAndGetSushiFromFileTest extends TestWithEmbeddedServer {
     }
 
     @Test
+    public void creatSushi_noBind_Success() throws URISyntaxException {
+        // docs:load-from-file
+        Bastion.request("Create Sushi", JsonRequest.postFromResource(BASE_URL, "classpath:/json/create_sushi_request.json"))
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
+                .call();
+        // docs:load-from-file
+    }
+
+    @Test
     public void createSushiRequest_ValidateJsonSchemaOfResponse_Success() {
         Bastion.request("Valid Response JSON Schema", new CreateSushiRequest())
                .bind(Sushi.class)

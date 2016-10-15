@@ -9,14 +9,26 @@ to test the overall process of calling these APIs.
 
 ## Test
 
-* Simple Get Request:
+* `GET` Request:
 [ex:general-get-example]
 
-* Simple Post Request:
+* `POST` Request:
 [ex:general-post-example]
 
-* Simple JSON Assertion: (property order in response does not affect test)
+* JSON Assertion: (property order in response does not affect test)
 [ex:simple-json-assertion]
+
+* JSON Request:
+[ex:json-request-example]
+
+* JSON Request/Assertion loaded from file:
+[ex:load-from-file]
+
+* Form URL Encoded Data Request:
+[ex:form-url-encoded-request]
+
+* Bind the response entity to a model object:
+[ex:bound-data] 
 
 ## Dependency
 
@@ -31,6 +43,13 @@ dependency to your POM file:
 <dependency>
 ```
 
+Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:
+```groovy
+@Grapes(
+    @Grab(group='rocks.bastion', module='bastion', version='[VERSION]')
+)
+```
+
 # Building
 
 Use Maven to build Bastion and run the associated tests. After checking out the repository 
@@ -40,7 +59,7 @@ use the following command to build and test the source code.
 
 # Contributing
 
-Bastion is an open-source project which means that we will gladly accept contributions. Simply 
-fork the repository and submit pull requests for review. Do use standard good coding practice 
-in your submissions and read the [roadmap](https://github.com/KPull/Bastion/wiki/Roadmap) which 
-is an indication of what we really need next.
+Bastion is an open-source project which means that we will gladly accept contributions. Feel free
+to submit issues or suggestions on Github. We will also accept any code contributions to the project.
+Simply fork the repository and submit pull requests for review. Do use standard good coding practice 
+in your submissions. Also, you can look at our 'Issues' page to get an idea of what you can work on.

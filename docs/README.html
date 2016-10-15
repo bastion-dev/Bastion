@@ -10,11 +10,19 @@
 <h2><a href="#test" name="test"></a>Test</h2>
 <ul>
   <li>
-  <p>Simple Get Request: [ex:general-get-example]</p></li>
+  <p><code>GET</code> Request: [ex:general-get-example]</p></li>
   <li>
-  <p>Simple Post Request: [ex:general-post-example]</p></li>
+  <p><code>POST</code> Request: [ex:general-post-example]</p></li>
   <li>
-  <p>Simple JSON Assertion: (property order in response does not affect test) [ex:simple-json-assertion]</p></li>
+  <p>JSON Assertion: (property order in response does not affect test) [ex:simple-json-assertion]</p></li>
+  <li>
+  <p>JSON Request: [ex:json-request-example]</p></li>
+  <li>
+  <p>JSON Request/Assertion loaded from file: [ex:load-from-file]</p></li>
+  <li>
+  <p>Form URL Encoded Data Request: [ex:form-url-encoded-request]</p></li>
+  <li>
+  <p>Bind the response entity to a model object: [ex:bound-data] </p></li>
 </ul>
 <h2><a href="#dependency" name="dependency"></a>Dependency</h2>
 <p>Use a dependency management tool such as Maven to download the Bastion library for use in your project. Add the following dependency to your POM file:</p>
@@ -25,10 +33,15 @@
     &lt;scope&gt;test&lt;/scope&gt;
 &lt;dependency&gt;
 </code></pre>
+<p>Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:</p>
+<pre><code class="groovy">@Grapes(
+    @Grab(group=&#39;rocks.bastion&#39;, module=&#39;bastion&#39;, version=&#39;[VERSION]&#39;)
+)
+</code></pre>
 <h1><a href="#building" name="building"></a>Building</h1>
 <p>Use Maven to build Bastion and run the associated tests. After checking out the repository use the following command to build and test the source code.</p>
 <pre><code>mvn install
 </code></pre>
 <h1><a href="#contributing" name="contributing"></a>Contributing</h1>
-<p>Bastion is an open-source project which means that we will gladly accept contributions. Simply fork the repository and submit pull requests for review. Do use standard good coding practice in your submissions and read the <a href="https://github.com/KPull/Bastion/wiki/Roadmap">roadmap</a> which is an indication of what we really need next.</p>    </body>
+<p>Bastion is an open-source project which means that we will gladly accept contributions. Feel free to submit issues or suggestions on Github. We will also accept any code contributions to the project. Simply fork the repository and submit pull requests for review. Do use standard good coding practice in your submissions. Also, you can look at our &lsquo;Issues&rsquo; page to get an idea of what you can work on.</p>    </body>
 </html>
