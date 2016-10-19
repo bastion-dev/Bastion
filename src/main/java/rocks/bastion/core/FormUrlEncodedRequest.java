@@ -102,12 +102,14 @@ public class FormUrlEncodedRequest implements HttpRequest {
      *
      * @param name  The non-{@literal null} name to use for this data parameter's key
      * @param value The non-{@literal null} value to use for this data parameter's key
+     * @return This request (for method chaining)
      */
-    public void addDataParameter(String name, String value) {
+    public FormUrlEncodedRequest addDataParameter(String name, String value) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(value);
         dataParameters.add(new ApiDataParameter(name, value));
         recomputeBody();
+        return this;
     }
 
     /**
@@ -116,12 +118,14 @@ public class FormUrlEncodedRequest implements HttpRequest {
      * the data parameter's name and the entry's value will become the data parameter's value.
      *
      * @param parameters The non-{@literal null} map of data parameters to add to this request
+     * @return This request (for method chaining)
      */
-    public void addDataParameters(Map<String, String> parameters) {
+    public FormUrlEncodedRequest addDataParameters(Map<String, String> parameters) {
         Objects.requireNonNull(parameters);
         List<ApiDataParameter> listFromMap = parameters.entrySet().stream().map(entry ->
                 new ApiDataParameter(entry.getKey(), entry.getValue())).collect(Collectors.toList());
         addDataParameters(listFromMap);
+        return this;
     }
 
     /**
