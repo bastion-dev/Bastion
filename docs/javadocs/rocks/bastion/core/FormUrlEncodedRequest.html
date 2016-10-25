@@ -161,7 +161,7 @@ implements <a href="../../../rocks/bastion/core/HttpRequest.html" title="interfa
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code><a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html#addDataParameter-java.lang.String-java.lang.String-">addDataParameter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
 <div class="block">Adds a single data parameter to be sent with the URL-encoded string in this request's content-body.</div>
@@ -174,7 +174,7 @@ implements <a href="../../../rocks/bastion/core/HttpRequest.html" title="interfa
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code><a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html#addDataParameters-java.util.Map-">addDataParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;parameters)</code>
 <div class="block">Adds data parameters, represented by the given map, to be sent with the URL-encoded string in this request's content-body.</div>
 </td>
@@ -434,13 +434,15 @@ implements <a href="../../../rocks/bastion/core/HttpRequest.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>addDataParameter</h4>
-<pre>public&nbsp;void&nbsp;addDataParameter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
+<pre>public&nbsp;<a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a>&nbsp;addDataParameter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
 <div class="block">Adds a single data parameter to be sent with the URL-encoded string in this request's content-body.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - The non-null name to use for this data parameter's key</dd>
 <dd><code>value</code> - The non-null value to use for this data parameter's key</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This request (for method chaining)</dd>
 </dl>
 </li>
 </ul>
@@ -450,13 +452,15 @@ implements <a href="../../../rocks/bastion/core/HttpRequest.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>addDataParameters</h4>
-<pre>public&nbsp;void&nbsp;addDataParameters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;parameters)</pre>
+<pre>public&nbsp;<a href="../../../rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a>&nbsp;addDataParameters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;parameters)</pre>
 <div class="block">Adds data parameters, represented by the given map, to be sent with the URL-encoded string in this request's content-body.
  Each entry in the map is considered to be a separate data parameter: for each entry in the map, the key will be
  the data parameter's name and the entry's value will become the data parameter's value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parameters</code> - The non-null map of data parameters to add to this request</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This request (for method chaining)</dd>
 </dl>
 </li>
 </ul>

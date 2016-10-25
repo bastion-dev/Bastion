@@ -183,9 +183,22 @@
                                     <name>pomSrc</name>
                                     <value>${project.basedir}/pom.xml</value>
                                 </property>
+                                <property>
+                                    <name>readmeSrc</name>
+                                    <value>${project.basedir}/src/docs/md/README.md</value>
+                                </property>
+                                <property>
+                                    <name>readmeDst</name>
+                                    <value>${project.basedir}/README.md</value>
+                                </property>
+                                <property>
+                                    <name>sources</name>
+                                    <value>${project.basedir}/src</value>
+                                </property>
                             </properties>
                             <scripts>
                                 <script>file:///${project.basedir}/src/docs/groovy/toc.groovy</script>
+                                <script>file:///${project.basedir}/src/docs/groovy/generate_readme.groovy</script>
                             </scripts>
                         </configuration>
                     </execution>
