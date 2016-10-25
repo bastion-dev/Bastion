@@ -125,15 +125,65 @@ defines the HTTP data that is sent to the remote server while the test is execut
 supplying your request data. Alternatively, if none of the built-in request subclasses are useful, you can create your own `Request` subclass
 as explained in the section [Custom Requests](#custom-requests).
 
-Bastion provides the following list of in-built `Request` subclasses:
+Bastion provides the following list of built-in `Request` subclasses:
 
 * [GeneralRequest](#general-request): A simple HTTP request which allows for any arbitrary entity data.
 * [JsonRequest](#json-request): An HTTP request which takes a JSON string as its entity data.
 * [FormUrlEncodedRequest](#form-url-encoded-request): An HTTP request which takes data in the form of a map which is then sent as a form URL encoded request.
 
+Any `Request` supports the following attributes, some of which are standard to HTTP:
+
+* *Headers*:
+* *Query Parameters*:
+* *Route Parameters*:
+* *Content Type*:
+* *Entity Body*:
+
 #### General Request
 
+`GeneralRequest` is the universal HTTP request, able to take any arbitrary entity data string. To initialise a new `GeneralRequest` use any of the following
+static factory methods, giving the URL you want to send the request on:
+
+* `GeneralRequest.get()`: Initialise an HTTP `GET` request.
+* `GeneralRequest.post()`: Initialise an HTTP `post()` request. This method also takes a string to use as the HTTP entity data (use `GeneralRequest.EMPTY_BODY` to send no data).
+* `GeneralRequest.delete()`: Initialise an HTTP `delete()` request. This method also takes a string to use as the HTTP entity data (use `GeneralRequest.EMPTY_BODY` to send no data).
+* `GeneralRequest.put()`: Initialise an HTTP `put()` request. This method also takes a string to use as the HTTP entity data (use `GeneralRequest.EMPTY_BODY` to send no data).
+* `GeneralRequest.patch()`: Initialise an HTTP `patch()` request. This method also takes a string to use as the HTTP entity data (use `GeneralRequest.EMPTY_BODY` to send no data).
+
+Calling any of the above methods will give you an initialised `GeneralRequest` object which can be used with `Bastion.request()`. The request will not initially
+have any HTTP headers, query parameters or route parameters.
+
+Once you have an instance of `GeneralRequest`, you can call methods to modify *Headers*, *Query Parameters*, *Route Parameters* and *Content type* as
+explained in section [Requests](#requests).
+
+[Examples using `GeneralRequest` go here]
+ 
 #### JSON Request
+
+`JsonRequest` is a request object specially designed to handle JSON data. Unlike `GeneralRequest`, `JsonRequest` will set the appropriate content type header
+to indicate that the data being sent has mime-type `application/json`. The request object is initialised using a JSON string (or file) and will validate the 
+given data to ensure that it is valid JSON (if you don't want this validation, use `GeneralRequest` instead). To initialise a new `JsonRequest` use any of the
+following static factory methods, giving the URL you want to send the request on:
+
+* `JsonRequest.fromString()`: Allows you to create a `JsonRequest` with the given HTTP method (`GET`, `POST`, etc.) and the given JSON string.
+* `JsonRequest.fromResource()`: Allows you to create a `JsonRequest` with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
+* `JsonRequest.fromTemplate()`: Like `fromResource()` but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.
+
+The factory methods above also have utility methods which do not take an `HttpMethod` argument as follows:
+
+* `JsonRequest.postFromString()`
+* `JsonRequest.postFromResource()`
+* `JsonRequest.postfromTemplate()`
+* `JsonRequest.putFromString()`
+* `JsonRequest.putFromResource()`
+* ... and so on.
+
+The `JsonRequest.fromResource()` and `JsonRequest.fromTemplate()` family of factory methods take a string representing either a URL or even a classpath resource.
+For example, to load request data from a fixture file in the classpath, you could do,
+
+```java
+Bastion.request(JsonRequest.postFromResource("http://localhost:8080/login", "classpath:/fixtures/login-request.json"));
+```
 
 #### Form URL Encoded Data Request
 
@@ -141,10 +191,46 @@ Bastion provides the following list of in-built `Request` subclasses:
 
 ### Assertions
 
+_Assertions_ objects are passed to the `withAssertions()` method which is called either after the `request()` method or the `bind()` method when using the
+`Bastion` builder. An `Assertions` objects defines the test predicate applied on the received HTTP response. If any of the applied assertions fail, then
+the test fails. Certain `Assertions` objects will provide helpful messages and logs to explain how to transform the received response into the expected response.
+When supplying `Assertions` using the `withAssertions()` method, you can use the `and()` method on the Assertions themselves to chain `Assertions` together.
+
+We suggest using one of the built-in `Assertions` subclasses when defining your tests. Alternatively, if none of the built-in assertions subclasses are
+useful, you can create your own `Assertions` subclass as explained in the section [Custom Assertions](#custom-assertions).
+
+Bastion provides the following list of built-in `Assertions` subclasses.
+
+* [JsonResponseAssertions](#json-response-assertions): Asserts that a received response is in JSON format and that the received response data is as expected.
+* [JsonSchemaAssertions](#json-schema-assertions): Asserts that a received response is in JSON format and that the received response data at least conforms to the given JSON schema.
+
 #### JSON Assertion
 
 #### JSON Schema
 
 #### Custom Assertions
 
+### Binding a Model
+
+### Executing and Getting Data
+
 ## Contribute
+
+Bastion is an open-source project! Open-source means that we encourage you to contribute in any way you can. We will accept all contributions, in any shape
+or form, that help make Bastion better. Here are some things you can do to contribute:
+
+* Send a positive comment to the Bastion contributers. :)
+* [Submit an issue](https://github.com/KPull/Bastion/issues) on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
+  submitting an issue to check that it has not been submitted earlier. When opening an issue, try to include as much detail as possible so that the
+  community can more easily address your concern.
+* Submit a pull request for any of our [open issues](https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue). Some issues are more easy to implement
+  than others and, if you're just starting out, these issues let you get used to the Bastion code structure. If you need any assistance, simply comment on
+  the issue at hand and we'll be glad to help. We ask that you adhere to a consistent code style and employ good programming practice but don't worry if
+  you're unsure about anything: we'll help you get your submission up to scratch as well.
+* You can also [submit a pull request](https://github.com/KPull/Bastion/pulls) which is not related to any of the issues currently on GitHub. If you have
+  developed your own `Request` or `Assertions` implementations, for example, and you believe they could be useful to the rest of the Bastion community,
+  we will add them to the library for use in future versions of Bastion.
+* Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,
+  grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the `src/docs/md`
+  directory.
+* Spread the word. Tell your colleagues about Bastion or write a blog post about Bastion. The more people we can tell Bastion about, the better!
