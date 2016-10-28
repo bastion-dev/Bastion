@@ -40,7 +40,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     @Override
     public void callStarted(BastionStartedEvent event) {
-        runningBastionRequest = Description.createTestDescription(runningTestCase.getDisplayName(), event.getRequestMessage());
+        runningBastionRequest = Description.createTestDescription(runningTestCase.getDisplayName(), event.getRequest().name());
         runningTestCase.addChild(runningBastionRequest);
         currentNotifier.fireTestStarted(runningBastionRequest);
     }

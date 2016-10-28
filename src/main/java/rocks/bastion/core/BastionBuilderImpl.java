@@ -94,7 +94,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     public PostExecutionBuilder<? extends MODEL> call() {
         modelResponse = null;
         try {
-            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
+            notifyListenersCallStarted(new BastionStartedEvent(request));
             Response response = new RequestExecutor(request).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
@@ -102,13 +102,13 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
             executeCallback(modelResponse);
             return this;
         } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
+            notifyListenersCallFailed(new BastionFailureEvent(request, modelResponse, e));
             return this;
         } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
+            notifyListenersCallError(new BastionErrorEvent(request, modelResponse, t));
             return this;
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
+            notifyListenersCallFinished(new BastionFinishedEvent(request, modelResponse));
         }
     }
 
