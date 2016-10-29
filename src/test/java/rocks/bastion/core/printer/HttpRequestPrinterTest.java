@@ -15,9 +15,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
 public class HttpRequestPrinterTest {
+
     @Test
     public void getAsString() throws Exception {
-        HttpRequestPrinter printer = new HttpRequestPrinter(new HttpRequest() {
+        HttpRequestPrinter printer = new HttpRequestPrinter(prepareRequest());
+        assertThat(printer.getAsString()).isEqualTo("POST /oisaje?query1=value2 HTTP/1.1\r\n" +
+                "Host: test.test\r\n" +
+                "Content-Type: application/json; charset=UTF-8\r\n" +
+                "Header1: value1\r\n" +
+                "Authorization: token\r\n" +
+                "\r\n" +
+                "{\n" +
+                "\t\"tkoast\":\"raskpor\",\n" +
+                "\t\"skoipra\":\"smroiar\"\n" +
+                "}");
+    }
+
+    private HttpRequest prepareRequest() {
+        return new HttpRequest() {
             @Override
             public String name() {
                 return "Name";
@@ -60,17 +75,7 @@ public class HttpRequestPrinterTest {
                         "\t\"skoipra\":\"smroiar\"\n" +
                         "}";
             }
-        });
-        assertThat(printer.getAsString()).isEqualTo("POST /oisaje?query1=value2 HTTP/1.1\r\n" +
-                "Host: test.test\r\n" +
-                "Content-Type: application/json; charset=UTF-8\r\n" +
-                "Header1: value1\r\n" +
-                "Authorization: token\r\n" +
-                "\r\n" +
-                "{\n" +
-                "\t\"tkoast\":\"raskpor\",\n" +
-                "\t\"skoipra\":\"smroiar\"\n" +
-                "}");
+        };
     }
 
 }

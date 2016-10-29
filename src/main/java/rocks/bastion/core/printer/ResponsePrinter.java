@@ -1,41 +1,37 @@
 package rocks.bastion.core.printer;
 
-import com.mashape.unirest.http.HttpMethod;
+import com.google.common.io.CharStreams;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicLineFormatter;
-import org.apache.http.message.BasicRequestLine;
-import org.apache.http.message.LineFormatter;
-import rocks.bastion.core.HttpRequest;
-import rocks.bastion.core.RequestExecutor;
+import org.apache.http.message.BasicStatusLine;
+import org.springframework.util.StreamUtils;
+import rocks.bastion.core.Response;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URL;
 import java.util.Objects;
 
 /**
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
-public class HttpRequestPrinter {
+public class ResponsePrinter {
 
-    private HttpRequest request;
+    private Response response;
 
-    public HttpRequestPrinter(HttpRequest request) {
-        Objects.requireNonNull(request);
-        this.request = request;
+    public ResponsePrinter(Response response) {
+        Objects.requireNonNull(response);
+        this.response = response;
     }
 
     public void print(Writer writer) throws IOException {
-        RequestExecutor executor = new RequestExecutor(request);
-        URL url = new URL(executor.getResolvedUrl());
-        BasicRequestLine requestLine = new BasicRequestLine(executor.getMethod(), url.getFile(), new ProtocolVersion("HTTP", 1, 1));
         BasicLineFormatter formatter = new BasicLineFormatter();
-        writer.append(BasicLineFormatter.formatRequestLine(requestLine, formatter)).append("\r\n");
-        writer.append(BasicLineFormatter.formatHeader(new BasicHeader("Host", url.getHost()), formatter)).append("\r\n");
-        executor.getHeaders().forEach(apiHeader -> {
+        String statusLine = BasicLineFormatter.formatStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1),
+                response.getStatusCode(), response.getStatusText()), formatter);
+        writer.append(statusLine).append("\r\n");
+        response.getHeaders().forEach(apiHeader -> {
             try {
                 writer.append(BasicLineFormatter.formatHeader(new BasicHeader(apiHeader.getName(), apiHeader.getValue()), formatter)).append("\r\n");
             } catch (IOException exception) {
@@ -43,7 +39,8 @@ public class HttpRequestPrinter {
             }
         });
         writer.append("\r\n");
-        writer.append(request.body().toString());
+        InputStreamReader entity = new InputStreamReader(response.getBody());
+        CharStreams.copy(entity, writer);
     }
 
     public String getAsString() {
