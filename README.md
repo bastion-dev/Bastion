@@ -68,7 +68,7 @@ Bastion.request("Order Sashimi", FormUrlEncodedRequest.post("http://localhost:98
 Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromString("http://localhost:9876/sushi", "{ " +
         "\"name\":\"sashimi\", " +
         "\"price\":\"5.60\", " +
-        "\"type\":\"SASHIMI\" " +
+        "\"type\":\"SASIHIMI\" " +
         "}"
 )).bind(Sushi.class).withAssertions(JsonResponseAssertions.fromString(201, "{ " +
                 "\"id\":5, " +

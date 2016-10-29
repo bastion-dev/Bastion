@@ -37,7 +37,7 @@ public class HttpRequestPrinter {
      * Formats and prints the request object to the specified {@link Writer} stream. The format used when outputting the
      * response conforms to the HTTP standard.
      *
-     * @param writer The writer to output to. Cannot be {@link null}.
+     * @param writer The writer to output to. Cannot be {@literal null}.
      * @throws IOException Thrown if the request could not be formatted and sent to the specified writer.
      */
     public void print(Writer writer) throws IOException {
