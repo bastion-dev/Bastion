@@ -4,5 +4,6 @@ rocks.bastion.core.builder
 rocks.bastion.core.event
 rocks.bastion.core.json
 rocks.bastion.core.model
+rocks.bastion.core.printer
 rocks.bastion.core.resource
 rocks.bastion.junit
