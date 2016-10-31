@@ -28,7 +28,10 @@ to test the overall process of calling these APIs.
 [ex:form-url-encoded-request]
 
 * Bind the response entity to a model object:
-[ex:bound-data] 
+[ex:bound-data]
+
+* Groovy (using multi-line strings):
+[ex:groovy-example]
 
 ## Dependency
 
@@ -40,7 +43,7 @@ dependency to your POM file:
     <artifactId>bastion</artifactId>
     <version>[VERSION]</version>
     <scope>test</scope>
-<dependency>
+</dependency>
 ```
 
 Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:

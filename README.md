@@ -78,7 +78,26 @@ Sushi createdSushi = Bastion.request("Create Sushi", JsonRequest.postFromString(
                 "}"
         ).ignoreValuesForProperties("id")
 ).call().getModel();
-``` 
+```
+
+* Groovy (using multi-line strings):
+```java
+Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi",
+        '''{
+        "name":"sashimi",
+        "price":"5.60",
+        "type":"SASHIMI"
+    }'''
+)).withAssertions(JsonResponseAssertions.fromString(201,
+        '''{
+           "id":5,
+           "name":"sashimi",
+           "price":5.60,
+           "type":"SASHIMI"
+        }'''
+).ignoreValuesForProperties("/id")
+).call()
+```
 
 ## Dependency
 
@@ -90,7 +109,7 @@ dependency to your POM file:
     <artifactId>bastion</artifactId>
     <version>0.2.1-BETA</version>
     <scope>test</scope>
-<dependency>
+</dependency>
 ```
 
 Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:
