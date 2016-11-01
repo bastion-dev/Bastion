@@ -83,6 +83,8 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * <ul>
  * <li>{@link rocks.bastion.core.GeneralRequest}: Allows you to specify a string content-body. Can also be used if you wouldn't
  * like to send any content-body (such as for a {@code GET} request).</li>
+ * <li>{@link rocks.bastion.core.FormUrlEncodedRequest}: Allows you to construct an HTTP request containing URL encoded form data in its
+ * content-body.</li>
  * <li>{@link rocks.bastion.core.json.JsonRequest}: Allows you to specify a valid JSON string to send as part of your HTTP request
  * content-body.</li>
  * </ul>
@@ -100,10 +102,12 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * how to use it):
  * </p>
  * <ul>
+ * <li>{@link rocks.bastion.core.StatusCodeAssertions}: Expects a response from the remote server to have any of the specified status codes.</li>
  * <li>{@link rocks.bastion.core.json.JsonResponseAssertions}: Expects a JSON response from the remote server. It allows
  * you to specify a valid JSON string to assert the response against. The assertion is smart in that a JSON structural comparison
  * is performed (instead of a straight-up text equality comparison) making sure that the response contains all the expected
  * properties, with the correct values, regardless of whitespace and property order.</li>
+ * <li>{@link rocks.bastion.core.json.JsonSchemaAssertions}: Expects a JSON response from the remote server to adhere to the given JSON schema.</li>
  * </ul>
  * <p>
  * Just like requests, you may define your own {@link Assertions assertion types}. You are encouraged to do so if you

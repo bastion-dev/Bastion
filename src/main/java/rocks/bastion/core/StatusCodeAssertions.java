@@ -1,15 +1,8 @@
 package rocks.bastion.core;
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.assertj.core.util.IterableUtil;
-import rocks.bastion.core.Assertions;
-import rocks.bastion.core.ModelResponse;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,32 +11,54 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Performs assertions on a response by checking for the HTTP status code. The user supplies either one status code or
  * multiple status codes for which the response will pass the assertions.
  */
-public class StatusCodeAssertions implements Assertions<Object> {
+public final class StatusCodeAssertions implements Assertions<Object> {
 
-    public static StatusCodeAssertions of(int... statusCodes) {
-        return new StatusCodeAssertions(statusCodes);
+    /**
+     * Initialise a assertions object expecting the HTTP response status code to be equal to any one of the given status codes.
+     *
+     * @param expectedStatusCodes The non-empty array of status codes to match against
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws IllegalArgumentException Thrown if the supplied array is empty
+     */
+    public static StatusCodeAssertions expecting(int... expectedStatusCodes) {
+        return new StatusCodeAssertions(expectedStatusCodes);
     }
 
-    public static StatusCodeAssertions of(Integer... statusCodes) {
-        return of(ArrayUtils.toPrimitive(statusCodes));
+    /**
+     * Initialise a assertions object expecting the HTTP response status code to be equal to any one of the given status codes.
+     *
+     * @param expectedStatusCodes The non-empty array of status codes to match against
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws IllegalArgumentException Thrown if the supplied array is empty
+     */
+    public static StatusCodeAssertions expecting(Integer... expectedStatusCodes) {
+        return expecting(ArrayUtils.toPrimitive(expectedStatusCodes));
     }
 
-    public static StatusCodeAssertions of(Iterable<Integer> statusCodes) {
-        return of(Iterables.toArray(statusCodes, Integer.class));
+    /**
+     * Initialise a assertions object expecting the HTTP response status code to be equal to any one of the given status codes.
+     *
+     * @param expectedStatusCodes The non-empty iterable of status codes to match against
+     * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
+     * @throws IllegalArgumentException Thrown if the supplied array is empty
+     */
+    public static StatusCodeAssertions expecting(Iterable<Integer> expectedStatusCodes) {
+        return expecting(Iterables.toArray(expectedStatusCodes, Integer.class));
     }
 
-    private final int[] statusCodes;
+    private final int[] expectedStatusCodes;
 
-    private StatusCodeAssertions(int... statusCodes) {
-        Objects.requireNonNull(statusCodes);
-        if (statusCodes.length == 0) {
+    private StatusCodeAssertions(int... expectedStatusCodes) {
+        Objects.requireNonNull(expectedStatusCodes);
+        if (expectedStatusCodes.length == 0) {
             throw new IllegalArgumentException("The given list of status codes cannot be empty");
         }
-        this.statusCodes = statusCodes;
+        this.expectedStatusCodes = expectedStatusCodes;
     }
 
     @Override
     public void execute(int statusCode, ModelResponse<?> response, Object model) throws AssertionError {
-        assertThat(statusCode).describedAs("HTTP Response Status Code").isIn(Arrays.asList(statusCodes));
+        assertThat(statusCode).describedAs("HTTP Response Status Code").matches(actualStatusCode ->
+                ArrayUtils.contains(expectedStatusCodes, actualStatusCode));
     }
 }
