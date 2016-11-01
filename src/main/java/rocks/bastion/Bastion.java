@@ -91,7 +91,6 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * <p>Also, feel free to provide your own implementation of an {@link HttpRequest} which will allow you customise completely
  * the request sent by Bastion. Implementing your own {@link HttpRequest request class} is extremely useful to encourage
  * reuse and maintainability (instead of repeating your own requests each time).</p>
- * <p>
  * <h1>Assertion Types</h1>
  * <p>
  * Assertions allow you to quickly check whether a test was successful or not. Note that a request does not necessarily have
