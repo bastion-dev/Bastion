@@ -6,7 +6,7 @@
 
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.2.1-BETA</version>
+    <version>0.2.2-BETA</version>
 
     <name>Bastion</name>
     <description>A Java library for testing HTTP API endpoints.</description>
