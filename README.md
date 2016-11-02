@@ -107,7 +107,7 @@ dependency to your POM file:
 <dependency>
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.2.2-BETA</version>
+    <version>0.3-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -115,7 +115,7 @@ dependency to your POM file:
 Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:
 ```groovy
 @Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='0.2.2-BETA')
+    @Grab(group='rocks.bastion', module='bastion', version='0.3-SNAPSHOT')
 )
 ```
 
