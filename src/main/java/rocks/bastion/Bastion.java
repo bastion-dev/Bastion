@@ -162,7 +162,7 @@ public final class Bastion {
      * @param request The HTTP request that Bastion will execute for this test.
      * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
      */
-    public static BastionBuilder<String> request(String message, HttpRequest request) {
+    public static BastionBuilder<Object> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 

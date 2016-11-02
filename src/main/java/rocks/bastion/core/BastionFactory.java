@@ -45,7 +45,7 @@ public abstract class BastionFactory {
 
     /**
      * Construct and initialise a new instance of the {@link BastionBuilderImpl} builder. By default, the returned builder
-     * will bind the response to a {@linkplain String} model. Also, the returned builder will use the specified
+     * will bind the response to a plain {@linkplain Object} model. Also, the returned builder will use the specified
      * {@code message} (for informational purposes) and {@code request}.
      *
      * @param message A non-{@literal null} String which describes the request/test that Bastion will be performing.
@@ -55,8 +55,8 @@ public abstract class BastionFactory {
      * @return A fully configured instance of the {@link BastionBuilderImpl} fluent builder which can be used directly by
      * the user to construct Bastion tests.
      */
-    public BastionBuilder<String> getBastion(String message, HttpRequest request) {
-        BastionBuilderImpl<String> bastion = new BastionBuilderImpl<>(message, request);
+    public BastionBuilder<Object> getBastion(String message, HttpRequest request) {
+        BastionBuilderImpl<Object> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
         prepareBastion(bastion);
         return bastion;
