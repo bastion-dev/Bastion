@@ -27,6 +27,58 @@ public class JsonResponseAssertionsTest {
     }
 
     @Test
+    public void execute_ignoredOrderForArrayField_shouldAssertSuccessfully() throws Exception {
+        JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"array\":[\"first\",\"second\",\"third\"] }").ignoreOrderForArrayProperties("/array");
+        ModelResponse<String> response = TestModelResponse.prepare("{ \"array\":[\"third\",\"first\",\"second\"] }");
+        assertions.execute(200, response, response.getModel());
+    }
+
+    @Test
+    public void execute_notIgnoredOrderForArrayFieldDisorderedAssertion_shouldThrowErrorWithDiff() throws Exception {
+        try {
+            JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"array\":[\"first\",\"second\",\"third\"] }");
+            ModelResponse<String> response = TestModelResponse.prepare("{ \"array\":[\"third\",\"first\",\"second\"] }");
+            assertions.execute(200, response, response.getModel());
+        } catch (AssertionError assertionError) {
+            Assert.assertEquals("Assertion Failed Message", assertionError.getMessage(), "Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:" +
+                    "\n" +
+                    " [{\"op\":\"move\",\"path\":\"/array/2\",\"from\":\"/array/0\"}]");
+            return;
+        }
+        Assert.fail("An assertion error should have been thrown by the JSON Response Assertions");
+    }
+
+    @Test
+    public void execute_ignoredOrderForArrayFieldMissingElement_shouldThrowErrorWithDiff() throws Exception {
+        try {
+            JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"array\":[\"first\",\"second\",\"third\"] }").ignoreOrderForArrayProperties("/array");
+            ModelResponse<String> response = TestModelResponse.prepare("{ \"array\":[\"third\",\"first\"] }");
+            assertions.execute(200, response, response.getModel());
+        } catch (AssertionError assertionError) {
+            Assert.assertEquals("Assertion Failed Message", assertionError.getMessage(), "Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:" +
+                    "\n" +
+                    " [{\"op\":\"add\",\"path\":\"/array/1\",\"value\":\"second\"}]");
+            return;
+        }
+        Assert.fail("An assertion error should have been thrown by the JSON Response Assertions");
+    }
+
+    @Test
+    public void execute_ignoredOrderForArrayFieldExtraElement_shouldThrowErrorWithDiff() throws Exception {
+        try {
+            JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"array\":[\"first\",\"second\",\"third\"] }").ignoreOrderForArrayProperties("/array");
+            ModelResponse<String> response = TestModelResponse.prepare("{ \"array\":[\"third\",\"first\",\"second\",\"fourth\"] }");
+            assertions.execute(200, response, response.getModel());
+        } catch (AssertionError assertionError) {
+            Assert.assertEquals("Assertion Failed Message", assertionError.getMessage(), "Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:" +
+                    "\n" +
+                    " [{\"op\":\"remove\",\"path\":\"/array/0\"},{\"op\":\"replace\",\"path\":\"/array/2\",\"value\":\"third\"}]");
+            return;
+        }
+        Assert.fail("An assertion error should have been thrown by the JSON Response Assertions");
+    }
+
+    @Test
     public void execute_fromStringJsonMismatches_shouldThrowErrorWithDiff() throws Exception {
         try {
             JsonResponseAssertions assertions = JsonResponseAssertions.fromString(200, "{ \"key\":\"kyle\", \"surname\":\"pullicino\" }");

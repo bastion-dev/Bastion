@@ -113,6 +113,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
     private ContentType contentType;
     private String expectedJson;
     private Collection<String> ignoredFieldsValue;
+    private Collection<String> ignoredArrayOrderValue;
 
     protected JsonResponseAssertions(int expectedStatusCode, String expectedJson) {
         Objects.requireNonNull(expectedJson);
@@ -121,6 +122,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
         contentType = ContentType.APPLICATION_JSON;
         this.expectedJson = expectedJson;
         ignoredFieldsValue = new HashSet<>();
+        ignoredArrayOrderValue = new HashSet<>();
 
         validateExpectedJson();
     }
@@ -139,6 +141,29 @@ public class JsonResponseAssertions implements Assertions<Object> {
     public JsonResponseAssertions ignoreValuesForProperties(String... fields) {
         Objects.requireNonNull(fields);
         Arrays.stream(fields).forEach(this::ignoreValueForProperty);
+        return this;
+    }
+
+    /**
+     * Ignore particular array fields' order in the actual response. This means that:
+     * <br>
+     * { "array":["first","second","third"] }
+     * <br>
+     * Will be considered equivalent to:
+     * <br>
+     * { "array":["third","first","second"] }
+     * <br>
+     * It will still detect and report any extra or missing values.
+     * <br><br>
+     * Implementation wise, when performing the JSON patch diff between the expected and the actual responses, Bastion will ignore
+     * any patch operations which have {@code op} {@code "move"} and a field which is one of the ignored fields.
+     *
+     * @param fields The fields' names to ignore the order of
+     * @return This object (for method chaining)
+     */
+    public JsonResponseAssertions ignoreOrderForArrayProperties(String... fields) {
+        Objects.requireNonNull(fields);
+        Arrays.stream(fields).forEach(this::ignoreOrderForArrayProperty);
         return this;
     }
 
@@ -180,6 +205,11 @@ public class JsonResponseAssertions implements Assertions<Object> {
         ignoredFieldsValue.add(sanitizePropertyName(field));
     }
 
+    private void ignoreOrderForArrayProperty(String field) {
+        Objects.requireNonNull(field);
+        ignoredArrayOrderValue.add(sanitizePropertyName(field));
+    }
+
     private String sanitizePropertyName(String field) {
         if (!field.startsWith("/")) {
             return '/' + field;
@@ -207,6 +237,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
         JsonNode expectedJsonTree = factory.createParser(expectedJson).readValueAsTree();
         JsonNode jsonPatch = JsonDiff.asJson(actualJsonTree, expectedJsonTree);
         removeReplaceOpsForIgnoredFields(jsonPatch);
+        removeMoveOpsForOrderIgnoredFields(jsonPatch);
         return jsonPatch;
     }
 
@@ -217,6 +248,20 @@ public class JsonResponseAssertions implements Assertions<Object> {
             JsonNode operationType = patchOperation.get("op");
             JsonNode pathName = patchOperation.get("path");
             if (operationType.asText().equals("replace") && ignoredFieldsValue.contains(pathName.asText())) {
+                patchIterator.remove();
+            }
+        }
+    }
+
+    private void removeMoveOpsForOrderIgnoredFields(Iterable jsonPatch) {
+        Iterator<JsonNode> patchIterator = jsonPatch.iterator();
+        while (patchIterator.hasNext()) {
+            JsonNode patchOperation = patchIterator.next();
+            JsonNode operationType = patchOperation.get("op");
+            JsonNode pathName = patchOperation.get("path");
+            // Trimming up to the last '/' to ignored index
+            String trimmedPathName = pathName.asText().substring(0, pathName.asText().lastIndexOf("/"));
+            if (operationType.asText().equals("move") && ignoredArrayOrderValue.contains(trimmedPathName)) {
                 patchIterator.remove();
             }
         }
