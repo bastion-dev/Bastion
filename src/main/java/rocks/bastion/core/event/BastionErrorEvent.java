@@ -1,5 +1,6 @@
 package rocks.bastion.core.event;
 
+import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.Response;
 
 /**
@@ -9,8 +10,8 @@ public class BastionErrorEvent extends BastionEvent {
 
     private Throwable throwable;
 
-    public BastionErrorEvent(String requestMessage, Response response, Throwable throwable) {
-        super(requestMessage, response);
+    public BastionErrorEvent(HttpRequest request, Response response, Throwable throwable) {
+        super(request, response);
         this.throwable = throwable;
     }
 

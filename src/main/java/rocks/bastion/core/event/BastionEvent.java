@@ -1,5 +1,6 @@
 package rocks.bastion.core.event;
 
+import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.Response;
 
 /**
@@ -7,16 +8,16 @@ import rocks.bastion.core.Response;
  */
 public class BastionEvent {
 
-    private String requestMessage;
+    private HttpRequest request;
     private Response response;
 
-    public BastionEvent(String requestMessage, Response response) {
-        this.requestMessage = requestMessage;
+    public BastionEvent(HttpRequest request, Response response) {
+        this.request = request;
         this.response = response;
     }
 
-    public String getRequestMessage() {
-        return requestMessage;
+    public HttpRequest getRequest() {
+        return request;
     }
 
     public Response getResponse() {

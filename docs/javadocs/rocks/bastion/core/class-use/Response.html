@@ -94,6 +94,10 @@
 <td class="colFirst"><a href="#rocks.bastion.core.model">rocks.bastion.core.model</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#rocks.bastion.core.printer">rocks.bastion.core.printer</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -174,21 +178,21 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionErrorEvent.html#BastionErrorEvent-java.lang.String-rocks.bastion.core.Response-java.lang.Throwable-">BastionErrorEvent</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;requestMessage,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionErrorEvent.html#BastionErrorEvent-rocks.bastion.core.HttpRequest-rocks.bastion.core.Response-java.lang.Throwable-">BastionErrorEvent</a></span>(<a href="../../../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>&nbsp;request,
                  <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang">Throwable</a>&nbsp;throwable)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionEvent.html#BastionEvent-java.lang.String-rocks.bastion.core.Response-">BastionEvent</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;requestMessage,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionEvent.html#BastionEvent-rocks.bastion.core.HttpRequest-rocks.bastion.core.Response-">BastionEvent</a></span>(<a href="../../../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>&nbsp;request,
             <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionFailureEvent.html#BastionFailureEvent-java.lang.String-rocks.bastion.core.Response-java.lang.AssertionError-">BastionFailureEvent</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;requestMessage,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionFailureEvent.html#BastionFailureEvent-rocks.bastion.core.HttpRequest-rocks.bastion.core.Response-java.lang.AssertionError-">BastionFailureEvent</a></span>(<a href="../../../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>&nbsp;request,
                    <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AssertionError.html?is-external=true" title="class or interface in java.lang">AssertionError</a>&nbsp;assertionError)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionFinishedEvent.html#BastionFinishedEvent-java.lang.String-rocks.bastion.core.Response-">BastionFinishedEvent</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;requestMessage,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/event/BastionFinishedEvent.html#BastionFinishedEvent-rocks.bastion.core.HttpRequest-rocks.bastion.core.Response-">BastionFinishedEvent</a></span>(<a href="../../../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>&nbsp;request,
                     <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -221,6 +225,24 @@
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Optional.html?is-external=true" title="class or interface in java.util">Optional</a>&lt;?&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">JsonResponseDecoder.</span><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/model/JsonResponseDecoder.html#decode-rocks.bastion.core.Response-rocks.bastion.core.model.DecodingHints-">decode</a></span>(<a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response,
       <a href="../../../../rocks/bastion/core/model/DecodingHints.html" title="class in rocks.bastion.core.model">DecodingHints</a>&nbsp;hints)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="rocks.bastion.core.printer">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a> in <a href="../../../../rocks/bastion/core/printer/package-summary.html">rocks.bastion.core.printer</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../rocks/bastion/core/printer/package-summary.html">rocks.bastion.core.printer</a> with parameters of type <a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/printer/ResponsePrinter.html#ResponsePrinter-rocks.bastion.core.Response-">ResponsePrinter</a></span>(<a href="../../../../rocks/bastion/core/Response.html" title="interface in rocks.bastion.core">Response</a>&nbsp;response)</code>
+<div class="block">Constructs a new instance of this printer to format the specified response object.</div>
+</td>
 </tr>
 </tbody>
 </table>

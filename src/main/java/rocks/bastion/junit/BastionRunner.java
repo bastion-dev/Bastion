@@ -40,7 +40,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     @Override
     public void callStarted(BastionStartedEvent event) {
-        runningBastionRequest = Description.createTestDescription(runningTestCase.getDisplayName(), event.getRequestMessage());
+        runningBastionRequest = Description.createTestDescription(runningTestCase.getDisplayName(), event.getRequest().name());
         runningTestCase.addChild(runningBastionRequest);
         currentNotifier.fireTestStarted(runningBastionRequest);
     }
@@ -52,17 +52,14 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     @Override
     public void callFailed(BastionFailureEvent event) {
+        new EventLogging(event).logResponseAndRequest();
         currentNotifier.fireTestFailure(new Failure(runningBastionRequest, event.getAssertionError()));
-        Response response = event.getResponse();
-        try {
-            System.err.printf("Response body: %s\n", CharStreams.toString(new InputStreamReader(response.getBody())));
-        } catch (IOException ignored) {
-        }
         throw event.getAssertionError();
     }
 
     @Override
     public void callError(BastionErrorEvent event) {
+        new EventLogging(event).logResponseAndRequest();
         Throwable throwable = event.getThrowable();
         currentNotifier.fireTestFailure(new Failure(runningBastionRequest, throwable));
         if (throwable instanceof RuntimeException) {
