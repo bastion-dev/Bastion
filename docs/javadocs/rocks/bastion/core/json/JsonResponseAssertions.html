@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,11 +212,17 @@ implements <a href="../../../../rocks/bastion/core/Assertions.html" title="inter
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html" title="class in rocks.bastion.core.json">JsonResponseAssertions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html#ignoreOrderForArrayProperties-java.lang.String...-">ignoreOrderForArrayProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fields)</code>
+<div class="block">Ignore particular array fields' order in the actual response.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html" title="class in rocks.bastion.core.json">JsonResponseAssertions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html#ignoreValuesForProperties-java.lang.String...-">ignoreValuesForProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fields)</code>
 <div class="block">Ignore particular fields' values in the actual JSON response.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html" title="class in rocks.bastion.core.json">JsonResponseAssertions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html#overrideContentType-org.apache.http.entity.ContentType-">overrideContentType</a></span>(org.apache.http.entity.ContentType&nbsp;contentType)</code>
 <div class="block">The assertions object will initially check that the content-type header returned by the actual response is
@@ -385,6 +391,33 @@ implements <a href="../../../../rocks/bastion/core/Assertions.html" title="inter
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fields</code> - The fields' names to ignore</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This object (for method chaining)</dd>
+</dl>
+</li>
+</ul>
+<a name="ignoreOrderForArrayProperties-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ignoreOrderForArrayProperties</h4>
+<pre>public&nbsp;<a href="../../../../rocks/bastion/core/json/JsonResponseAssertions.html" title="class in rocks.bastion.core.json">JsonResponseAssertions</a>&nbsp;ignoreOrderForArrayProperties(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fields)</pre>
+<div class="block">Ignore particular array fields' order in the actual response. This means that:
+ <br>
+ { "array":["first","second","third"] }
+ <br>
+ Will be considered equivalent to:
+ <br>
+ { "array":["third","first","second"] }
+ <br>
+ It will still detect and report any extra or missing values.
+ <br><br>
+ Implementation wise, when performing the JSON patch diff between the expected and the actual responses, Bastion will ignore
+ any patch operations which have <code>op</code> <code>"move"</code> and a field which is one of the ignored fields.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fields</code> - The fields' names to ignore the order of</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>This object (for method chaining)</dd>
 </dl>
