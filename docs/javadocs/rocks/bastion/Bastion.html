@@ -185,13 +185,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <ul>
  <li><a href="../../rocks/bastion/core/GeneralRequest.html" title="class in rocks.bastion.core"><code>GeneralRequest</code></a>: Allows you to specify a string content-body. Can also be used if you wouldn't
  like to send any content-body (such as for a <code>GET</code> request).</li>
+ <li><a href="../../rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core"><code>FormUrlEncodedRequest</code></a>: Allows you to construct an HTTP request containing URL encoded form data in its
+ content-body.</li>
  <li><a href="../../rocks/bastion/core/json/JsonRequest.html" title="class in rocks.bastion.core.json"><code>JsonRequest</code></a>: Allows you to specify a valid JSON string to send as part of your HTTP request
  content-body.</li>
  </ul>
  <p>Also, feel free to provide your own implementation of an <a href="../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core"><code>HttpRequest</code></a> which will allow you customise completely
  the request sent by Bastion. Implementing your own <a href="../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core"><code>request class</code></a> is extremely useful to encourage
  reuse and maintainability (instead of repeating your own requests each time).</p>
- <p>
  <h1>Assertion Types</h1>
  <p>
  Assertions allow you to quickly check whether a test was successful or not. Note that a request does not necessarily have
@@ -202,10 +203,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  how to use it):
  </p>
  <ul>
+ <li><a href="../../rocks/bastion/core/StatusCodeAssertions.html" title="class in rocks.bastion.core"><code>StatusCodeAssertions</code></a>: Expects a response from the remote server to have any of the specified status codes.</li>
  <li><a href="../../rocks/bastion/core/json/JsonResponseAssertions.html" title="class in rocks.bastion.core.json"><code>JsonResponseAssertions</code></a>: Expects a JSON response from the remote server. It allows
  you to specify a valid JSON string to assert the response against. The assertion is smart in that a JSON structural comparison
  is performed (instead of a straight-up text equality comparison) making sure that the response contains all the expected
  properties, with the correct values, regardless of whitespace and property order.</li>
+ <li><a href="../../rocks/bastion/core/json/JsonSchemaAssertions.html" title="class in rocks.bastion.core.json"><code>JsonSchemaAssertions</code></a>: Expects a JSON response from the remote server to adhere to the given JSON schema.</li>
  </ul>
  <p>
  Just like requests, you may define your own <a href="../../rocks/bastion/core/Assertions.html" title="interface in rocks.bastion.core"><code>assertion types</code></a>. You are encouraged to do so if you
