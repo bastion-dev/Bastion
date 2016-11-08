@@ -1,3 +1,5 @@
+![Bastion Logo](https://raw.githubusercontent.com/KPull/Bastion/master/src/docs/logo/bastion_logo.png)
+
 # Overview
 
 Bastion is a library that eases the development of end-to-end tests for HTTP APIs. A typical user would write 
