@@ -118,6 +118,8 @@ public class SushiService {
             res.header("Content-type", "application/json");
             res.body(json.render(INVALID_ENTITY.toResponse(res, getRootCauseMessage(ex))));
         });
+
+        awaitInitialization();
     }
 
     public void stop() {

@@ -1,0 +1,7 @@
+box: openjdk:8u102-jdk
+build:
+ steps:
+   - script:
+       name: Maven Build
+       code: |
+         mvn install
