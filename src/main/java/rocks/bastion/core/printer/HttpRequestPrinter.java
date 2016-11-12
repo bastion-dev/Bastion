@@ -5,6 +5,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicLineFormatter;
 import org.apache.http.message.BasicRequestLine;
 import rocks.bastion.core.ApiHeader;
+import rocks.bastion.core.BastionFactory;
 import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.RequestExecutor;
 
@@ -63,7 +64,7 @@ public class HttpRequestPrinter {
     }
 
     private void writeHeadSection(Writer writer) throws IOException {
-        RequestExecutor executor = new RequestExecutor(request);
+        RequestExecutor executor = new RequestExecutor(request, BastionFactory.getDefaultBastionFactory().getConfiguration());
         URL url = new URL(executor.getResolvedUrl());
         BasicLineFormatter formatter = new BasicLineFormatter();
         writeRequestLine(url, writer, formatter);

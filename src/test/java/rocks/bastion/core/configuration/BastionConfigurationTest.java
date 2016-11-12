@@ -16,7 +16,7 @@ public class BastionConfigurationTest {
 
     @Before
     public void before() {
-        BastionFactory.setConfiguration(new Configuration());
+        BastionFactory.getDefaultBastionFactory().setConfiguration(new Configuration());
     }
 
     @Test
@@ -29,7 +29,7 @@ public class BastionConfigurationTest {
                 .addRouteParam("routeParam1", "value1")
                 .timeout(15000);
 
-        Configuration config = BastionFactory.getConfiguration();
+        Configuration config = BastionFactory.getDefaultBastionFactory().getConfiguration();
         assertThat(config).isNotNull();
 
         GlobalRequestAttributes globals = config.getGlobalRequestAttributes();
@@ -52,7 +52,7 @@ public class BastionConfigurationTest {
 
     @Test
     public void resourceConfiguration_bastionConfigured() throws Exception{
-        Configuration config = Bastion.load("bastion.yml");
+        Configuration config = Bastion.loadConfiguration("bastion.yml");
         assertThat(config).isNotNull();
 
         GlobalRequestAttributes globals = config.getGlobalRequestAttributes();

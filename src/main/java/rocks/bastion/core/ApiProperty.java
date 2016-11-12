@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A simple data structure which contains a name-value pair for various attributes/properties in an HTTP request. This includes
- * but is not limited to: Headers and Query Parameters.
+ * A simple data structure which contains a name-value pair for various attributes/properties in an
+ * HTTP request. This includes but is not limited to: Headers and Query Parameters.
  */
-public class ApiProperty implements Serializable{
+public class ApiProperty implements Serializable {
+
     private String name;
     private String value;
 
@@ -22,7 +23,7 @@ public class ApiProperty implements Serializable{
         setValue(value);
     }
 
-    protected ApiProperty(){
+    protected ApiProperty() {
         // required for serialization
     }
 

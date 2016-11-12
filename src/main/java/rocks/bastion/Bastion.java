@@ -179,14 +179,14 @@ public final class Bastion {
         // This class should not be instantiated.
     }
 
-    public static Configuration load(String resourceLocation) {
+    public static Configuration loadConfiguration(String resourceLocation) {
         requireNonNull(resourceLocation, "The resource location cannot be null.");
-        Configuration config = BastionConfigurationLoader.load(resourceLocation);
-        BastionFactory.setConfiguration(config);
-        return BastionFactory.getConfiguration();
+        Configuration config = new BastionConfigurationLoader(resourceLocation).load();
+        BastionFactory.getDefaultBastionFactory().setConfiguration(config);
+        return BastionFactory.getDefaultBastionFactory().getConfiguration();
     }
 
     public static GlobalRequestAttributes globals() {
-        return BastionFactory.getConfiguration().getGlobalRequestAttributes();
+        return BastionFactory.getDefaultBastionFactory().getConfiguration().getGlobalRequestAttributes();
     }
 }

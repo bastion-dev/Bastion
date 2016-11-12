@@ -6,6 +6,8 @@ import rocks.bastion.core.configuration.Configuration;
 
 import java.util.Objects;
 
+import static java.util.Objects.*;
+
 /**
  * Creates and configures an instance of the {@link BastionBuilderImpl} fluent builder. A single factory can be designated as the
  * <i>Default</i> factory which is used by the {@link Bastion#request(String, HttpRequest)} method. Subclasses will generally
@@ -15,7 +17,7 @@ import java.util.Objects;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
-    private static Configuration configuration;
+    private Configuration configuration;
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
@@ -39,17 +41,18 @@ public abstract class BastionFactory {
      * @param defaultBastionFactory The factory instance to designate as "Default". Cannot be {@literal null}.
      */
     public static void setDefaultBastionFactory(BastionFactory defaultBastionFactory) {
-        Objects.requireNonNull(defaultBastionFactory, "The default Bastion factory cannot be null");
+        requireNonNull(defaultBastionFactory, "The default Bastion factory cannot be null");
         BastionFactory.defaultBastionFactory = defaultBastionFactory;
     }
 
     private boolean suppressAssertions = false;
 
-    public static void setConfiguration(Configuration configuration) {
-        BastionFactory.configuration = configuration;
+    public void setConfiguration(Configuration configuration) {
+        requireNonNull(configuration, "Configuration should not be null.");
+        this.configuration = configuration;
     }
 
-    public static Configuration getConfiguration() {
+    public Configuration getConfiguration() {
         if (configuration == null) {
             configuration = new Configuration();
         }
@@ -71,7 +74,7 @@ public abstract class BastionFactory {
     public BastionBuilder<Object> getBastion(String message, HttpRequest request) {
         BastionBuilderImpl<Object> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
-        bastion.setConfiguration(configuration);
+        bastion.setConfiguration(getConfiguration());
         prepareBastion(bastion);
         return bastion;
     }

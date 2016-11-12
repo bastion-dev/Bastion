@@ -97,7 +97,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         modelResponse = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(request));
-            Response response = new RequestExecutor(request, configuration).execute();
+            Response response = new RequestExecutor(request, getConfiguration()).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
