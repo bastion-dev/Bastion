@@ -1,7 +1,8 @@
 package rocks.bastion.core.configuration;
 
 /**
- * TODO document class
+ * Unchecked exception thrown when the Bastion configuration could not be loaded or has an invalid
+ * structure.
  */
 public class InvalidConfigurationException extends RuntimeException {
 
