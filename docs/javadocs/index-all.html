@@ -96,6 +96,8 @@
 <dd>
 <div class="block">Add a new HTTP header that will be sent with a request.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#addHeader-java.lang.String-java.lang.String-">addHeader(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/FormUrlEncodedRequest.html#addHeader-java.lang.String-java.lang.String-">addHeader(String, String)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a></dt>
 <dd>
 <div class="block">Add a new HTTP header that will be sent with this request.</div>
@@ -112,6 +114,8 @@
 <dd>
 <div class="block">Add a new HTTP query parameter that will be sent with the request.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#addQueryParam-java.lang.String-java.lang.String-">addQueryParam(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/FormUrlEncodedRequest.html#addQueryParam-java.lang.String-java.lang.String-">addQueryParam(String, String)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a></dt>
 <dd>
 <div class="block">Add a new HTTP query parameter that will be sent with this request.</div>
@@ -128,6 +132,8 @@
 <dd>
 <div class="block">Add a new HTTP route parameter that will be sent with the request.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#addRouteParam-java.lang.String-java.lang.String-">addRouteParam(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/FormUrlEncodedRequest.html#addRouteParam-java.lang.String-java.lang.String-">addRouteParam(String, String)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core">FormUrlEncodedRequest</a></dt>
 <dd>
 <div class="block">Add a new HTTP route parameter that will be sent with this request.</div>
@@ -162,12 +168,15 @@
 <dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/ApiProperty.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiProperty</span></a> - Class in <a href="rocks/bastion/core/package-summary.html">rocks.bastion.core</a></dt>
 <dd>
-<div class="block">A simple data structure which contains a name-value pair for various attributes/properties in an HTTP request.</div>
+<div class="block">A simple data structure which contains a name-value pair for various attributes/properties in an
+ HTTP request.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/ApiProperty.html#ApiProperty-java.lang.String-java.lang.String-">ApiProperty(String, String)</a></span> - Constructor for class rocks.bastion.core.<a href="rocks/bastion/core/ApiProperty.html" title="class in rocks.bastion.core">ApiProperty</a></dt>
 <dd>
 <div class="block">Basic constructor taking a name-value pair.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/ApiProperty.html#ApiProperty--">ApiProperty()</a></span> - Constructor for class rocks.bastion.core.<a href="rocks/bastion/core/ApiProperty.html" title="class in rocks.bastion.core">ApiProperty</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/ApiQueryParam.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiQueryParam</span></a> - Class in <a href="rocks/bastion/core/package-summary.html">rocks.bastion.core</a></dt>
 <dd>
 <div class="block">Simple data structure for holding a single instance of an HTTP request query parameter.</div>
@@ -201,6 +210,12 @@
 <dd>
 <div class="block">The standard implementation of the <a href="rocks/bastion/core/builder/BastionBuilder.html" title="interface in rocks.bastion.core.builder"><code>BastionBuilder</code></a>.</div>
 </dd>
+<dt><a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">BastionConfigurationLoader</span></a> - Class in <a href="rocks/bastion/core/configuration/package-summary.html">rocks.bastion.core.configuration</a></dt>
+<dd>
+<div class="block">Loads a bastion configuration from the specified resource.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html#BastionConfigurationLoader-java.lang.String-">BastionConfigurationLoader(String)</a></span> - Constructor for class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html" title="class in rocks.bastion.core.configuration">BastionConfigurationLoader</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/event/BastionErrorEvent.html" title="class in rocks.bastion.core.event"><span class="typeNameLink">BastionErrorEvent</span></a> - Class in <a href="rocks/bastion/core/event/package-summary.html">rocks.bastion.core.event</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/event/BastionErrorEvent.html#BastionErrorEvent-rocks.bastion.core.HttpRequest-rocks.bastion.core.Response-java.lang.Throwable-">BastionErrorEvent(HttpRequest, Response, Throwable)</a></span> - Constructor for class rocks.bastion.core.event.<a href="rocks/bastion/core/event/BastionErrorEvent.html" title="class in rocks.bastion.core.event">BastionErrorEvent</a></dt>
@@ -318,6 +333,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/junit/BastionRunner.html#callStarted-rocks.bastion.core.event.BastionStartedEvent-">callStarted(BastionStartedEvent)</a></span> - Method in class rocks.bastion.junit.<a href="rocks/bastion/junit/BastionRunner.html" title="class in rocks.bastion.junit">BastionRunner</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#clear--">clear()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>
+<div class="block">Resets all the global request attributes to their default values.</div>
+</dd>
 <dt><a href="rocks/bastion/core/CommonRequestAttributes.html" title="class in rocks.bastion.core"><span class="typeNameLink">CommonRequestAttributes</span></a> - Class in <a href="rocks/bastion/core/package-summary.html">rocks.bastion.core</a></dt>
 <dd>
 <div class="block">
@@ -336,6 +355,12 @@
  Route parameters: Initialised to the empty collection of route parameters.
  </div>
 </dd>
+<dt><a href="rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">Configuration</span></a> - Class in <a href="rocks/bastion/core/configuration/package-summary.html">rocks.bastion.core.configuration</a></dt>
+<dd>
+<div class="block">Contains all Bastion configuration settings.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/Configuration.html#Configuration--">Configuration()</a></span> - Constructor for class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration">Configuration</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/CommonRequestAttributes.html#contentType--">contentType()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/CommonRequestAttributes.html" title="class in rocks.bastion.core">CommonRequestAttributes</a></dt>
 <dd>
 <div class="block">See <a href="rocks/bastion/core/HttpRequest.html#contentType--"><code>HttpRequest.contentType()</code></a> for information about this method.</div>
@@ -543,6 +568,10 @@
 <dd>
 <div class="block">Gets the response's body, ready for reading.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/BastionBuilderImpl.html#getConfiguration--">getConfiguration()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/BastionBuilderImpl.html" title="class in rocks.bastion.core">BastionBuilderImpl</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/BastionFactory.html#getConfiguration--">getConfiguration()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/BastionFactory.html" title="class in rocks.bastion.core">BastionFactory</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/TemplateContentCompiler.html#getContent--">getContent()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/TemplateContentCompiler.html" title="class in rocks.bastion.core">TemplateContentCompiler</a></dt>
 <dd>
 <div class="block">Returns the fully resolved template.</div>
@@ -559,6 +588,16 @@
 <dd>
 <div class="block">Gets the <a href="rocks/bastion/core/BastionFactory.html" title="class in rocks.bastion.core"><code>BastionFactory</code></a> which is designated as the "Default" factory.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#getGlobalHeaders--">getGlobalHeaders()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#getGlobalQueryParams--">getGlobalQueryParams()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/Configuration.html#getGlobalRequestAttributes--">getGlobalRequestAttributes()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration">Configuration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#getGlobalRequestTimeout--">getGlobalRequestTimeout()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#getGlobalRouteParams--">getGlobalRouteParams()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/ModelResponse.html#getHeaders--">getHeaders()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/ModelResponse.html" title="class in rocks.bastion.core">ModelResponse</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/RawResponse.html#getHeaders--">getHeaders()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/RawResponse.html" title="class in rocks.bastion.core">RawResponse</a></dt>
@@ -641,6 +680,16 @@
 <dd>
 <div class="block">Gets the currently set variable assignment for the template.</div>
 </dd>
+<dt><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">GlobalRequestAttributes</span></a> - Class in <a href="rocks/bastion/core/configuration/package-summary.html">rocks.bastion.core.configuration</a></dt>
+<dd>
+<div class="block">Request attributes that can be applied to all HTTP requests created by Bastion.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#GlobalRequestAttributes--">GlobalRequestAttributes()</a></span> - Constructor for class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#GlobalRequestAttributes-java.util.Collection-java.util.Collection-java.util.Collection-long-">GlobalRequestAttributes(Collection&lt;ApiHeader&gt;, Collection&lt;ApiQueryParam&gt;, Collection&lt;RouteParam&gt;, long)</a></span> - Constructor for class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/Bastion.html#globals--">globals()</a></span> - Static method in class rocks.bastion.<a href="rocks/bastion/Bastion.html" title="class in rocks.bastion">Bastion</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a name="I:H">
 <!--   -->
@@ -699,6 +748,16 @@
 <dd>
 <div class="block">Ignore particular fields' values in the actual JSON response.</div>
 </dd>
+<dt><a href="rocks/bastion/core/configuration/InvalidConfigurationException.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">InvalidConfigurationException</span></a> - Exception in <a href="rocks/bastion/core/configuration/package-summary.html">rocks.bastion.core.configuration</a></dt>
+<dd>
+<div class="block">TODO document class</div>
+</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/InvalidConfigurationException.html#InvalidConfigurationException--">InvalidConfigurationException()</a></span> - Constructor for exception rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/InvalidConfigurationException.html" title="class in rocks.bastion.core.configuration">InvalidConfigurationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/InvalidConfigurationException.html#InvalidConfigurationException-java.lang.String-">InvalidConfigurationException(String)</a></span> - Constructor for exception rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/InvalidConfigurationException.html" title="class in rocks.bastion.core.configuration">InvalidConfigurationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/InvalidConfigurationException.html#InvalidConfigurationException-java.lang.String-java.lang.Throwable-">InvalidConfigurationException(String, Throwable)</a></span> - Constructor for exception rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/InvalidConfigurationException.html" title="class in rocks.bastion.core.configuration">InvalidConfigurationException</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/json/InvalidJsonException.html" title="class in rocks.bastion.core.json"><span class="typeNameLink">InvalidJsonException</span></a> - Exception in <a href="rocks/bastion/core/json/package-summary.html">rocks.bastion.core.json</a></dt>
 <dd>
 <div class="block">Indicates that the JSON provided for a <a href="rocks/bastion/core/json/JsonRequest.html" title="class in rocks.bastion.core.json"><code>JsonRequest</code></a> is not valid JSON.</div>
@@ -754,7 +813,11 @@
 </a>
 <h2 class="title">L</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html#load--">load()</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html" title="class in rocks.bastion.core.configuration">BastionConfigurationLoader</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/resource/ResourceLoader.html#load--">load()</a></span> - Method in class rocks.bastion.core.resource.<a href="rocks/bastion/core/resource/ResourceLoader.html" title="class in rocks.bastion.core.resource">ResourceLoader</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/Bastion.html#loadConfiguration-java.lang.String-">loadConfiguration(String)</a></span> - Static method in class rocks.bastion.<a href="rocks/bastion/Bastion.html" title="class in rocks.bastion">Bastion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/event/EventLogging.html#logRequest--">logRequest()</a></span> - Method in class rocks.bastion.core.event.<a href="rocks/bastion/core/event/EventLogging.html" title="class in rocks.bastion.core.event">EventLogging</a></dt>
 <dd>&nbsp;</dd>
@@ -1007,6 +1070,12 @@
 </dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/DefaultBastionFactory.html#registerModelConverters-rocks.bastion.core.model.ResponseDecodersRegistrar-">registerModelConverters(ResponseDecodersRegistrar)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/DefaultBastionFactory.html" title="class in rocks.bastion.core">DefaultBastionFactory</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#removeHeader-java.lang.String-java.lang.String-">removeHeader(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#removeQueryParam-java.lang.String-java.lang.String-">removeQueryParam(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#removeRouteParam-java.lang.String-java.lang.String-">removeRouteParam(String, String)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/Bastion.html#request-java.lang.String-rocks.bastion.core.HttpRequest-">request(String, HttpRequest)</a></span> - Static method in class rocks.bastion.<a href="rocks/bastion/Bastion.html" title="class in rocks.bastion">Bastion</a></dt>
 <dd>
 <div class="block">
@@ -1016,7 +1085,7 @@
 <dd>
 <div class="block">Responsible for executing a Bastion remote request built using the <a href="rocks/bastion/core/BastionBuilderImpl.html" title="class in rocks.bastion.core"><code>BastionBuilderImpl</code></a> builder and prepare a response object.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="rocks/bastion/core/RequestExecutor.html#RequestExecutor-rocks.bastion.core.HttpRequest-">RequestExecutor(HttpRequest)</a></span> - Constructor for class rocks.bastion.core.<a href="rocks/bastion/core/RequestExecutor.html" title="class in rocks.bastion.core">RequestExecutor</a></dt>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/RequestExecutor.html#RequestExecutor-rocks.bastion.core.HttpRequest-rocks.bastion.core.configuration.Configuration-">RequestExecutor(HttpRequest, Configuration)</a></span> - Constructor for class rocks.bastion.core.<a href="rocks/bastion/core/RequestExecutor.html" title="class in rocks.bastion.core">RequestExecutor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/resource/ResourceLoader.html" title="class in rocks.bastion.core.resource"><span class="typeNameLink">ResourceLoader</span></a> - Class in <a href="rocks/bastion/core/resource/package-summary.html">rocks.bastion.core.resource</a></dt>
 <dd>
@@ -1059,6 +1128,8 @@
 <dt><a href="rocks/bastion/core/package-summary.html">rocks.bastion.core</a> - package rocks.bastion.core</dt>
 <dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/builder/package-summary.html">rocks.bastion.core.builder</a> - package rocks.bastion.core.builder</dt>
+<dd>&nbsp;</dd>
+<dt><a href="rocks/bastion/core/configuration/package-summary.html">rocks.bastion.core.configuration</a> - package rocks.bastion.core.configuration</dt>
 <dd>&nbsp;</dd>
 <dt><a href="rocks/bastion/core/event/package-summary.html">rocks.bastion.core.event</a> - package rocks.bastion.core.event</dt>
 <dd>&nbsp;</dd>
@@ -1110,6 +1181,10 @@
 <dd>
 <div class="block">Sets the body content that will be sent by this request.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/BastionBuilderImpl.html#setConfiguration-rocks.bastion.core.configuration.Configuration-">setConfiguration(Configuration)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/BastionBuilderImpl.html" title="class in rocks.bastion.core">BastionBuilderImpl</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/BastionFactory.html#setConfiguration-rocks.bastion.core.configuration.Configuration-">setConfiguration(Configuration)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/BastionFactory.html" title="class in rocks.bastion.core">BastionFactory</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/CommonRequestAttributes.html#setContentType-org.apache.http.entity.ContentType-">setContentType(ContentType)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/CommonRequestAttributes.html" title="class in rocks.bastion.core">CommonRequestAttributes</a></dt>
 <dd>
 <div class="block">Set the content-type that will be used for a request.</div>
@@ -1122,6 +1197,16 @@
 <dd>
 <div class="block">Designate a new factory instance as the "Default".</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#setGlobalHeaders-java.util.Collection-">setGlobalHeaders(Collection&lt;ApiHeader&gt;)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#setGlobalQueryParams-java.util.Collection-">setGlobalQueryParams(Collection&lt;ApiQueryParam&gt;)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/Configuration.html#setGlobalRequestAttributes-rocks.bastion.core.configuration.GlobalRequestAttributes-">setGlobalRequestAttributes(GlobalRequestAttributes)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration">Configuration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#setGlobalRequestTimeout-long-">setGlobalRequestTimeout(long)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#setGlobalRouteParams-java.util.Collection-">setGlobalRouteParams(Collection&lt;RouteParam&gt;)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/CommonRequestAttributes.html#setMethod-rocks.bastion.core.HttpMethod-">setMethod(HttpMethod)</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/CommonRequestAttributes.html" title="class in rocks.bastion.core">CommonRequestAttributes</a></dt>
 <dd>
 <div class="block">Change the HTTP method used by a request.</div>
@@ -1193,6 +1278,8 @@
 <dd>
 <div class="block">Attach a callback function to this Bastion test.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html#timeout-long-">timeout(long)</a></span> - Method in class rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="rocks/bastion/core/HttpMethod.html#toString--">toString()</a></span> - Method in class rocks.bastion.core.<a href="rocks/bastion/core/HttpMethod.html" title="class in rocks.bastion.core">HttpMethod</a></dt>
 <dd>&nbsp;</dd>
 </dl>

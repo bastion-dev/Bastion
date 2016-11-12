@@ -76,6 +76,7 @@
 <li><a href="rocks/bastion/package-tree.html">rocks.bastion</a>, </li>
 <li><a href="rocks/bastion/core/package-tree.html">rocks.bastion.core</a>, </li>
 <li><a href="rocks/bastion/core/builder/package-tree.html">rocks.bastion.core.builder</a>, </li>
+<li><a href="rocks/bastion/core/configuration/package-tree.html">rocks.bastion.core.configuration</a>, </li>
 <li><a href="rocks/bastion/core/event/package-tree.html">rocks.bastion.core.event</a>, </li>
 <li><a href="rocks/bastion/core/json/package-tree.html">rocks.bastion.core.json</a>, </li>
 <li><a href="rocks/bastion/core/model/package-tree.html">rocks.bastion.core.model</a>, </li>
@@ -89,7 +90,7 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">Object</span></a>
 <ul>
-<li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/ApiProperty.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiProperty</span></a>
+<li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/ApiProperty.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiProperty</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)
 <ul>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/ApiDataParameter.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiDataParameter</span></a></li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/ApiHeader.html" title="class in rocks.bastion.core"><span class="typeNameLink">ApiHeader</span></a></li>
@@ -99,6 +100,7 @@
 </li>
 <li type="circle">rocks.bastion.<a href="rocks/bastion/Bastion.html" title="class in rocks.bastion"><span class="typeNameLink">Bastion</span></a></li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/BastionBuilderImpl.html" title="class in rocks.bastion.core"><span class="typeNameLink">BastionBuilderImpl</span></a>&lt;MODEL&gt; (implements rocks.bastion.core.builder.<a href="rocks/bastion/core/builder/BastionBuilder.html" title="interface in rocks.bastion.core.builder">BastionBuilder</a>&lt;MODEL&gt;, rocks.bastion.core.event.<a href="rocks/bastion/core/event/BastionEventPublisher.html" title="interface in rocks.bastion.core.event">BastionEventPublisher</a>, rocks.bastion.core.builder.<a href="rocks/bastion/core/builder/PostExecutionBuilder.html" title="interface in rocks.bastion.core.builder">PostExecutionBuilder</a>&lt;MODEL&gt;, rocks.bastion.core.model.<a href="rocks/bastion/core/model/ResponseDecodersRegistrar.html" title="interface in rocks.bastion.core.model">ResponseDecodersRegistrar</a>)</li>
+<li type="circle">rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/BastionConfigurationLoader.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">BastionConfigurationLoader</span></a></li>
 <li type="circle">rocks.bastion.core.event.<a href="rocks/bastion/core/event/BastionEvent.html" title="class in rocks.bastion.core.event"><span class="typeNameLink">BastionEvent</span></a>
 <ul>
 <li type="circle">rocks.bastion.core.event.<a href="rocks/bastion/core/event/BastionErrorEvent.html" title="class in rocks.bastion.core.event"><span class="typeNameLink">BastionErrorEvent</span></a></li>
@@ -114,10 +116,12 @@
 </li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/BastionUtils.html" title="class in rocks.bastion.core"><span class="typeNameLink">BastionUtils</span></a></li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/CommonRequestAttributes.html" title="class in rocks.bastion.core"><span class="typeNameLink">CommonRequestAttributes</span></a></li>
+<li type="circle">rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">Configuration</span></a></li>
 <li type="circle">rocks.bastion.core.model.<a href="rocks/bastion/core/model/DecodingHints.html" title="class in rocks.bastion.core.model"><span class="typeNameLink">DecodingHints</span></a></li>
 <li type="circle">rocks.bastion.core.event.<a href="rocks/bastion/core/event/EventLogging.html" title="class in rocks.bastion.core.event"><span class="typeNameLink">EventLogging</span></a></li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/FormUrlEncodedRequest.html" title="class in rocks.bastion.core"><span class="typeNameLink">FormUrlEncodedRequest</span></a> (implements rocks.bastion.core.<a href="rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>)</li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/GeneralRequest.html" title="class in rocks.bastion.core"><span class="typeNameLink">GeneralRequest</span></a> (implements rocks.bastion.core.<a href="rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>)</li>
+<li type="circle">rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">GlobalRequestAttributes</span></a></li>
 <li type="circle">rocks.bastion.core.<a href="rocks/bastion/core/HttpMethod.html" title="class in rocks.bastion.core"><span class="typeNameLink">HttpMethod</span></a></li>
 <li type="circle">rocks.bastion.core.printer.<a href="rocks/bastion/core/printer/HttpRequestPrinter.html" title="class in rocks.bastion.core.printer"><span class="typeNameLink">HttpRequestPrinter</span></a></li>
 <li type="circle">rocks.bastion.core.json.<a href="rocks/bastion/core/json/JsonRequest.html" title="class in rocks.bastion.core.json"><span class="typeNameLink">JsonRequest</span></a> (implements rocks.bastion.core.<a href="rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>)</li>
@@ -151,6 +155,7 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">RuntimeException</span></a>
 <ul>
+<li type="circle">rocks.bastion.core.configuration.<a href="rocks/bastion/core/configuration/InvalidConfigurationException.html" title="class in rocks.bastion.core.configuration"><span class="typeNameLink">InvalidConfigurationException</span></a></li>
 <li type="circle">rocks.bastion.core.json.<a href="rocks/bastion/core/json/InvalidJsonException.html" title="class in rocks.bastion.core.json"><span class="typeNameLink">InvalidJsonException</span></a></li>
 <li type="circle">rocks.bastion.core.resource.<a href="rocks/bastion/core/resource/InvalidResourceException.html" title="class in rocks.bastion.core.resource"><span class="typeNameLink">InvalidResourceException</span></a>
 <ul>
