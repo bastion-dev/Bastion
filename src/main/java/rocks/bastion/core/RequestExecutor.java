@@ -86,14 +86,14 @@ public class RequestExecutor {
     }
 
     private void applyHeaders() {
-        headers = new LinkedList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
-        if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
-            executableHttpRequest.header("Content-Type", bastionHttpRequest.contentType().get().toString());
+        headers = new LinkedList<>();
+        ArrayList<ApiHeader> combinedHeaders = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
+        combinedHeaders.addAll(bastionHttpRequest.headers());
+        if (!combinedHeaders.stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
             headers.add(new ApiHeader("Content-Type", bastionHttpRequest.contentType().get().toString()));
         }
-        bastionHttpRequest.headers().stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
-        ArrayList<ApiHeader> headers = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
-        headers.addAll(bastionHttpRequest.headers());
+        combinedHeaders.stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
+        headers.addAll(combinedHeaders);
     }
 
     private void applyQueryParameters() {
