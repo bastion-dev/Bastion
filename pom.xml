@@ -123,7 +123,109 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-readme</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <properties>
+                                        <property>
+                                            <name>tocSrc</name>
+                                            <value>${project.basedir}/docs/index.html</value>
+                                        </property>
+                                        <property>
+                                            <name>pomSrc</name>
+                                            <value>${project.basedir}/pom.xml</value>
+                                        </property>
+                                        <property>
+                                            <name>readmeSrc</name>
+                                            <value>${project.basedir}/src/docs/md/README.md</value>
+                                        </property>
+                                        <property>
+                                            <name>readmeDst</name>
+                                            <value>${project.basedir}/README.md</value>
+                                        </property>
+                                        <property>
+                                            <name>sources</name>
+                                            <value>${project.basedir}/src</value>
+                                        </property>
+                                    </properties>
+                                    <scripts>
+                                        <script>file:///${project.basedir}/src/docs/groovy/generate_readme.groovy</script>
+                                    </scripts>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                                <version>2.4.6</version>
+                                <scope>runtime</scope>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <notimestamp>true</notimestamp>
+                                    <outputDirectory>${project.basedir}/docs/javadocs</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.3</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -135,108 +237,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.ruleoftech</groupId>
-                <artifactId>markdown-page-generator-plugin</artifactId>
-                <version>0.10</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <headerHtmlFile>${project.basedir}/src/docs/html/header.html</headerHtmlFile>
-                    <footerHtmlFile>${project.basedir}/src/docs/html/footer.html</footerHtmlFile>
-                    <inputDirectory>${project.basedir}/src/docs/md</inputDirectory>
-                    <outputDirectory>${project.basedir}/docs</outputDirectory>
-                    <pegdownExtensions>TABLES,SMARTYPANTS,FENCED_CODE_BLOCKS,AUTOLINKS,EXTANCHORLINKS</pegdownExtensions>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pegdown</groupId>
-                        <artifactId>pegdown</artifactId>
-                        <version>1.6.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>docs-toc</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <properties>
-                                <property>
-                                    <name>tocSrc</name>
-                                    <value>${project.basedir}/docs/index.html</value>
-                                </property>
-                                <property>
-                                    <name>pomSrc</name>
-                                    <value>${project.basedir}/pom.xml</value>
-                                </property>
-                                <property>
-                                    <name>readmeSrc</name>
-                                    <value>${project.basedir}/src/docs/md/README.md</value>
-                                </property>
-                                <property>
-                                    <name>readmeDst</name>
-                                    <value>${project.basedir}/README.md</value>
-                                </property>
-                                <property>
-                                    <name>sources</name>
-                                    <value>${project.basedir}/src</value>
-                                </property>
-                            </properties>
-                            <scripts>
-                                <script>file:///${project.basedir}/src/docs/groovy/toc.groovy</script>
-                                <script>file:///${project.basedir}/src/docs/groovy/generate_readme.groovy</script>
-                            </scripts>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-all</artifactId>
-                        <version>2.4.6</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-docs-css</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.basedir}/docs/css</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/docs/css</directory>
-                                    <includes>
-                                        <include>modest.css</include>
-                                    </includes>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
@@ -246,23 +246,6 @@
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <notimestamp>true</notimestamp>
-                            <outputDirectory>${project.basedir}/docs/javadocs</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -290,31 +273,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.3</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                </configuration>
             </plugin>
         </plugins>
     </build>
