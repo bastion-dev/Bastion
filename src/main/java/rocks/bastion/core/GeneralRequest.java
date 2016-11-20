@@ -213,4 +213,17 @@ public class GeneralRequest implements HttpRequest {
     public Object body() {
         return requestAttributes.body();
     }
+
+    @Override
+    public long timeout() {
+        return requestAttributes.timeout();
+    }
+
+    /**
+     * See {@link HttpRequest#timeout()} for details.
+     * @param timeout the timeout for the request phases, in milliseconds
+     */
+    public void setTimeout(long timeout) {
+        requestAttributes.setTimeout(timeout);
+    }
 }

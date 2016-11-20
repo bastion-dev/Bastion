@@ -110,6 +110,18 @@ public class SushiService {
             return sushi;
         }, json);
 
+        get("/chikuzen-ni", (req, res) -> {
+                    res.header("Content-type", "application/json");
+                    Sushi sushi = new Sushi();
+                    sushi.setId(6L);
+                    sushi.setName("Chikuzen-ni");
+                    //aka slow cooked chicken, so...
+                    Thread.sleep(12000L);
+                    sushi.setPrice(new BigDecimal("15.95"));
+                    return sushi;
+                }
+        );
+
         exception(RuntimeException.class, (ex, req, res) -> {
             res.header("Content-type", "application/json");
             res.body(json.render(INTERNAL_SERVER_ERROR.toResponse(res, getRootCauseMessage(ex))));

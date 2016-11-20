@@ -85,4 +85,20 @@ public interface HttpRequest {
      */
     Object body();
 
+    /**
+     * A timeout (in milliseconds) that will cause tests to cutoff if:
+     * <ul>
+     *  <li>the connection takes too long to be established</li>
+     *  <li>the response takes too long to arrive.</li>
+     * </ul>
+     * Note that these are 2 separate timeouts; the test might take (in the worst case) <b>twice</b> the value of the timeout, if the phases mentioned above take long enough.
+     * Tests exceeding these timeouts will throw an {@link AssertionError} and be marked as failed.
+     * A value of {@literal 0} indicates no timeout - the test will wait indefinitely for a response.
+     *
+     * @return a number (in milliseconds) representing the longest a test should wait for each phase of a request
+     */
+    default long timeout() {
+        return 0;
+    }
+
 }

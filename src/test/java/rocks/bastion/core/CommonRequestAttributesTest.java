@@ -87,4 +87,10 @@ public class CommonRequestAttributesTest {
         assertThat(commonRequestAttributes.body()).describedAs("Body").isEqualTo("New Body");
     }
 
+    @Test
+    public void setTimeout() throws Exception {
+        commonRequestAttributes.setTimeout(1000L);
+        assertThat(commonRequestAttributes.timeout()).describedAs("Timeout").isEqualTo(1000L);
+
+    }
 }

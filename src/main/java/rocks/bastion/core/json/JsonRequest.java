@@ -539,6 +539,19 @@ public class JsonRequest implements HttpRequest {
         return requestAttributes.body();
     }
 
+        @Override
+    public long timeout() {
+        return requestAttributes.timeout();
+    }
+
+    /**
+     * See {@link HttpRequest#timeout()} for details.
+     * @param timeout the timeout for the request phases, in milliseconds
+     */
+    public void setTimeout(long timeout) {
+        requestAttributes.setTimeout(timeout);
+    }
+
     private void validateJson() throws InvalidJsonException {
         String jsonBody = requestAttributes.body().toString();
         try {
