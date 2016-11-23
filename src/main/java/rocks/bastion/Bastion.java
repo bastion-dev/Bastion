@@ -169,6 +169,23 @@ public final class Bastion {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
+    /**
+     * <p>
+     * Starts building a single Bastion test which will execute the specified HTTP request. The method will return a
+     * fluent-builder object which will let you specify the test further.
+     * </p>
+     * <p>
+     * The request you specify in this method can be an instance of one of the in-built {@link HttpRequest request types}
+     * provided with Bastion itself. You can also supply your own implementation of a request by subclassing {@link HttpRequest}.
+     * </p>
+     *
+     * @param request The HTTP request that Bastion will execute for this test.
+     * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
+     */
+    public static BastionBuilder<Object> request(HttpRequest request) {
+        return BastionFactory.getDefaultBastionFactory().getBastion("", request);
+    }
+
     private Bastion() {
         // This class should not be instantiated.
     }
