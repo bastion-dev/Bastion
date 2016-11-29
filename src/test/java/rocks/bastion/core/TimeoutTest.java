@@ -45,7 +45,7 @@ public class TimeoutTest extends TestWithEmbeddedServer {
 
     private void performRequestAndAssert(HttpRequest request) {
         try {
-            Bastion.request("Create Sushi", request).call().getResponse().getStatusCode();
+            Bastion.request("Create Sushi", request).call() ;
         } catch (AssertionError e) {
             //for our timeout to work, the test must take longer than it!
             org.assertj.core.api.Assertions.assertThat(stopwatch.runtime(TimeUnit.MILLISECONDS)).as("Test runtime").isGreaterThanOrEqualTo(1000L);

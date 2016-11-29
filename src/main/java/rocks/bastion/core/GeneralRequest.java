@@ -223,7 +223,8 @@ public class GeneralRequest implements HttpRequest {
      * See {@link HttpRequest#timeout()} for details.
      * @param timeout the timeout for the request phases, in milliseconds
      */
-    public void setTimeout(long timeout) {
+    public GeneralRequest setTimeout(long timeout) {
         requestAttributes.setTimeout(timeout);
+        return this;
     }
 }
