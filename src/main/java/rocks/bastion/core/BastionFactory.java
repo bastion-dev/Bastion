@@ -2,6 +2,7 @@ package rocks.bastion.core;
 
 import rocks.bastion.Bastion;
 import rocks.bastion.core.builder.BastionBuilder;
+import rocks.bastion.core.configuration.BastionConfigurationLoader;
 import rocks.bastion.core.configuration.Configuration;
 
 import java.util.Objects;
@@ -17,6 +18,8 @@ import static java.util.Objects.*;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
+
+    private boolean suppressAssertions = false;
     private Configuration configuration;
 
     /**
@@ -45,18 +48,20 @@ public abstract class BastionFactory {
         BastionFactory.defaultBastionFactory = defaultBastionFactory;
     }
 
-    private boolean suppressAssertions = false;
+    public static Configuration loadConfiguration(String resourceLocation) {
+        Configuration config = new BastionConfigurationLoader(resourceLocation).load();
+        BastionFactory bastionFactory = getDefaultBastionFactory();
+        bastionFactory.setConfiguration(config);
+        return bastionFactory.getConfiguration();
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 
     public void setConfiguration(Configuration configuration) {
         requireNonNull(configuration, "Configuration should not be null.");
         this.configuration = configuration;
-    }
-
-    public Configuration getConfiguration() {
-        if (configuration == null) {
-            configuration = new Configuration();
-        }
-        return configuration;
     }
 
     /**
@@ -98,5 +103,4 @@ public abstract class BastionFactory {
      * @param bastion The builder instance to configure.
      */
     protected abstract void prepareBastion(BastionBuilderImpl<?> bastion);
-
 }

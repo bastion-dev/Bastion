@@ -20,17 +20,7 @@ public class GlobalRequestAttributes {
     private long globalRequestTimeout;
 
     public GlobalRequestAttributes() {
-        setGlobalHeaders(new ArrayList<>());
-        setGlobalQueryParams(new ArrayList<>());
-        setGlobalRouteParams(new ArrayList<>());
-        setGlobalRequestTimeout(0);
-    }
-
-    public GlobalRequestAttributes(Collection<ApiHeader> globalHeaders, Collection<ApiQueryParam> globalQueryParams, Collection<RouteParam> globalRouteParams, long globalRequestTimeout) {
-        setGlobalHeaders(globalHeaders);
-        setGlobalQueryParams(globalQueryParams);
-        setGlobalRouteParams(globalRouteParams);
-        setGlobalRequestTimeout(globalRequestTimeout);
+        clear();
     }
 
     /**

@@ -1,5 +1,6 @@
 package rocks.bastion.core;
 
+import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.JsonResponseDecoder;
 import rocks.bastion.core.model.ResponseDecoder;
@@ -20,6 +21,10 @@ import rocks.bastion.core.model.StringResponseDecoder;
  * </ul>
  */
 public class DefaultBastionFactory extends BastionFactory implements BastionListener {
+
+    public DefaultBastionFactory() {
+        setConfiguration(new Configuration());
+    }
 
     @Override
     public void callStarted(BastionStartedEvent event) {

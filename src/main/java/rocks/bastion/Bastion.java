@@ -11,6 +11,7 @@ import rocks.bastion.core.configuration.BastionConfigurationLoader;
 import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.configuration.GlobalRequestAttributes;
 import rocks.bastion.core.json.JsonRequest;
+import rocks.bastion.core.resource.ResourceLoader;
 
 import static java.util.Objects.requireNonNull;
 
@@ -175,18 +176,34 @@ public final class Bastion {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
     }
 
-    private Bastion() {
-        // This class should not be instantiated.
-    }
-
+    /**
+     * <p>
+     * Loads Bastion's configuration from the provided resource location. The resource location should be a valid .yml file that
+     * corresponds to the same schema as a {@link Configuration}.
+     * </p>
+     *
+     * @see Configuration
+     * @see ResourceLoader
+     * @param resourceLocation The resource location for the Bastion configuration.
+     * @return The loaded configuration.
+     */
     public static Configuration loadConfiguration(String resourceLocation) {
         requireNonNull(resourceLocation, "The resource location cannot be null.");
-        Configuration config = new BastionConfigurationLoader(resourceLocation).load();
-        BastionFactory.getDefaultBastionFactory().setConfiguration(config);
-        return BastionFactory.getDefaultBastionFactory().getConfiguration();
+        return BastionFactory.loadConfiguration(resourceLocation);
     }
 
+    /**
+     * <p>
+     * Starts building or modifying the configuration of the {@link GlobalRequestAttributes} for Bastion.
+     * </p>
+     *
+     * @return The configured global request attributes.
+     */
     public static GlobalRequestAttributes globals() {
         return BastionFactory.getDefaultBastionFactory().getConfiguration().getGlobalRequestAttributes();
+    }
+
+    private Bastion() {
+        // This class should not be instantiated.
     }
 }
