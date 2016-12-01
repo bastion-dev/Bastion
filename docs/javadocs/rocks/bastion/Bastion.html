@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
+var methods = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -268,6 +268,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static <a href="../../rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../rocks/bastion/Bastion.html#globals--">globals</a></span>()</code>
+<div class="block">
+ Starts building or modifying the configuration of the <a href="../../rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration"><code>GlobalRequestAttributes</code></a> for Bastion.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../../rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration">Configuration</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../rocks/bastion/Bastion.html#loadConfiguration-java.lang.String-">loadConfiguration</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resourceLocation)</code>
+<div class="block">
+ Loads Bastion's configuration from the provided resource location.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../rocks/bastion/core/builder/BastionBuilder.html" title="interface in rocks.bastion.core.builder">BastionBuilder</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../rocks/bastion/Bastion.html#request-java.lang.String-rocks.bastion.core.HttpRequest-">request</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;message,
        <a href="../../rocks/bastion/core/HttpRequest.html" title="interface in rocks.bastion.core">HttpRequest</a>&nbsp;request)</code>
@@ -300,7 +314,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="request-java.lang.String-rocks.bastion.core.HttpRequest-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>request</h4>
 <pre>public static&nbsp;<a href="../../rocks/bastion/core/builder/BastionBuilder.html" title="interface in rocks.bastion.core.builder">BastionBuilder</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;request(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;message,
@@ -320,6 +334,44 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>request</code> - The HTTP request that Bastion will execute for this test.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.</dd>
+</dl>
+</li>
+</ul>
+<a name="loadConfiguration-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadConfiguration</h4>
+<pre>public static&nbsp;<a href="../../rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration">Configuration</a>&nbsp;loadConfiguration(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resourceLocation)</pre>
+<div class="block"><p>
+ Loads Bastion's configuration from the provided resource location. The resource location should be a valid .yml file that
+ corresponds to the same schema as a <a href="../../rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration"><code>Configuration</code></a>.
+ </p></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resourceLocation</code> - The resource location for the Bastion configuration.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The loaded configuration.</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../rocks/bastion/core/configuration/Configuration.html" title="class in rocks.bastion.core.configuration"><code>Configuration</code></a>, 
+<a href="../../rocks/bastion/core/resource/ResourceLoader.html" title="class in rocks.bastion.core.resource"><code>ResourceLoader</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="globals--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>globals</h4>
+<pre>public static&nbsp;<a href="../../rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration">GlobalRequestAttributes</a>&nbsp;globals()</pre>
+<div class="block"><p>
+ Starts building or modifying the configuration of the <a href="../../rocks/bastion/core/configuration/GlobalRequestAttributes.html" title="class in rocks.bastion.core.configuration"><code>GlobalRequestAttributes</code></a> for Bastion.
+ </p></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The configured global request attributes.</dd>
 </dl>
 </li>
 </ul>

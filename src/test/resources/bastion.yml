@@ -1,0 +1,15 @@
+globalRequestAttributes:
+  globalHeaders:
+  - name: "header1"
+    value: "headerValue1"
+  - name: "header1"
+    value: "headerValue2"
+  - name: "header2"
+    value: "headerValue1"
+  globalQueryParams:
+  - name: "queryParam1"
+    value: "queryParamValue1"
+  globalRouteParams:
+  - name: "routeParam1"
+    value: "value1"
+  globalRequestTimeout: 15000

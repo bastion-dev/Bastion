@@ -8,4 +8,8 @@ public class ApiHeader extends ApiProperty {
     public ApiHeader(String name, String value) {
         super(name, value);
     }
+
+    private ApiHeader(){
+        // required for serialization
+    }
 }
