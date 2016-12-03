@@ -1,10 +1,11 @@
-Bastion User Guide
-==================
-
-:toc:
+= Bastion User Guide [VERSION]
 :icons:
+:data-uri:
+:toc2:
 :numbered:
 :website: http://bastion.rocks/
+
+WARNING: Fix all Bastion requests without descriptive text!
 
 Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service
 but the library also provides built-in classes for testing endpoints validating responses containing various different content types including
@@ -141,14 +142,18 @@ Requests
 _Request_ objects are passed to the +request()+ method which is the first builder method invoked when using the +Bastion+ builder. A +Request+ object
 defines the HTTP data that is sent to the remote server while the test is executing. We suggest using one of the built-in +Request+ subclasses when
 supplying your request data. Alternatively, if none of the built-in request subclasses are useful, you can create your own +Request+ subclass
-as explained in the section [Custom Requests](#custom-requests).
+as explained in the section <<custom-requests>>
 
+.Built-in request classes
 Bastion provides the following list of built-in +Request+ subclasses:
 
-* [GeneralRequest](#general-request): A simple HTTP request which allows for any arbitrary entity data.
-* [JsonRequest](#json-request): An HTTP request which takes a JSON string as its entity data.
-* [FormUrlEncodedRequest](#form-url-encoded-request): An HTTP request which takes data in the form of a map which is then sent as a form URL encoded request.
+* <<general-request, GeneralRequest>>: A simple HTTP request which allows for any arbitrary entity data.
+* <<json-request,JsonRequest>>: An HTTP request which takes a JSON string as its entity data.
+* <<form-url-encoded-request,FormUrlEncodedRequest>>: An HTTP request which takes data in the form of a map which is then sent as a URL encoded string
+as if the data was submitted using an HTML form.
 
+[[request-attributes]]
+.Adding request attributes
 Any +Request+ supports the following attributes, some of which are standard to HTTP:
 
 * *Headers*: Use the +addHeader()+ method to add a header to a request.
@@ -162,6 +167,7 @@ http://reddit.com/r/{subreddit}
 * *Content Type*:
 * *Entity Body*:
 
+[[general-request]]
 General Request
 ~~~~~~~~~~~~~~~
 
@@ -178,10 +184,16 @@ Calling any of the above methods will give you an initialised +GeneralRequest+ o
 have any HTTP headers, query parameters or route parameters.
 
 Once you have an instance of +GeneralRequest+, you can call methods to modify *Headers*, *Query Parameters*, *Route Parameters* and *Content type* as
-explained in section [Requests](#requests).
+explained in section <<request-attributes>>.
 
-Examples using +GeneralRequest+ go here
+[source,java]
+-----
+Bastion.request("Get Sushi",
+    GeneralRequest.get("http://sushi.test/sushi/5")
+).call();
+-----
 
+[[json-request]]
 JSON Request
 ~~~~~~~~~~~~
 
@@ -194,6 +206,8 @@ following static factory methods, giving the URL you want to send the request on
 * +JsonRequest.fromResource()+: Allows you to create a +JsonRequest+ with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
 * +JsonRequest.fromTemplate()+: Like +fromResource()+ but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.
 
+WARNING: The request object here will *validate* that the provided data is valid JSON, in all cases. If you want to send invalid JSON, see <<general-request>> instead.
+
 The factory methods above also have utility methods which do not take an +HttpMethod+ argument as follows:
 
 * +JsonRequest.postFromString()+
@@ -203,13 +217,71 @@ The factory methods above also have utility methods which do not take an +HttpMe
 * +JsonRequest.putFromResource()+
 * ... and so on.
 
-The +JsonRequest.fromResource()+ and +JsonRequest.fromTemplate()+ family of factory methods take a string representing either a URL or even a classpath resource.
-For example, to load request data from a fixture file in the classpath, you could do,
+Once you have an instance of +JsonRequest+, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
+explained in section <<request-attributes>>. You can also change the *Content type* header that is sent using +overrideContentType()+.
 
-```java
-Bastion.request(JsonRequest.postFromResource("http://localhost:8080/login", "classpath:/fixtures/login-request.json"));
-```
+.JSON request from a string
 
+Use the +fromString()+ family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
+your JSON request, as you would using an HTTP client, and Bastion will take care of all the other details related to JSON requests
+for you.
+
+[source,java]
+-----
+Bastion.request(JsonRequest.putFromString("http://test.test",
+    "{ \"key\":\"value\", \"array\":[ \"1\", \"test\" ] }")
+).call();
+-----
+
+TIP: In a language like Java, typing the request data directly in the test can quickly start becoming unwieldy due to all
+the extra escape characters you need. We recommend using a language like Groovy, which supports multi-line strings, allowing
+you to avoid all the unnecessary escape characters.
+
+.JSON request from a file
+
+Use the +fromResource()+ family of static factory methods to load a simple JSON file as the HTTP entity body. The +fromResource()+
+methods can take any URL including those beginning with the +classpath:+ prefix (which loads a file from the
+classpath).
+
+[source,java]
+-----
+Bastion.request(JsonRequest.postFromResource("http://localhost:8080/login",
+    "classpath:/fixtures/login-request.json")
+).call();
+-----
+
+.JSON request from a template
+
+The +fromTemplate()+ family of static factory methods are similar to +fromResource()+ but they also take any additional argument
+containing a map where the keys are variable names and the values are the replacement values for the variable placeholders in the
+template.
+
+[source,java]
+-----
+Bastion.request(JsonRequest.postFromTemplate("http://awesomewebsite.test",
+    "classpath:/rocks/bastion/core/request/test-template-body.json",
+    Collections.singletonMap("food", "apples")
+).call();
+-----
+
+The template files must be Mustache templates. An example Mustache template is shown below:
+
+[source,javascript]
+-----
+{
+  "name": "john",
+  "timestamp": "2016-10-15T20:00:25+0100",
+  "favourites": {
+    "food": "{{ food }}",
+    "colours": ["blue", "red"],
+    "number": 23
+  }
+}
+-----
+
+Notice the +food+ variable in the template: this will get replaced by the value +apples+ in the test.
+
+[[form-url-encoded-request]]
 Form URL Encoded Data Request
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -228,12 +300,50 @@ First, use any of the following static factory methods and specify the URL to se
 TIP: The +withMethod()+ factory method allows you choose any HTTP method you want (including +GET+). Use it when none of the
 other standard factory methods are suitable for your test.
 
-Once you have a +FormUrlEncodedRequest+ in hand, use the +addDataParameter()+ or +addDataParameters()+ methods to add the data
-which will go to the request's entity body. The +FormUrlEncodedRequest+ will automatically format the data you supply, internally,
-into a URL encoded string
+Once you have an instance of +FormUrlEncodedRequest+, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
+explained in section <<request-attributes>>. You can also change the *Content type* header that is sent using +overrideContentType()+.
 
+More importantly, use the +addDataParameter()+ or +addDataParameters()+ methods to add the data
+which will go into the request's entity body. The +FormUrlEncodedRequest+ will automatically format the data you supply, internally,
+into a URL encoded string. An example, using +FormUrlEncodedRequest+ follows below,
+
+[source,java]
+-----
+Bastion.request(FormUrlEncodedRequest.post("http://awesomewebsite.test/submit.php")
+    .addDataParameter("name", "John Doe")
+    .addDataParameter("country", "MT")
+).call();
+-----
+
+[[custom-requests]]
 Custom Requests
 ~~~~~~~~~~~~~~~
+
+Bastion gives you the option of developing your own request classes. This is useful if you notice that you are repeatedly
+using a particular request in your tests. For the sake of maintainability and better software design, you can avoid repeatedly
+initialising the same request, over and over again, by implementing your own request type.
+
+The relevant interface to implement is +HttpRequest+. This interface defines the following methods which you need to implement:
+
+* +name()+: Returns a descriptive name of the current request object. This name _might_ appear in test reports, so returning
+a good name helps you debug faster when a problem occurs.
+* +url()+: Returns the URL string which the request will be sent to. Bastion is quite lenient on what constitutes a valid URL.
+If a question mark appears in the URL, for example, anything after the question mark will be added to the request's query parameters.
+* +method()+: Returns the HTTP method that the request will be sent with. This could be +GET+, +POST+, +PUT+, etc.
+* +contentType()+: Returns the value which will be used for the +Content-type+ HTTP header. You can are not required to return
+a content type, hence this method returns an +Optional+ value.
+* +headers()+: Returns the possibly empty +Collection+ of +ApiHeader+ objects (or rather, HTTP headers) which will be sent with the request.
+* +queryParams()+: Returns the possibly empty +Collection+ of +ApiQueryParam+ objects which are sent with the HTTP request.
+* +routeParams()+: Returns the values to use for filling in any route parameters in this request's URL. Route parameters are
+variables, enclosed within a pair of braces, in the requet's URL.
+* +body()+: Returns the object to use for the HTTP entity body. Bastion will typically send the returned object's +toString()+
+value but this _might_ be depend on the request's content type.
+
+Once you've implemented your own +HttpRequest+, you can then pass it, as if it was any other request, to the +Bastion.request()+
+method.
+
+TIP: If you've developed a general +HttpRequest+ which you think might be useful for the Bastion community and other users,
+please consider submitting a pull request to the main Bastion repository. See the <<contribute>> section for more information.
 
 Assertions
 ----------
@@ -266,6 +376,7 @@ Binding a Model
 Executing and Getting Data
 --------------------------
 
+[[contribute]]
 Contribute
 ----------
 
