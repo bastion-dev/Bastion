@@ -1,11 +1,11 @@
-= Bastion User Guide [VERSION]
+= Bastion User Guide {bastion-version}
 :icons:
 :data-uri:
-:toc2:
+:toc:
 :numbered:
 :website: http://bastion.rocks/
 
-WARNING: Fix all Bastion requests without descriptive text!
+WARNING: Hey! Fix all Bastion requests without descriptive text!
 
 Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service
 but the library also provides built-in classes for testing endpoints validating responses containing various different content types including
@@ -29,7 +29,7 @@ it available for your project's tests.
 <dependency>
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>[VERSION]</version>
+    <version>{bastion-version}</version>
     <scope>test</scope>
 </dependency>
 ---------------------------------------
@@ -42,7 +42,7 @@ Add the following line to your +import+ statement to download Bastion and make i
 
 ---------------------------------------
 @Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='[VERSION]')
+    @Grab(group='rocks.bastion', module='bastion', version='{bastion-version}')
 )
 import rocks.bastion.Bastion
 ---------------------------------------
@@ -53,7 +53,7 @@ Gradle
 If you're using Gradle as your dependency management tool, add the following line to your Gradle file to use Bastion.
 
 ---------------------------------------
-testCompile group: 'rocks.bastion', name: 'bastion', version: '[VERSION]'
+testCompile group: 'rocks.bastion', name: 'bastion', version: '{bastion-version}'
 ---------------------------------------
 
 Quickstart
