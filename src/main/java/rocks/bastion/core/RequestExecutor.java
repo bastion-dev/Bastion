@@ -7,25 +7,31 @@ import com.mashape.unirest.request.HttpRequestWithBody;
 
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import rocks.bastion.core.configuration.Configuration;
 
 /**
  * Responsible for executing a Bastion remote request built using the {@link BastionBuilderImpl} builder and prepare a response object.
  */
 public class RequestExecutor {
 
+    private Configuration configuration;
     private HttpRequest bastionHttpRequest;
     private com.mashape.unirest.request.HttpRequest executableHttpRequest;
     private Collection<ApiHeader> headers;
     private String resolvedUrl;
 
-    public RequestExecutor(HttpRequest bastionHttpRequest) {
+    public RequestExecutor(HttpRequest bastionHttpRequest, Configuration configuration) {
         Objects.requireNonNull(bastionHttpRequest);
         this.bastionHttpRequest = bastionHttpRequest;
+        this.configuration = configuration;
         executableHttpRequest = prepareHttpRequest();
         applyHeaders();
         applyQueryParameters();
@@ -96,21 +102,26 @@ public class RequestExecutor {
 
     private void applyHeaders() {
         headers = new LinkedList<>();
-        if (!bastionHttpRequest.headers().stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
-            executableHttpRequest.header("Content-Type", bastionHttpRequest.contentType().get().toString());
+        ArrayList<ApiHeader> combinedHeaders = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
+        combinedHeaders.addAll(bastionHttpRequest.headers());
+        if (!combinedHeaders.stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
             headers.add(new ApiHeader("Content-Type", bastionHttpRequest.contentType().get().toString()));
         }
-        bastionHttpRequest.headers().stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
-        headers.addAll(bastionHttpRequest.headers());
+        combinedHeaders.stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
+        headers.addAll(combinedHeaders);
     }
 
     private void applyQueryParameters() {
-        bastionHttpRequest.queryParams().stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
+        List<ApiQueryParam> apiQueryParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalQueryParams());
+        apiQueryParams.addAll(bastionHttpRequest.queryParams());
+        apiQueryParams.stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();
     }
 
     private void applyRouteParameters() {
-        bastionHttpRequest.routeParams().stream().forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
+        List<RouteParam> routeParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalRouteParams());
+        routeParams.addAll(bastionHttpRequest.routeParams());
+        routeParams.stream().forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();
     }
 

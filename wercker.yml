@@ -1,7 +1,0 @@
-box: maven:3.3.9-jdk-8-alpine
-build:
- steps:
-   - script:
-       name: Maven Build
-       code: |
-         mvn install
