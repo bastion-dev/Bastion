@@ -9,6 +9,10 @@ import rocks.bastion.support.embedded.TestWithEmbeddedServer;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 /**
  * Tests for the timeout functionality.
  *
@@ -17,43 +21,34 @@ import java.util.concurrent.TimeUnit;
 public class TimeoutTest extends TestWithEmbeddedServer {
 
     @Rule
-    public Stopwatch stopwatch = new Stopwatch() {};
+    public Stopwatch stopwatch = new Stopwatch() {
+    };
 
-    @Test(expected = TestTimeoutException.class, timeout = 30000L)
+    @Test(timeout = 3000L)
     public void callSlowAPI_jsonRequest_requestTimesOutAndTestFails() {
         JsonRequest request = JsonRequest.fromString(HttpMethod.GET, "http://localhost:9876/chikuzen-ni", "");
-        request.setTimeout(15000L);
-
+        request.setTimeout(1500L);
         performRequestAndAssert(request);
     }
 
-    @Test(expected = TestTimeoutException.class, timeout = 3000L)
+    @Test(timeout = 3000L)
     public void callSlowAPI_generalRequest_requestTimesOutAndTestFails() {
         GeneralRequest request = GeneralRequest.get("http://localhost:9876/chikuzen-ni");
         request.setTimeout(1500L);
-
         performRequestAndAssert(request);
     }
 
-    @Test(expected = TestTimeoutException.class, timeout = 3000L)
+    @Test(timeout = 3000L)
     public void callSlowAPI_formUrlEncodedRequest_requestTimesOutAndTestFails() {
         FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.GET, "http://localhost:9876/chikuzen-ni");
         request.setTimeout(1500L);
-
         performRequestAndAssert(request);
     }
 
     private void performRequestAndAssert(HttpRequest request) {
-        try {
-            Bastion.request("Create Sushi", request).call() ;
-        } catch (AssertionError e) {
-            //for our timeout to work, the test must take longer than it!
-            org.assertj.core.api.Assertions.assertThat(stopwatch.runtime(TimeUnit.MILLISECONDS)).as("Test runtime").isGreaterThanOrEqualTo(1000L);
-            throw new TestTimeoutException();
-        }
-    }
-
-    private static class TestTimeoutException extends RuntimeException {
-
+        assertThatThrownBy(() -> Bastion.request("Create Sushi", request).call())
+                .isInstanceOf(AssertionError.class)
+                .hasMessage(format("Failed to receive response before timeout of [%d] ms", request.timeout()));
+        assertThat(stopwatch.runtime(TimeUnit.MILLISECONDS)).as("Test runtime").isGreaterThanOrEqualTo(1000L);
     }
 }
