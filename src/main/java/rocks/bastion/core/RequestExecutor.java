@@ -6,6 +6,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class RequestExecutor {
         Objects.requireNonNull(bastionHttpRequest);
         this.bastionHttpRequest = bastionHttpRequest;
         this.configuration = configuration;
-        executableHttpRequest = identifyHttpRequest();
+        executableHttpRequest = prepareHttpRequest();
         applyHeaders();
         applyQueryParameters();
         applyRouteParameters();
@@ -60,29 +61,43 @@ public class RequestExecutor {
             HttpResponse<InputStream> httpResponse = performRequest();
             return convertToRawResponse(httpResponse);
         } catch (UnirestException exception) {
+            if (exception.getCause() instanceof SocketTimeoutException) {
+                throw new AssertionError(String.format("Failed to receive response before timeout of [%s] ms", bastionHttpRequest.timeout()));
+            }
             throw new IllegalStateException("Failed executing request", exception);
         }
     }
 
-    private com.mashape.unirest.request.HttpRequest identifyHttpRequest() {
+    private com.mashape.unirest.request.HttpRequest prepareHttpRequest() {
+
+        Unirest.setTimeouts(bastionHttpRequest.timeout(), bastionHttpRequest.timeout());
+        com.mashape.unirest.request.HttpRequest request;
         switch (bastionHttpRequest.method().getValue()) {
             case "GET":
-                return Unirest.get(bastionHttpRequest.url());
+                request = Unirest.get(bastionHttpRequest.url());
+                break;
             case "POST":
-                return Unirest.post(bastionHttpRequest.url());
+                request = Unirest.post(bastionHttpRequest.url());
+                break;
             case "PATCH":
-                return Unirest.patch(bastionHttpRequest.url());
+                request = Unirest.patch(bastionHttpRequest.url());
+                break;
             case "DELETE":
-                return Unirest.delete(bastionHttpRequest.url());
+                request = Unirest.delete(bastionHttpRequest.url());
+                break;
             case "PUT":
-                return Unirest.put(bastionHttpRequest.url());
+                request = Unirest.put(bastionHttpRequest.url());
+                break;
             case "OPTIONS":
-                return Unirest.options(bastionHttpRequest.url());
+                request = Unirest.options(bastionHttpRequest.url());
+                break;
             case "HEAD":
-                return Unirest.head(bastionHttpRequest.url());
+                request = Unirest.head(bastionHttpRequest.url());
+                break;
             default:
                 throw new UnsupportedOperationException(String.format("We cannot perform a request of type %s.", bastionHttpRequest.method().getValue()));
         }
+        return request;
     }
 
     private void applyHeaders() {

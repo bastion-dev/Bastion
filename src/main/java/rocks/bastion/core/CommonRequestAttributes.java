@@ -36,6 +36,7 @@ public class CommonRequestAttributes {
     private Collection<ApiQueryParam> queryParams;
     private Collection<RouteParam> routeParams;
     private Object body;
+    private long timeout;
 
     /**
      * Constructs a new instance of this object containing the following initial defaults:
@@ -226,4 +227,23 @@ public class CommonRequestAttributes {
         return body;
     }
 
+    /**
+     * See {@link HttpRequest#timeout()}.
+     *
+     * @return the timeout for all phases of a request
+     */
+    public long timeout() {
+        return timeout;
+    }
+
+
+    /**
+     * Set the timeout for all phases of a request.
+     * See {@link HttpRequest#timeout()} for more details.
+     *
+     * @param timeout the timeout (in milliseconds).
+     */
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
 }
