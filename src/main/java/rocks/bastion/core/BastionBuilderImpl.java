@@ -2,6 +2,7 @@ package rocks.bastion.core;
 
 import com.google.common.base.Strings;
 import rocks.bastion.core.builder.*;
+import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.DecodingHints;
 import rocks.bastion.core.model.ResponseDecoder;
@@ -32,6 +33,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     private Callback<? super MODEL> callback;
     private MODEL model;
     private ModelResponse<MODEL> modelResponse;
+    private Configuration configuration;
 
     BastionBuilderImpl(String message, HttpRequest request) {
         Objects.requireNonNull(message);
@@ -94,21 +96,21 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     public PostExecutionBuilder<? extends MODEL> call() {
         modelResponse = null;
         try {
-            notifyListenersCallStarted(new BastionStartedEvent(getDescriptiveText()));
-            Response response = new RequestExecutor(request).execute();
+            notifyListenersCallStarted(new BastionStartedEvent(request));
+            Response response = new RequestExecutor(request, getConfiguration()).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
             return this;
         } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(getDescriptiveText(), modelResponse, e));
+            notifyListenersCallFailed(new BastionFailureEvent(request, modelResponse, e));
             return this;
         } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(getDescriptiveText(), modelResponse, t));
+            notifyListenersCallError(new BastionErrorEvent(request, modelResponse, t));
             return this;
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(getDescriptiveText(), modelResponse));
+            notifyListenersCallFinished(new BastionFinishedEvent(request, modelResponse));
         }
     }
 
@@ -190,5 +192,13 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
 
     private boolean isModelInstanceOfRequiredType(Object decodedResponseModel) {
         return (modelType == null) || ((decodedResponseModel != null) && modelType.isAssignableFrom(decodedResponseModel.getClass()));
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

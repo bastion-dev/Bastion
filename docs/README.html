@@ -4,7 +4,8 @@
         <link href="css/modest.css" rel="stylesheet" type="text/css"/>
         <title>Bastion User Guide (0.2-SNAPSHOT)</title>
     </head>
-    <body><h1><a href="#overview" name="overview"></a>Overview</h1>
+    <body><p><img src="https://raw.githubusercontent.com/KPull/Bastion/master/src/docs/logo/bastion_logo.png" alt="Bastion Logo" /></p>
+<h1><a href="#overview" name="overview"></a>Overview</h1>
 <p>Bastion is a library that eases the development of end-to-end tests for HTTP APIs. A typical user would write tests using Bastion based off of some sort of API specification. This API specification can be anything like a WADL file, RAML file or a JSON schema. A test engineer would prepare requests and responses based on these specifications to test the overall process of calling these APIs.</p>
 <h1><a href="#usage" name="usage"></a>Usage</h1>
 <h2><a href="#test" name="test"></a>Test</h2>
@@ -22,7 +23,9 @@
   <li>
   <p>Form URL Encoded Data Request: [ex:form-url-encoded-request]</p></li>
   <li>
-  <p>Bind the response entity to a model object: [ex:bound-data] </p></li>
+  <p>Bind the response entity to a model object: [ex:bound-data]</p></li>
+  <li>
+  <p>Groovy (using multi-line strings): [ex:groovy-example]</p></li>
 </ul>
 <h2><a href="#dependency" name="dependency"></a>Dependency</h2>
 <p>Use a dependency management tool such as Maven to download the Bastion library for use in your project. Add the following dependency to your POM file:</p>
@@ -31,7 +34,7 @@
     &lt;artifactId&gt;bastion&lt;/artifactId&gt;
     &lt;version&gt;[VERSION]&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
-&lt;dependency&gt;
+&lt;/dependency&gt;
 </code></pre>
 <p>Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:</p>
 <pre><code class="groovy">@Grapes(
@@ -42,6 +45,14 @@
 <p>Use Maven to build Bastion and run the associated tests. After checking out the repository use the following command to build and test the source code.</p>
 <pre><code>mvn install
 </code></pre>
-<h1><a href="#contributing" name="contributing"></a>Contributing</h1>
-<p>Bastion is an open-source project which means that we will gladly accept contributions. Feel free to submit issues or suggestions on Github. We will also accept any code contributions to the project. Simply fork the repository and submit pull requests for review. Do use standard good coding practice in your submissions. Also, you can look at our &lsquo;Issues&rsquo; page to get an idea of what you can work on.</p>    </body>
+<h1><a href="#contribute" name="contribute"></a>Contribute</h1>
+<p>Bastion is an open-source project! Open-source means that we encourage you to contribute in any way you can. We will accept all contributions, in any shape or form, that help make Bastion better. Here are some things you can do to contribute:</p>
+<ul>
+  <li>Send a positive comment to the Bastion contributers. :)</li>
+  <li><a href="https://github.com/KPull/Bastion/issues">Submit an issue</a> on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before  submitting an issue to check that it has not been submitted earlier. When opening an issue, try to include as much detail as possible so that the  community can more easily address your concern.</li>
+  <li>Submit a pull request for any of our <a href="https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue">open issues</a>. Some issues are more easy to implement  than others and, if you&rsquo;re just starting out, these issues let you get used to the Bastion code structure. If you need any assistance, simply comment on  the issue at hand and we&rsquo;ll be glad to help. We ask that you adhere to a consistent code style and employ good programming practice but don&rsquo;t worry if  you&rsquo;re unsure about anything: we&rsquo;ll help you get your submission up to scratch as well.</li>
+  <li>You can also <a href="https://github.com/KPull/Bastion/pulls">submit a pull request</a> which is not related to any of the issues currently on GitHub. If you have  developed your own <code>Request</code> or <code>Assertions</code> implementations, for example, and you believe they could be useful to the rest of the Bastion community,  we will add them to the library for use in future versions of Bastion.</li>
+  <li>Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,  grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the <code>src/docs/md</code>  directory.</li>
+  <li>Spread the word. Tell your colleagues about Bastion or write a blog post about Bastion. The more people we can tell Bastion about, the better!</li>
+</ul>    </body>
 </html>

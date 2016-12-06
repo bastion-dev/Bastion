@@ -2,8 +2,12 @@ package rocks.bastion.core;
 
 import rocks.bastion.Bastion;
 import rocks.bastion.core.builder.BastionBuilder;
+import rocks.bastion.core.configuration.BastionConfigurationLoader;
+import rocks.bastion.core.configuration.Configuration;
 
 import java.util.Objects;
+
+import static java.util.Objects.*;
 
 /**
  * Creates and configures an instance of the {@link BastionBuilderImpl} fluent builder. A single factory can be designated as the
@@ -14,6 +18,9 @@ import java.util.Objects;
 public abstract class BastionFactory {
 
     private static BastionFactory defaultBastionFactory = null;
+
+    private boolean suppressAssertions = false;
+    private Configuration configuration;
 
     /**
      * Gets the {@link BastionFactory} which is designated as the "Default" factory. This factory is the one used
@@ -37,15 +44,29 @@ public abstract class BastionFactory {
      * @param defaultBastionFactory The factory instance to designate as "Default". Cannot be {@literal null}.
      */
     public static void setDefaultBastionFactory(BastionFactory defaultBastionFactory) {
-        Objects.requireNonNull(defaultBastionFactory, "The default Bastion factory cannot be null");
+        requireNonNull(defaultBastionFactory, "The default Bastion factory cannot be null");
         BastionFactory.defaultBastionFactory = defaultBastionFactory;
     }
 
-    private boolean suppressAssertions = false;
+    public static Configuration loadConfiguration(String resourceLocation) {
+        Configuration config = new BastionConfigurationLoader(resourceLocation).load();
+        BastionFactory bastionFactory = getDefaultBastionFactory();
+        bastionFactory.setConfiguration(config);
+        return bastionFactory.getConfiguration();
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        requireNonNull(configuration, "Configuration should not be null.");
+        this.configuration = configuration;
+    }
 
     /**
      * Construct and initialise a new instance of the {@link BastionBuilderImpl} builder. By default, the returned builder
-     * will bind the response to a {@linkplain String} model. Also, the returned builder will use the specified
+     * will bind the response to a plain {@linkplain Object} model. Also, the returned builder will use the specified
      * {@code message} (for informational purposes) and {@code request}.
      *
      * @param message A non-{@literal null} String which describes the request/test that Bastion will be performing.
@@ -55,9 +76,10 @@ public abstract class BastionFactory {
      * @return A fully configured instance of the {@link BastionBuilderImpl} fluent builder which can be used directly by
      * the user to construct Bastion tests.
      */
-    public BastionBuilder<String> getBastion(String message, HttpRequest request) {
-        BastionBuilderImpl<String> bastion = new BastionBuilderImpl<>(message, request);
+    public BastionBuilder<Object> getBastion(String message, HttpRequest request) {
+        BastionBuilderImpl<Object> bastion = new BastionBuilderImpl<>(message, request);
         bastion.setSuppressAssertions(suppressAssertions);
+        bastion.setConfiguration(getConfiguration());
         prepareBastion(bastion);
         return bastion;
     }
@@ -81,5 +103,4 @@ public abstract class BastionFactory {
      * @param bastion The builder instance to configure.
      */
     protected abstract void prepareBastion(BastionBuilderImpl<?> bastion);
-
 }

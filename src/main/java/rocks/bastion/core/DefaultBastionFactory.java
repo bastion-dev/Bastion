@@ -1,5 +1,6 @@
 package rocks.bastion.core;
 
+import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.event.*;
 import rocks.bastion.core.model.JsonResponseDecoder;
 import rocks.bastion.core.model.ResponseDecoder;
@@ -15,11 +16,15 @@ import rocks.bastion.core.model.StringResponseDecoder;
  * <li>{@link StringResponseDecoder} - Binds the response to a {@link String} model by reading the content
  * inside the HTTP response.
  * <li>{@link JsonResponseDecoder} - Binds an HTTP response with content-type {@code application/json} to
- * a Java-based object using the 
+ * a Java-based object using the
  * <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.0.0/com/fasterxml/jackson/databind/ObjectMapper.html">Jackson Object Mappe</a>.</li>
  * </ul>
  */
 public class DefaultBastionFactory extends BastionFactory implements BastionListener {
+
+    public DefaultBastionFactory() {
+        setConfiguration(new Configuration());
+    }
 
     @Override
     public void callStarted(BastionStartedEvent event) {
@@ -33,11 +38,13 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
 
     @Override
     public void callFailed(BastionFailureEvent event) {
+        new EventLogging(event).logResponseAndRequest();
         throw event.getAssertionError();
     }
 
     @Override
     public void callError(BastionErrorEvent event) {
+        new EventLogging(event).logResponseAndRequest();
         Throwable throwable = event.getThrowable();
         if (throwable instanceof RuntimeException) {
             throw (RuntimeException) throwable;
@@ -58,4 +65,5 @@ public class DefaultBastionFactory extends BastionFactory implements BastionList
         bastion.registerModelConverter(new JsonResponseDecoder());
         bastion.registerModelConverter(new StringResponseDecoder());
     }
+
 }

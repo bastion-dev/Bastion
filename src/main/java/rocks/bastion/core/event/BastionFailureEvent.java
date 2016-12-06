@@ -1,5 +1,6 @@
 package rocks.bastion.core.event;
 
+import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.Response;
 
 /**
@@ -9,8 +10,8 @@ public class BastionFailureEvent extends BastionEvent {
 
     private AssertionError assertionError;
 
-    public BastionFailureEvent(String requestMessage, Response response, AssertionError assertionError) {
-        super(requestMessage, response);
+    public BastionFailureEvent(HttpRequest request, Response response, AssertionError assertionError) {
+        super(request, response);
         this.assertionError = assertionError;
     }
 

@@ -19,16 +19,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Asserts that an API response has conforms to a given JSON schema.
+ * Asserts that an API response conforms to a given JSON schema.
  */
-public class JsonSchemaAssertions implements Assertions<Object> {
-
-    private String expectedSchema;
-
-    protected JsonSchemaAssertions(String expectedSchema) {
-        Objects.requireNonNull(expectedSchema);
-        this.expectedSchema = expectedSchema;
-    }
+public final class JsonSchemaAssertions implements Assertions<Object> {
 
     public static JsonSchemaAssertions fromString(String expectedSchemaJson) {
         return new JsonSchemaAssertions(expectedSchemaJson);
@@ -37,6 +30,13 @@ public class JsonSchemaAssertions implements Assertions<Object> {
     public static JsonSchemaAssertions fromResource(String expectedSchemaSource) {
         Objects.requireNonNull(expectedSchemaSource);
         return new JsonSchemaAssertions(new ResourceLoader(expectedSchemaSource).load());
+    }
+
+    private String expectedSchema;
+
+    private JsonSchemaAssertions(String expectedSchema) {
+        Objects.requireNonNull(expectedSchema);
+        this.expectedSchema = expectedSchema;
     }
 
     @Override
@@ -63,11 +63,11 @@ public class JsonSchemaAssertions implements Assertions<Object> {
 
     private void assertResponseConformsToSchema(JsonNode response) throws ProcessingException, IOException {
         ProcessingReport validationReport = JsonSchemaFactory.byDefault()
-                                                             .getJsonSchema(getExpectedSchema()).validate(response);
+                .getJsonSchema(getExpectedSchema()).validate(response);
         if (!validationReport.isSuccess()) {
             String messages = StreamSupport.stream(validationReport.spliterator(), false)
-                                           .map(ProcessingMessage::getMessage)
-                                           .collect(Collectors.joining(", "));
+                    .map(ProcessingMessage::getMessage)
+                    .collect(Collectors.joining(", "));
             Assert.fail(String.format("Actual response body is not as specified. The following message(s) where produced during validation; %s.", messages));
         }
     }

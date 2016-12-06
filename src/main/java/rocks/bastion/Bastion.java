@@ -7,6 +7,13 @@ import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.builder.PostExecutionBuilder;
+import rocks.bastion.core.configuration.BastionConfigurationLoader;
+import rocks.bastion.core.configuration.Configuration;
+import rocks.bastion.core.configuration.GlobalRequestAttributes;
+import rocks.bastion.core.json.JsonRequest;
+import rocks.bastion.core.resource.ResourceLoader;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The main starting point for creating a Bastion test using the library.
@@ -83,13 +90,14 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * <ul>
  * <li>{@link rocks.bastion.core.GeneralRequest}: Allows you to specify a string content-body. Can also be used if you wouldn't
  * like to send any content-body (such as for a {@code GET} request).</li>
+ * <li>{@link rocks.bastion.core.FormUrlEncodedRequest}: Allows you to construct an HTTP request containing URL encoded form data in its
+ * content-body.</li>
  * <li>{@link rocks.bastion.core.json.JsonRequest}: Allows you to specify a valid JSON string to send as part of your HTTP request
  * content-body.</li>
  * </ul>
  * <p>Also, feel free to provide your own implementation of an {@link HttpRequest} which will allow you customise completely
  * the request sent by Bastion. Implementing your own {@link HttpRequest request class} is extremely useful to encourage
  * reuse and maintainability (instead of repeating your own requests each time).</p>
- * <p>
  * <h1>Assertion Types</h1>
  * <p>
  * Assertions allow you to quickly check whether a test was successful or not. Note that a request does not necessarily have
@@ -100,10 +108,12 @@ import rocks.bastion.core.builder.PostExecutionBuilder;
  * how to use it):
  * </p>
  * <ul>
+ * <li>{@link rocks.bastion.core.StatusCodeAssertions}: Expects a response from the remote server to have any of the specified status codes.</li>
  * <li>{@link rocks.bastion.core.json.JsonResponseAssertions}: Expects a JSON response from the remote server. It allows
  * you to specify a valid JSON string to assert the response against. The assertion is smart in that a JSON structural comparison
  * is performed (instead of a straight-up text equality comparison) making sure that the response contains all the expected
  * properties, with the correct values, regardless of whitespace and property order.</li>
+ * <li>{@link rocks.bastion.core.json.JsonSchemaAssertions}: Expects a JSON response from the remote server to adhere to the given JSON schema.</li>
  * </ul>
  * <p>
  * Just like requests, you may define your own {@link Assertions assertion types}. You are encouraged to do so if you
@@ -162,12 +172,55 @@ public final class Bastion {
      * @param request The HTTP request that Bastion will execute for this test.
      * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
      */
-    public static BastionBuilder<String> request(String message, HttpRequest request) {
+    public static BastionBuilder<Object> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
+    }
+
+    /**
+     * <p>
+     * Starts building a single Bastion test which will execute the specified HTTP request. The method will return a
+     * fluent-builder object which will let you specify the test further.
+     * </p>
+     * <p>
+     * The request you specify in this method can be an instance of one of the in-built {@link HttpRequest request types}
+     * provided with Bastion itself. You can also supply your own implementation of a request by subclassing {@link HttpRequest}.
+     * </p>
+     *
+     * @param request The HTTP request that Bastion will execute for this test.
+     * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
+     */
+    public static BastionBuilder<Object> request(HttpRequest request) {
+        return BastionFactory.getDefaultBastionFactory().getBastion("", request);
+    }
+
+    /**
+     * <p>
+     * Loads Bastion's configuration from the provided resource location. The resource location should be a valid .yml file that
+     * corresponds to the same schema as a {@link Configuration}.
+     * </p>
+     *
+     * @see Configuration
+     * @see ResourceLoader
+     * @param resourceLocation The resource location for the Bastion configuration.
+     * @return The loaded configuration.
+     */
+    public static Configuration loadConfiguration(String resourceLocation) {
+        requireNonNull(resourceLocation, "The resource location cannot be null.");
+        return BastionFactory.loadConfiguration(resourceLocation);
+    }
+
+    /**
+     * <p>
+     * Starts building or modifying the configuration of the {@link GlobalRequestAttributes} for Bastion.
+     * </p>
+     *
+     * @return The configured global request attributes.
+     */
+    public static GlobalRequestAttributes globals() {
+        return BastionFactory.getDefaultBastionFactory().getConfiguration().getGlobalRequestAttributes();
     }
 
     private Bastion() {
         // This class should not be instantiated.
     }
-
 }

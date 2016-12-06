@@ -13,6 +13,7 @@ public class GroovyCreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
     public void secondTestCreateSushi_Success() {
+        // docs:groovy-example
         Bastion.request("First Request", JsonRequest.postFromString("http://localhost:9876/sushi",
                 '''{
                 "name":"sashimi",
@@ -28,5 +29,6 @@ public class GroovyCreateSushiTest extends TestWithEmbeddedServer {
                 }'''
         ).ignoreValuesForProperties("/id")
         ).call()
+        // docs:groovy-example
     }
 }
