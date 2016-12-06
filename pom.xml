@@ -228,11 +228,14 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <backend>html5</backend>
+                    <sourceHighlighter>coderay</sourceHighlighter>
                     <sourceDirectory>${project.basedir}/src/docs/asciidoc</sourceDirectory>
                     <outputDirectory>${project.basedir}/docs</outputDirectory>
-                    <backend>html</backend>
                     <embedAssets>true</embedAssets>
                     <attributes>
+                        <imagesdir>src/docs/asciidoc/images</imagesdir>
+                        <icons>font</icons>
                         <bastion-version>${project.version}</bastion-version>
                     </attributes>
                 </configuration>

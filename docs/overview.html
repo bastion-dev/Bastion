@@ -416,6 +416,98 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
 </head>
 <body class="article">
 <div id="header">
@@ -442,9 +534,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_assertions">5. Assertions</a>
 <ul class="sectlevel2">
-<li><a href="#_json_assertion">5.1. JSON Assertion</a></li>
-<li><a href="#_json_schema">5.2. JSON Schema</a></li>
-<li><a href="#_custom_assertions">5.3. Custom Assertions</a></li>
+<li><a href="#json-assertions">5.1. JSON Assertion</a></li>
+<li><a href="#json-schema-assertions">5.2. JSON Schema Assertion</a></li>
+<li><a href="#custom-assertions">5.3. Custom Assertions</a></li>
 </ul>
 </li>
 <li><a href="#_binding_a_model">6. Binding a Model</a></li>
@@ -460,10 +552,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Warning">
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Hey! Fix all Bastion requests without descriptive text!
+Heyo! Fix all Bastion requests without descriptive text!
 </td>
 </tr>
 </table>
@@ -488,7 +580,7 @@ the Bastion API, please see the <a href="http://bastion.rocks/javadocs/index.htm
 <div class="sect2">
 <h3 id="_maven">1.1. Maven</h3>
 <div class="paragraph">
-<p>For Java projects with a pom.xml file, you can add the following dependency to your &lt;dependencies&gt; section to download Bastion and make
+<p>For Java projects with a <code>pom.xml</code> file, you can add the following dependency to your <code>&lt;dependencies&gt;</code> section to download Bastion and make
 it available for your project&#8217;s tests.</p>
 </div>
 <div class="listingblock">
@@ -506,7 +598,7 @@ it available for your project&#8217;s tests.</p>
 <h3 id="_groovy_grapes">1.2. Groovy Grapes</h3>
 <div class="paragraph">
 <p>If you are using Groovy scripts for your tests, you can easily download Bastion directly from within your script files, using Groovy Grapes.
-Add the following line to your import statement to download Bastion and make it available to your script.</p>
+Add the following line to your <code>import</code> statement to download Bastion and make it available to your script.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -538,29 +630,29 @@ import rocks.bastion.Bastion</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@RunWith(BastionRunner.class)
-public class VatValidatorTest {
-    @Test
-    public void callValidateVatNumber_returnsAmazonVatData() {
-        Bastion.request("Validate Amazon's VAT Number", GeneralRequest.get("http://vatlayer.com/php_helper_scripts/vat_api.php")
-                .addQueryParam("secret_key", "577b6fb6551df7f3532ecbd45ea07ddd")
-                .addQueryParam("vat_number", "LU26375245")
-        ).withAssertions(JsonResponseAssertions.fromResource(200, "classpath:/json/amazon_vat.json")).call();
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(BastionRunner.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">VatValidatorTest</span> {
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> callValidateVatNumber_returnsAmazonVatData() {
+        Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Validate Amazon's VAT Number</span><span class="delimiter">&quot;</span></span>, GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vatlayer.com/php_helper_scripts/vat_api.php</span><span class="delimiter">&quot;</span></span>)
+                .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">577b6fb6551df7f3532ecbd45ea07ddd</span><span class="delimiter">&quot;</span></span>)
+                .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">vat_number</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LU26375245</span><span class="delimiter">&quot;</span></span>)
+        ).withAssertions(JsonResponseAssertions.fromResource(<span class="integer">200</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/amazon_vat.json</span><span class="delimiter">&quot;</span></span>)).call();
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this test, we make a simple GET request on the URL http://vatlayer.com/php_helper_scripts/vat_api.php. We add two query parameters
-to the request namely, secret_key and vat_number. We then expect a JSON response using a JsonResponseAssertions object. This assertions
-object will check that the status code is 200 (as specified by the user), and that the content-type header returned is indeed application/json.
-It will also check that the returned JSON content matches that found in the json/amazon_vat.json file.</p>
+<p>In this test, we make a simple <code>GET</code> request on the URL <code><a href="http://vatlayer.com/php_helper_scripts/vat_api.php" class="bare">http://vatlayer.com/php_helper_scripts/vat_api.php</a></code>. We add two query parameters
+to the request namely, <code>secret_key</code> and <code>vat_number</code>. We then expect a JSON response using a <code>JsonResponseAssertions</code> object. This assertions
+object will check that the status code is <code>200</code> (as specified by the user), and that the content-type header returned is indeed <code>application/json</code>.
+It will also check that the returned JSON content matches that found in the <code>json/amazon_vat.json</code> file.</p>
 </div>
 <div class="paragraph">
 <p>Notice that this JSON comparison is not a straight-up text equality comparison: instead, it structurally compares the actual received JSON to
 the expected JSON as if they were objects. Changing the order of properties in the response won&#8217;t matter. Even better, say the test fails, Bastion
 will tell you exactly what operations you need to perform to the response to get the expected outcome. Here is an example of an error output when
-the JsonResponseAssertions fail:</p>
+the <code>JsonResponseAssertions</code> fail:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -570,7 +662,7 @@ operations you need to perform to transform the actual response body into the ex
 </div>
 </div>
 <div class="paragraph">
-<p>We can see how the error tells us to change the value in the /country_code property to MT.</p>
+<p>We can see how the error tells us to change the value in the <code>/country_code</code> property to <code>MT</code>.</p>
 </div>
 <div class="paragraph">
 <p>This is only a taste of what Bastion can do. In the rest of the sections in this user guide, we explain all the features
@@ -582,28 +674,28 @@ of Bastion and how you can even extend the library to create your own requests a
 <h2 id="_overview">3. Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Bastion tests are implemented using the Bastion builder. This class provides a fluent-like interface for specifying tests. In the code snippet
+<p>Bastion tests are implemented using the <code>Bastion</code> builder. This class provides a fluent-like interface for specifying tests. In the code snippet
 below, we show how all the methods of the builder would look like when executed together.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Bastion.request(...)        <img src="data:image/png:base64," alt="1">
-       .bind(...)           <img src="data:image/png:base64," alt="2">
-       .withAssertions(...) <img src="data:image/png:base64," alt="3">
-       .thenDo(...)         <img src="data:image/png:base64," alt="4">
-       .call()              <img src="data:image/png:base64," alt="5">
-       .getModel()          <img src="data:image/png:base64," alt="6"></pre>
+<pre>Bastion.request(...)        <i class="conum" data-value="1"></i><b>(1)</b>
+       .bind(...)           <i class="conum" data-value="2"></i><b>(2)</b>
+       .withAssertions(...) <i class="conum" data-value="3"></i><b>(3)</b>
+       .thenDo(...)         <i class="conum" data-value="4"></i><b>(4)</b>
+       .call()              <i class="conum" data-value="5"></i><b>(5)</b>
+       .getModel()          <i class="conum" data-value="6"></i><b>(6)</b></pre>
 </div>
 </div>
 <div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Important">
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-This shows the basic structure of a Bastion test. Each one of the methods listed above (except request() and call()) is optional but they still
-must be specified in the order above. If you chose to skip withAssertions(), for example, you must call bind() before call(). The list below
+This shows the basic structure of a Bastion test. Each one of the methods listed above (except <code>request()</code> and <code>call()</code>) is optional but they still
+must be specified in the order above. If you chose to skip <code>withAssertions()</code>, for example, you must call <code>bind()</code> before <code>call()</code>. The list below
 explains each one of these methods separately.
 </td>
 </tr>
@@ -612,45 +704,45 @@ explains each one of these methods separately.
 <div class="colist arabic">
 <table>
 <tr>
-<td><img src="data:image/png:base64," alt="1"></td>
-<td>request(): This method is the main entry-point to create a Bastion test. You must specify a name which will identify this test in test reports
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>request()</code>: This method is the main entry-point to create a Bastion test. You must specify a name which will identify this test in test reports
 and also provide a <em>request</em> object that tells Bastion what kind of HTTP request to send. Bastion provides a number of different
-built-in requests you can use (eg. JsonRequest) but you can also implement your own request types. For a list of all built-in requests see
+built-in requests you can use (eg. <code>JsonRequest</code>) but you can also implement your own request types. For a list of all built-in requests see
 [Requests](#requests). The [Custom Requests](#custom-requests) section explains how to implement your own requests.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="2"></td>
-<td>bind(): Tells Bastion which model class to use when interpreting the incoming HTTP entity. When Bastion receives a response from the remote
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>bind()</code>: Tells Bastion which model class to use when interpreting the incoming HTTP entity. When Bastion receives a response from the remote
 server, it will decode the received entity data into an object of the given type. If this decoding process fails for some reason,
-the entire test is marked as failed. By providing a model class using the bind() method, you&#8217;ll have this type information available
-for later on when calling the withAssertions(), thenDo(), getModel() and getResponse().getModel() methods.</td>
+the entire test is marked as failed. By providing a model class using the <code>bind()</code> method, you&#8217;ll have this type information available
+for later on when calling the <code>withAssertions()</code>, <code>thenDo()</code>, <code>getModel()</code> and <code>getResponse().getModel()</code> methods.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="3"></td>
-<td>withAssertions(): Takes an <em>assertions</em> object which will verify that the response returned by the remote server is correct.
-Bastion provides a number of different built-in assertion objects for common verifications you might want to do (eg. JsonResponseAssertions) but you can also
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>withAssertions()</code>: Takes an <em>assertions</em> object which will verify that the response returned by the remote server is correct.
+Bastion provides a number of different built-in assertion objects for common verifications you might want to do (eg. <code>JsonResponseAssertions</code>) but you can also
 implement your own assertions. For a list of all built-in assertions see [Assertions](#assertions). The
 [Custom Assertions](#custom-assertions) section explains how to implement your own assertions.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="4"></td>
-<td>thenDo(): Takes a <em>Callback</em> object which will be executed when the response is received and the assertions pass. This is useful if you would
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>thenDo()</code>: Takes a <em>Callback</em> object which will be executed when the response is received and the assertions pass. This is useful if you would
 like to perform specific actions after Bastion requests. This could be logging the response, for example, or saving authentication data for future
 Bastion requests.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="5"></td>
-<td>call(): Executes the API request configured with the previous commands. Any assertions will be applied on the received response. The call operation
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>call()</code>: Executes the API request configured with the previous commands. Any assertions will be applied on the received response. The call operation
 will fail if Bastion is unable to bind the received response to a model or the assertions fail.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="6"></td>
-<td>getResponse(): After the call() method is executed, you can get the HTTP response object received using the getResponse() method. The returned
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>getResponse()</code>: After the <code>call()</code> method is executed, you can get the HTTP response object received using the <code>getResponse()</code> method. The returned
 response object will contain the bound model obtained from the response data.</td>
 </tr>
 <tr>
-<td><img src="data:image/png:base64," alt="7"></td>
-<td>getModel(): After the call() method is executed, you can get the bound model obtained from the response data.</td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><code>getModel()</code>: After the <code>call()</code> method is executed, you can get the bound model obtained from the response data.</td>
 </tr>
 </table>
 </div>
@@ -660,14 +752,14 @@ response object will contain the bound model obtained from the response data.</t
 <h2 id="_requests">4. Requests</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Request</em> objects are passed to the request() method which is the first builder method invoked when using the Bastion builder. A Request object
-defines the HTTP data that is sent to the remote server while the test is executing. We suggest using one of the built-in Request subclasses when
-supplying your request data. Alternatively, if none of the built-in request subclasses are useful, you can create your own Request subclass
+<p><em>Request</em> objects are passed to the <code>request()</code> method which is the first builder method invoked when using the <code>Bastion</code> builder. A <code>Request</code> object
+defines the HTTP data that is sent to the remote server while the test is executing. We suggest using one of the built-in <code>Request</code> subclasses when
+supplying your request data. Alternatively, if none of the built-in request subclasses are useful, you can create your own <code>Request</code> subclass
 as explained in the section <a href="#custom-requests">Custom Requests</a></p>
 </div>
 <div class="paragraph">
 <div class="title">Built-in request classes</div>
-<p>Bastion provides the following list of built-in Request subclasses:</p>
+<p>Bastion provides the following list of built-in <code>Request</code> subclasses:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -685,19 +777,19 @@ as if the data was submitted using an HTML form.</p>
 </div>
 <div id="request-attributes" class="paragraph">
 <div class="title">Adding request attributes</div>
-<p>Any Request supports the following attributes, some of which are standard to HTTP:</p>
+<p>Any <code>Request</code> supports the following attributes, some of which are standard to HTTP:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Headers</strong>: Use the addHeader() method to add a header to a request.</p>
+<p><strong>Headers</strong>: Use the <code>addHeader()</code> method to add a header to a request.</p>
 </li>
 <li>
-<p><strong>Query Parameters</strong>: Use the addQueryParam() method to add a query parameter to a request.</p>
+<p><strong>Query Parameters</strong>: Use the <code>addQueryParam()</code> method to add a query parameter to a request.</p>
 </li>
 <li>
-<p><strong>Route Parameters</strong>: Use the addRouteParam() method to add a route parameter value to a request. Route parameters are placeholder variables
-(delimited using a pair of braces) in the request&#8217;s URL which are then replaced by values which you specify using the addRouteParam() method.
+<p><strong>Route Parameters</strong>: Use the <code>addRouteParam()</code> method to add a route parameter value to a request. Route parameters are placeholder variables
+(delimited using a pair of braces) in the request&#8217;s URL which are then replaced by values which you specify using the <code>addRouteParam()</code> method.
 The following is an example of a URL with route parameters:</p>
 </li>
 </ul>
@@ -710,80 +802,89 @@ The following is an example of a URL with route parameters:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Content Type</strong>:</p>
+<p><strong>Content Type</strong>: The content type header describes the format for the data in the request&#8217;s payload. The content type is expressed as a MIME
+type string. The content type <em>may change</em> how Bastion formats the request&#8217;s entity type body. See the particular request&#8217;s section in this user
+guide for more information about how to set the content type.</p>
 </li>
 <li>
-<p><strong>Entity Body</strong>:</p>
+<p><strong>Entity Body</strong>: Contains the payload data that is sent with the request. Each different type of request defines its own way of accepting a body
+object. <code>JsonRequest</code> for example accepts a file, JSON string or template and the accepted data will be sent as JSON in the request&#8217;s body. You
+need to see the specific request&#8217;s type documentation for more information about how to provide the entity body data.</p>
 </li>
 </ul>
 </div>
 <div class="sect2">
 <h3 id="general-request">4.1. General Request</h3>
 <div class="paragraph">
-<p>GeneralRequest is the universal HTTP request, able to take any arbitrary entity data string. To initialise a new GeneralRequest use any of the following
+<p><code>GeneralRequest</code> is the universal HTTP request, able to take any arbitrary entity data string. To initialise a new <code>GeneralRequest</code> use any of the following
 static factory methods, giving the URL you want to send the request on:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>GeneralRequest.get(): Initialise an HTTP GET request.</p>
+<p><code>GeneralRequest.get()</code>: Initialise an HTTP <code>GET</code> request.</p>
 </li>
 <li>
-<p>GeneralRequest.post(): Initialise an HTTP post() request. This method also takes a string to use as the HTTP entity data (use GeneralRequest.EMPTY_BODY to send no data).</p>
+<p><code>GeneralRequest.post()</code>: Initialise an HTTP <code>post()</code> request. This method also takes a string to use as the HTTP entity data (use <code>GeneralRequest.EMPTY_BODY</code> to send no data).</p>
 </li>
 <li>
-<p>GeneralRequest.delete(): Initialise an HTTP delete() request. This method also takes a string to use as the HTTP entity data (use GeneralRequest.EMPTY_BODY to send no data).</p>
+<p><code>GeneralRequest.delete()</code>: Initialise an HTTP <code>delete()</code> request. This method also takes a string to use as the HTTP entity data (use <code>GeneralRequest.EMPTY_BODY</code> to send no data).</p>
 </li>
 <li>
-<p>GeneralRequest.put(): Initialise an HTTP put() request. This method also takes a string to use as the HTTP entity data (use GeneralRequest.EMPTY_BODY to send no data).</p>
+<p><code>GeneralRequest.put()</code>: Initialise an HTTP <code>put()</code> request. This method also takes a string to use as the HTTP entity data (use <code>GeneralRequest.EMPTY_BODY</code> to send no data).</p>
 </li>
 <li>
-<p>GeneralRequest.patch(): Initialise an HTTP patch() request. This method also takes a string to use as the HTTP entity data (use GeneralRequest.EMPTY_BODY to send no data).</p>
+<p><code>GeneralRequest.patch()</code>: Initialise an HTTP <code>patch()</code> request. This method also takes a string to use as the HTTP entity data (use <code>GeneralRequest.EMPTY_BODY</code> to send no data).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Calling any of the above methods will give you an initialised GeneralRequest object which can be used with Bastion.request(). The request will not initially
+<p>Calling any of the above methods will give you an initialised <code>GeneralRequest</code> object which can be used with <code>Bastion.request()</code>. The request will not initially
 have any HTTP headers, query parameters or route parameters.</p>
 </div>
 <div class="paragraph">
-<p>Once you have an instance of GeneralRequest, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong>, <strong>Route Parameters</strong> and <strong>Content type</strong> as
+<p>Once you have an instance of <code>GeneralRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong>, <strong>Route Parameters</strong> as
 explained in section <a href="#request-attributes">Adding request attributes</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Bastion.request("Get Sushi",
-    GeneralRequest.get("http://sushi.test/sushi/5")
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Get Sushi</span><span class="delimiter">&quot;</span></span>,
+    GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi.test/sushi/5</span><span class="delimiter">&quot;</span></span>)
+        .addHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-Table-Number</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">13</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+By default, the <code>GeneralRequest</code> will have content type <code>text/plain</code>. Use <code>setContentType()</code> on the request to change the content type
+to something else.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="json-request">4.2. JSON Request</h3>
 <div class="paragraph">
-<p>JsonRequest is a request object specially designed to handle JSON data. Unlike GeneralRequest, JsonRequest will set the appropriate content type header
-to indicate that the data being sent has mime-type application/json. The request object is initialised using a JSON string (or file) and will validate the
-given data to ensure that it is valid JSON (if you don&#8217;t want this validation, use GeneralRequest instead). To initialise a new JsonRequest use any of the
-following static factory methods, giving the URL you want to send the request on:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JsonRequest.fromString(): Allows you to create a JsonRequest with the given HTTP method (GET, POST, etc.) and the given JSON string.</p>
-</li>
-<li>
-<p>JsonRequest.fromResource(): Allows you to create a JsonRequest with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.</p>
-</li>
-<li>
-<p>JsonRequest.fromTemplate(): Like fromResource() but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.</p>
-</li>
-</ul>
+<p><code>JsonRequest</code> is a request object specially designed to handle JSON data. Unlike <code>GeneralRequest</code>, <code>JsonRequest</code> will set the appropriate content type header
+to indicate that the data being sent has mime-type <code>application/json</code>. The request object is initialised using a JSON string (or file) and will validate the
+given data to ensure that it is valid JSON (if you don&#8217;t want this validation, use <code>GeneralRequest</code> instead). To initialise a new <code>JsonRequest</code> use any of the
+following static factory methods, giving the URL you want to send the request on:
+this assertions object
+* <code>JsonRequest.fromString()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method (<code>GET</code>, <code>POST</code>, etc.) and the given JSON string.
+* <code>JsonRequest.fromResource()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
+* <code>JsonRequest.fromTemplate()</code>: Like <code>fromResource()</code> but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Warning">
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
 The request object here will <strong>validate</strong> that the provided data is valid JSON, in all cases. If you want to send invalid JSON, see <a href="#general-request">General Request</a> instead.
@@ -792,24 +893,24 @@ The request object here will <strong>validate</strong> that the provided data is
 </table>
 </div>
 <div class="paragraph">
-<p>The factory methods above also have utility methods which do not take an HttpMethod argument as follows:</p>
+<p>The factory methods above also have utility methods which do not take an <code>HttpMethod</code> argument as follows:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>JsonRequest.postFromString()</p>
+<p><code>JsonRequest.postFromString()</code></p>
 </li>
 <li>
-<p>JsonRequest.postFromResource()</p>
+<p><code>JsonRequest.postFromResource()</code></p>
 </li>
 <li>
-<p>JsonRequest.postfromTemplate()</p>
+<p><code>JsonRequest.postfromTemplate()</code></p>
 </li>
 <li>
-<p>JsonRequest.putFromString()</p>
+<p><code>JsonRequest.putFromString()</code></p>
 </li>
 <li>
-<p>JsonRequest.putFromResource()</p>
+<p><code>JsonRequest.putFromResource()</code></p>
 </li>
 <li>
 <p>&#8230;&#8203; and so on.</p>
@@ -817,19 +918,20 @@ The request object here will <strong>validate</strong> that the provided data is
 </ul>
 </div>
 <div class="paragraph">
-<p>Once you have an instance of JsonRequest, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
-explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using overrideContentType().</p>
+<p>Once you have an instance of <code>JsonRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
+explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using <code>overrideContentType()</code>
+(by default, <code>application/json</code> is sent).</p>
 </div>
 <div class="paragraph">
 <div class="title">JSON request from a string</div>
-<p>Use the fromString() family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
+<p>Use the <code>fromString()</code> family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
 your JSON request, as you would using an HTTP client, and Bastion will take care of all the other details related to JSON requests
 for you.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Bastion.request(JsonRequest.putFromString("http://test.test",
-    "{ \"key\":\"value\", \"array\":[ \"1\", \"test\" ] }")
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.putFromString(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://test.test</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">key</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">value</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">array</span><span class="char">\&quot;</span><span class="content">:[ </span><span class="char">\&quot;</span><span class="content">1</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">test</span><span class="char">\&quot;</span><span class="content"> ] }</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
 </div>
@@ -837,7 +939,7 @@ for you.</p>
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Tip">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 In a language like Java, typing the request data directly in the test can quickly start becoming unwieldy due to all
@@ -849,28 +951,28 @@ you to avoid all the unnecessary escape characters.
 </div>
 <div class="paragraph">
 <div class="title">JSON request from a file</div>
-<p>Use the fromResource() family of static factory methods to load a simple JSON file as the HTTP entity body. The fromResource()
-methods can take any URL including those beginning with the classpath: prefix (which loads a file from the
+<p>Use the <code>fromResource()</code> family of static factory methods to load a simple JSON file as the HTTP entity body. The <code>fromResource()</code>
+methods can take any URL including those beginning with the <code>classpath:</code> prefix (which loads a file from the
 classpath).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Bastion.request(JsonRequest.postFromResource("http://localhost:8080/login",
-    "classpath:/fixtures/login-request.json")
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/login</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/fixtures/login-request.json</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <div class="title">JSON request from a template</div>
-<p>The fromTemplate() family of static factory methods are similar to fromResource() but they also take any additional argument
+<p>The <code>fromTemplate()</code> family of static factory methods are similar to <code>fromResource()</code> but they also take any additional argument
 containing a map where the keys are variable names and the values are the replacement values for the variable placeholders in the
 template.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Bastion.request(JsonRequest.postFromTemplate("http://awesomewebsite.test",
-    "classpath:/rocks/bastion/core/request/test-template-body.json",
-    Collections.singletonMap("food", "apples")
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromTemplate(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://awesomewebsite.test</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/rocks/bastion/core/request/test-template-body.json</span><span class="delimiter">&quot;</span></span>,
+    <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">food</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">apples</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
 </div>
@@ -879,27 +981,27 @@ template.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">{
-  "name": "john",
-  "timestamp": "2016-10-15T20:00:25+0100",
-  "favourites": {
-    "food": "{{ food }}",
-    "colours": ["blue", "red"],
-    "number": 23
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timestamp</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2016-10-15T20:00:25+0100</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">favourites</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">food</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">{{ food }}</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">colours</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>],
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span>: <span class="integer">23</span>
   }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice the food variable in the template: this will get replaced by the value apples in the test.</p>
+<p>Notice the <code>food</code> variable in the template: this will get replaced by the value <code>apples</code> in the test.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="form-url-encoded-request">4.3. Form URL Encoded Data Request</h3>
 <div class="paragraph">
-<p>FormUrlEncodedRequest is a request object that allows you send URL encoded data as part of the HTTP request. This request is equivalent to
-requests sent by HTML forms (hence the Form in the name). The request will automatically be configured to have the mime-type application/x-www-form-urlencoded.
-Unlike JsonRequest, after initialising a ForumUrlEncodedRequest, you will need to call additional method to fill in the request&#8217;s data.</p>
+<p><code>FormUrlEncodedRequest</code> is a request object that allows you send URL encoded data as part of the HTTP request. This request is equivalent to
+requests sent by HTML forms (hence the <code>Form</code> in the name). The request will automatically be configured to have the mime-type <code>application/x-www-form-urlencoded</code>.
+Unlike <code>JsonRequest</code>, after initialising a <code>ForumUrlEncodedRequest</code>, you will need to call additional method to fill in the request&#8217;s data.</p>
 </div>
 <div class="paragraph">
 <p>First, use any of the following static factory methods and specify the URL to send the request to:</p>
@@ -907,19 +1009,19 @@ Unlike JsonRequest, after initialising a ForumUrlEncodedRequest, you will need t
 <div class="ulist">
 <ul>
 <li>
-<p>FormUrlEncodedRequest.post()</p>
+<p><code>FormUrlEncodedRequest.post()</code></p>
 </li>
 <li>
-<p>FormUrlEncodedRequest.put()</p>
+<p><code>FormUrlEncodedRequest.put()</code></p>
 </li>
 <li>
-<p>FormUrlEncodedRequest.delete()</p>
+<p><code>FormUrlEncodedRequest.delete()</code></p>
 </li>
 <li>
-<p>FormUrlEncodedRequest.patch()</p>
+<p><code>FormUrlEncodedRequest.patch()</code></p>
 </li>
 <li>
-<p>FormUrlEncodedRequest.withMethod()</p>
+<p><code>FormUrlEncodedRequest.withMethod()</code></p>
 </li>
 </ul>
 </div>
@@ -927,29 +1029,30 @@ Unlike JsonRequest, after initialising a ForumUrlEncodedRequest, you will need t
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Tip">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The withMethod() factory method allows you choose any HTTP method you want (including GET). Use it when none of the
+The <code>withMethod()</code> factory method allows you choose any HTTP method you want (including <code>GET</code>). Use it when none of the
 other standard factory methods are suitable for your test.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Once you have an instance of FormUrlEncodedRequest, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
-explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using overrideContentType().</p>
+<p>Once you have an instance of <code>FormUrlEncodedRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
+explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using <code>overrideContentType()</code> (by
+default, <code>application/x-www-form-urlencoded</code> is sent).</p>
 </div>
 <div class="paragraph">
-<p>More importantly, use the addDataParameter() or addDataParameters() methods to add the data
-which will go into the request&#8217;s entity body. The FormUrlEncodedRequest will automatically format the data you supply, internally,
-into a URL encoded string. An example, using FormUrlEncodedRequest follows below,</p>
+<p>More importantly, use the <code>addDataParameter()</code> or <code>addDataParameters()</code> methods to add the data
+which will go into the request&#8217;s entity body. The <code>FormUrlEncodedRequest</code> will automatically format the data you supply, internally,
+into a URL encoded string. An example, using <code>FormUrlEncodedRequest</code> follows below,</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Bastion.request(FormUrlEncodedRequest.post("http://awesomewebsite.test/submit.php")
-    .addDataParameter("name", "John Doe")
-    .addDataParameter("country", "MT")
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(FormUrlEncodedRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://awesomewebsite.test/submit.php</span><span class="delimiter">&quot;</span></span>)
+    .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>)
+    .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">country</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">MT</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
 </div>
@@ -962,53 +1065,57 @@ using a particular request in your tests. For the sake of maintainability and be
 initialising the same request, over and over again, by implementing your own request type.</p>
 </div>
 <div class="paragraph">
-<p>The relevant interface to implement is HttpRequest. This interface defines the following methods which you need to implement:</p>
+<p>The relevant interface to implement is <code>HttpRequest</code>. This interface defines the following methods which you need to implement:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>name(): Returns a descriptive name of the current request object. This name <em>might</em> appear in test reports, so returning
+<p><code>name()</code>: Returns a descriptive name of the current request object. This name <em>might</em> appear in test reports, so returning
 a good name helps you debug faster when a problem occurs.</p>
 </li>
 <li>
-<p>url(): Returns the URL string which the request will be sent to. Bastion is quite lenient on what constitutes a valid URL.
+<p><code>url()</code>: Returns the URL string which the request will be sent to. Bastion is quite lenient on what constitutes a valid URL.
 If a question mark appears in the URL, for example, anything after the question mark will be added to the request&#8217;s query parameters.</p>
 </li>
 <li>
-<p>method(): Returns the HTTP method that the request will be sent with. This could be GET, POST, PUT, etc.</p>
+<p><code>method()</code>: Returns the HTTP method that the request will be sent with. This could be <code>GET</code>, <code>POST</code>, <code>PUT</code>, etc.</p>
 </li>
 <li>
-<p>contentType(): Returns the value which will be used for the Content-type HTTP header. You can are not required to return
-a content type, hence this method returns an Optional value.</p>
+<p><code>contentType()</code>: Returns the value which will be used for the <code>Content-type</code> HTTP header. You are not required to return
+a content type, hence this method returns an <code>Optional</code> value.</p>
 </li>
 <li>
-<p>headers(): Returns the possibly empty Collection of ApiHeader objects (or rather, HTTP headers) which will be sent with the request.</p>
+<p><code>headers()</code>: Returns the possibly empty <code>Collection</code> of <code>ApiHeader</code> objects (or rather, HTTP headers) which will be sent with the request.</p>
 </li>
 <li>
-<p>queryParams(): Returns the possibly empty Collection of ApiQueryParam objects which are sent with the HTTP request.</p>
+<p><code>queryParams()</code>: Returns the possibly empty <code>Collection</code> of <code>ApiQueryParam</code> objects which are sent with the HTTP request.</p>
 </li>
 <li>
-<p>routeParams(): Returns the values to use for filling in any route parameters in this request&#8217;s URL. Route parameters are
+<p><code>routeParams()</code>: Returns the values to use for filling in any route parameters in this request&#8217;s URL. Route parameters are
 variables, enclosed within a pair of braces, in the requet&#8217;s URL.</p>
 </li>
 <li>
-<p>body(): Returns the object to use for the HTTP entity body. Bastion will typically send the returned object&#8217;s toString()
+<p><code>body()</code>: Returns the object to use for the HTTP entity body. Bastion will typically send the returned object&#8217;s <code>toString()</code>
 value but this <em>might</em> be depend on the request&#8217;s content type.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve implemented your own HttpRequest, you can then pass it, as if it was any other request, to the Bastion.request()
+<p>Once you&#8217;ve implemented your own <code>HttpRequest</code>, you can then pass it, as if it was any other request, to the <code>Bastion.request()</code>
 method.</p>
+</div>
+<div class="paragraph">
+<p>The built-in <code>HttpRequest</code> implementations provided with Bastion are good examples. A simpler example is found in the test sources called
+<code>CreateSushiRequest</code>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<img src="data:image/png:base64," alt="Tip">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you&#8217;ve developed a general HttpRequest which you think might be useful for the Bastion community and other users,
+If you&#8217;ve developed a <code>HttpRequest</code> implementation which you think might be useful for the Bastion community and other users,
 please consider submitting a pull request to the main Bastion repository. See the <a href="#contribute">Contribute</a> section for more information.
 </td>
 </tr>
@@ -1021,38 +1128,97 @@ please consider submitting a pull request to the main Bastion repository. See th
 <h2 id="_assertions">5. Assertions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Assertions</em> objects are passed to the withAssertions() method which is called either after the request() method or the bind() method when using the
-Bastion builder. An Assertions objects defines the test predicate applied on the received HTTP response. If any of the applied assertions fail, then
-the test fails. Certain Assertions objects will provide helpful messages and logs to explain how to transform the received response into the expected response.
-When supplying Assertions using the withAssertions() method, you can use the and() method on the Assertions themselves to chain Assertions together.</p>
+<p><em>Assertions</em> objects are passed to the <code>withAssertions()</code> method which is called either after the <code>request()</code> method or the <code>bind()</code> method when using the
+<code>Bastion</code> builder. An <code>Assertions</code> objects defines the test predicate applied on the received HTTP response. If any of the applied assertions fail, then
+the test fails. Certain <code>Assertions</code> objects will provide helpful messages and logs to explain how to transform the received response into the expected response.
+When supplying <code>Assertions</code> using the <code>withAssertions()</code> method, you can use the <code>and()</code> method on the Assertions themselves to chain <code>Assertions</code> together.</p>
 </div>
 <div class="paragraph">
-<p>We suggest using one of the built-in Assertions subclasses when defining your tests. Alternatively, if none of the built-in assertions subclasses are
-useful, you can create your own Assertions subclass as explained in the section [Custom Assertions](#custom-assertions).</p>
+<p>We suggest using one of the built-in <code>Assertions</code> subclasses when defining your tests. Alternatively, if none of the built-in assertions subclasses are
+useful, you can create your own <code>Assertions</code> subclass as explained in the section <a href="#custom-assertions">Custom Assertions</a>.</p>
 </div>
 <div class="paragraph">
-<p>Bastion provides the following list of built-in Assertions subclasses.</p>
+<p>Bastion provides the following list of built-in <code>Assertions</code> subclasses.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>[JsonResponseAssertions](#json-response-assertions): Asserts that a received response is in JSON format and that the received response data is as expected.</p>
+<p><a href="#json-assertions">JsonResponseAssertions</a>: Asserts that a received response is in JSON format and that the received response data is as expected.</p>
 </li>
 <li>
-<p>[JsonSchemaAssertions](#json-schema-assertions): Asserts that a received response is in JSON format and that the received response data at least conforms to the given JSON schema.</p>
+<p><a href="#json-schema">JsonSchemaAssertions</a>: Asserts that a received response is in JSON format and that the received response data at least conforms to the given JSON schema.</p>
 </li>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_json_assertion">5.1. JSON Assertion</h3>
+<h3 id="json-assertions">5.1. JSON Assertion</h3>
+<div class="paragraph">
+<p>Similar to <a href="#json-request">JSON requests</a>, <code>JsonResponseAssertions</code> lets you test that specific JSON data has been received. The expected JSON data
+can be given as a JSON string, loading from a file or loading and compiled from a template file.</p>
+</div>
+<div class="paragraph">
+<p>It is important to realise that when comparing the expected JSON with the actual JSON received in the response, Bastion will be smart enough
+to ignore any trivial differences in the data. In particular, JSON is compared structurally as opposed to a straight-up string equality check.
+Properties (not array values!) may be in a different order and there might be whitespace in the received data, but unless the JSON structure
+is different, the test will pass.</p>
+</div>
+<div class="paragraph">
+<p>First, you must initialise a <code>JsonResponseAssertions</code> object using one of the three static factory methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>JsonResponseAssertions.fromString()</code>: Allows you to create a <code>JsonResponseAssertions</code> expecting the given HTTP status code and the given
+JSON.</p>
+</li>
+<li>
+<p><code>JsonResponseAssertions.fromResource()</code>: Allows you to create a <code>JsonResponseAssertions</code> expecting the given HTTP status code. The JSON data to send is loaded from the given file or classpath resource.</p>
+</li>
+<li>
+<p><code>JsonResponseAssertions.fromTemplate()</code>: Like <code>fromResource()</code> but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map.
+The resulting data is then used as the expected JSON entity for the assertions.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The assertions object here will <strong>validate</strong> that the provided expected JSON is valid.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once you have a <code>JsonResponseAssertions</code> object, you can call the following methods on it, which will change the behaviour of the assertions
+Bastion performs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>overrideContentType()</code>: Changes the expected content type header of the response. By default, Bastion will check that the content type
+is <code>application/json</code> for the assertions to pass. You can change it using this method, if you need to.</p>
+</li>
+<li>
+<p><code>ignoreValuesForProperties()</code>: Ignores the value returned in the response for the specified JSON properties. This is useful if you have an
+auto-generated ID in the response, for example. Bastion will still check that the property appears in the response but will ignore any
+difference in its value.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Examples go here</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="json-schema-assertions">5.2. JSON Schema Assertion</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_json_schema">5.2. JSON Schema</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_custom_assertions">5.3. Custom Assertions</h3>
+<h3 id="custom-assertions">5.3. Custom Assertions</h3>
 
 </div>
 </div>
@@ -1094,12 +1260,12 @@ you&#8217;re unsure about anything: we&#8217;ll help you get your submission up 
 </li>
 <li>
 <p>You can also [submit a pull request](<a href="https://github.com/KPull/Bastion/pulls" class="bare">https://github.com/KPull/Bastion/pulls</a>) which is not related to any of the issues currently on GitHub. If you have
-developed your own Request or Assertions implementations, for example, and you believe they could be useful to the rest of the Bastion community,
+developed your own <code>Request</code> or <code>Assertions</code> implementations, for example, and you believe they could be useful to the rest of the Bastion community,
 we will add them to the library for use in future versions of Bastion.</p>
 </li>
 <li>
 <p>Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,
-grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the src/docs/md
+grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the <code>src/docs/md</code>
 directory.</p>
 </li>
 <li>
@@ -1112,7 +1278,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-03 12:21:41 CET
+Last updated 2016-12-06 21:33:34 CET
 </div>
 </div>
 </body>
