@@ -373,6 +373,7 @@ Bastion provides the following list of built-in `Assertions` subclasses.
 
 * <<json-assertions,JsonResponseAssertions>>: Asserts that a received response is in JSON format and that the received response data is as expected.
 * <<json-schema,JsonSchemaAssertions>>: Asserts that a received response is in JSON format and that the received response data at least conforms to the given JSON schema.
+* <<status-code-assertions,StatusCodeAssertions>>: Asserts that a received response has any of the expected HTTP status codes.
 
 [[json-assertions]]
 JSON Assertion
@@ -390,7 +391,7 @@ First, you must initialise a `JsonResponseAssertions` object using one of the th
 
 * `JsonResponseAssertions.fromString()`: Allows you to create a `JsonResponseAssertions` expecting the given HTTP status code and the given
 JSON.
-* `JsonResponseAssertions.fromResource()`: Allows you to create a `JsonResponseAssertions` expecting the given HTTP status code. The JSON data to send is loaded from the given file or classpath resource.
+* `JsonResponseAssertions.fromResource()`: Allows you to create a `JsonResponseAssertions` expecting the given HTTP status code. The JSON data to assert for is loaded from the given file or classpath resource.
 * `JsonResponseAssertions.fromTemplate()`: Like `fromResource()` but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map.
 The resulting data is then used as the expected JSON entity for the assertions.
 
@@ -411,10 +412,60 @@ difference in its value.
 JSON Schema Assertion
 ~~~~~~~~~~~~~~~~~~~~~
 
+This assertions object is similar to <<json-assertions,JsonResponseAssertions>> but takes a JSON schema as its input. The assertions object
+will check that the received response conforms to the given JSON schema. This is useful when you do not care about the actual content of the
+response (or perhaps you don't know what it will be yet) but do care that it is always in a consistent format.
+
+First, you must initialise a `JsonSchemaAssertions` object using one of the two static factory methods:
+
+* `JsonSchemaAssertions.fromString()`: Allows you to create a `JsonSchemaAssertions` where the schema to test for is supplied as a string
+argument to this method.
+* `JsonSchemaAssertions.fromResource()`: Allows you to create a `JsonSchemaAssertions` where the schema to test for is loaded from the given file or classpath resource.
+
+*Examples go here*
+
+[[status-code-assertions]]
+Status Code Assertions
+~~~~~~~~~~~~~~~~~~~~~~
+
+This is a simple assertions object which asserts that the HTTP status code of the response is as expected. You can supply multiple expected
+status codes and the assertion will pass if the status code matches any of the given expected status codes.
+
+To instantiate a `StatusCodeAssertions` object use the `StatusCodeAssertions.expecting()` static factory method. The static factory method
+takes any number of HTTP status codes which will all be considered as valid response codes.
+
+*Examples go here*
+
 [[custom-assertions]]
 Custom Assertions
 ~~~~~~~~~~~~~~~~~
 
+Bastion gives you the option of developing your own assertions classes. This is useful if you notice that you are repeatedly
+using a particular assertion in your tests. For the sake of maintainability and better software design, you can avoid repeatedly
+initialising the same assertions, over and over again, by implementing your own assertions type.
+
+The relevant interface to implement is `Assertions`. This interface defines a single method which you need to implement: `execute()`.
+The `execute()` method takes the following parameters, which Bastion will provider when the test runs:
+
+* `statusCode`: The HTTP status code of the response.
+* `response` (type: `ModelResponse`): The response object which represents the received response. This object will also contain
+the object that Bastion has <<model-binding,bound>> from the response.
+* `model`: The object that Bastion has <<model-binding,bound>> from the response. This is provided for convenience so that you don't need to
+use `response.getModel()` every time.
+
+Notice that `Assertions` takes a generic type parameter. This type parameter describes the type of response model that the `Assertions` object is
+expecting. By supplying a good generic type argument in your `Assertions` subclass, the user will always have to `bind()` that model type before
+using your `Assertions` object (see <<model-binding>> section).
+
+Once you've implemented your own `Assertions`, you can then pass it, as if it was any other assertions object, to the `withAssertions()`
+method.
+
+The built-in `Assertions` implementations provided with Bastion are good examples.
+
+TIP: If you've developed an `Assertions` implementation which you think might be useful for the Bastion community and other users,
+please consider submitting a pull request to the main Bastion repository. See the <<contribute>> section for more information.
+
+[[model-binding]]
 Binding a Model
 ---------------
 
@@ -429,17 +480,17 @@ Bastion is an open-source project! Open-source means that we encourage you to co
 or form, that help make Bastion better. Here are some things you can do to contribute:
 
 * Send a positive comment to the Bastion contributers. :)
-* [Submit an issue](https://github.com/KPull/Bastion/issues) on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
+* https://github.com/KPull/Bastion/issues[Submit an issue] on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
   submitting an issue to check that it has not been submitted earlier. When opening an issue, try to include as much detail as possible so that the
   community can more easily address your concern.
-* Submit a pull request for any of our [open issues](https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue). Some issues are more easy to implement
+* Submit a pull request for any of our https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue[open issues]. Some issues are more easy to implement
   than others and, if you're just starting out, these issues let you get used to the Bastion code structure. If you need any assistance, simply comment on
   the issue at hand and we'll be glad to help. We ask that you adhere to a consistent code style and employ good programming practice but don't worry if
   you're unsure about anything: we'll help you get your submission up to scratch as well.
-* You can also [submit a pull request](https://github.com/KPull/Bastion/pulls) which is not related to any of the issues currently on GitHub. If you have
+* You can also https://github.com/KPull/Bastion/pulls[submit a pull request] which is not related to any of the issues currently on GitHub. If you have
   developed your own `Request` or `Assertions` implementations, for example, and you believe they could be useful to the rest of the Bastion community,
   we will add them to the library for use in future versions of Bastion.
 * Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,
-  grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the `src/docs/md`
+  grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the `src/docs/asciidoc`
   directory.
 * Spread the word. Tell your colleagues about Bastion or write a blog post about Bastion. The more people we can tell Bastion about, the better!
