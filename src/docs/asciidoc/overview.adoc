@@ -469,6 +469,30 @@ please consider submitting a pull request to the main Bastion repository. See th
 Binding a Model
 ---------------
 
+Most of the time, you will want to extract the data received in an HTTP response, during a test, as a Java object. This lets you more easily
+perform assertions on the Java object itself or perhaps even use the information contained within for a future request inside the same test.
+
+The process for extracting a Java object from the HTTP response data is called *Binding a Model* and is achieved by using the `bind()` method
+after calling `Bastion.request()`. `bind()` takes a Java class type which you'd like to extract.
+
+For example, if the received data is a JSON-formatted string, you can extract a Java object representation of the JSON data by supplying the
+Java type which corresponds to whatever JSON you're expecting.
+
+.Bound model in assertions
+
+Once you have bound a model type using `bind()`, the typed model object is available to whatever `Assertions` object you passed to the
+`withAssertions()` method.This is particularly useful if you supply a lambda expression to the `withAssertions()` method as the model object
+will be correctly typed and all the data will be directly available in Java.
+
+*Example showing lambda expression goes here*
+
+.Binding JSON data to Java Objects
+When receiving `application/json` data, if you supply any Java object type to the `bind()` method, Bastion will use the Jackson library to
+deserialise the received JSON data to whatever object type you supplied. This means that you can modify the way data is deserialised in your
+data class using https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations[Jackson Annotations].
+
+*Example binding JSON to Java object goes here*
+
 Executing and Getting Data
 --------------------------
 
