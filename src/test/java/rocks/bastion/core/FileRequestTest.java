@@ -9,13 +9,45 @@ import rocks.bastion.support.embedded.TestWithEmbeddedServer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileRequestTest extends TestWithEmbeddedServer {
+
     @Test
     public void post() throws Exception {
         Bastion.request("Create Sushi", FileRequest.post("http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json"))
                 .bind(Sushi.class)
                 .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
-                .call()
-                .getModel();
+                .call();
+    }
+
+    @Test
+    public void put() throws Exception {
+        Bastion.request("Create Sushi", FileRequest.put("http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json"))
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
+                .call();
+    }
+
+    @Test
+    public void delete() throws Exception {
+        Bastion.request("Create Sushi", FileRequest.delete("http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json"))
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
+                .call();
+    }
+
+    @Test
+    public void patch() throws Exception {
+        Bastion.request("Create Sushi", FileRequest.patch("http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json"))
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
+                .call();
+    }
+
+    @Test
+    public void withMethod() throws Exception {
+        Bastion.request("Create Sushi", FileRequest.withMethod(HttpMethod.POST, "http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json"))
+                .bind(Sushi.class)
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json").ignoreValuesForProperties("/id"))
+                .call();
     }
 
     @Test
@@ -75,13 +107,13 @@ public class FileRequestTest extends TestWithEmbeddedServer {
     }
 
     @Test
-    public void unknownContentType() throws Exception {
+    public void contentType_unknownFileType_contentTypeShouldBePlainText() throws Exception {
         FileRequest request = FileRequest.post("http://localhost:9876/sushi", "classpath:/rocks/bastion/core/request/unknown.unk");
         assertThat(request.contentType().get().getMimeType()).describedAs("Request content-type").isEqualTo("text/plain");
     }
 
     @Test
-    public void contentType() throws Exception {
+    public void contentType_jsonFileType_contentTypeShouldBeJson() throws Exception {
         FileRequest request = FileRequest.post("http://localhost:9876/sushi", "classpath:/json/create_sushi_request.json");
         assertThat(request.contentType().get().getMimeType()).describedAs("Request content-type").isEqualTo("application/json");
     }
