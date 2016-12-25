@@ -254,9 +254,7 @@ classpath).
 
 [source,java]
 -----
-Bastion.request(JsonRequest.postFromResource("http://localhost:8080/login",
-    "classpath:/fixtures/login-request.json")
-).call();
+[ex:load-from-file]
 -----
 
 .JSON request from a template

@@ -48,6 +48,7 @@
 
     <properties>
         <jackson.version>2.8.2</jackson.version>
+        <kotlin.version>1.0.5-3</kotlin.version>
     </properties>
 
     <scm>
@@ -140,6 +141,13 @@
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -239,6 +247,26 @@
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <artifactId>kotlin-maven-plugin</artifactId>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <version>${kotlin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>process-docs</id>
+                                <goals>
+                                    <goal>script</goal>
+                                </goals>
+                                <phase>
+                                    generate-sources
+                                </phase>
+                                <configuration>
+                                    <scriptFile>src/docs/kotlin/rocks/bastion/docs/CodeReplacement.kts</scriptFile>
+                                    <buildDirectory>${project.build.outputDirectory}/kotlin-build-scripts</buildDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -247,15 +275,6 @@
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
