@@ -80,7 +80,7 @@ public class TestWithProxiedEmbeddedServer extends TestWithEmbeddedServer {
     private static DnsResolver prepareProxiedDnsResolver() {
         return new SystemDefaultDnsResolver() {
             @Override
-            public InetAddress[] resolve(final String host) throws UnknownHostException {
+            public InetAddress[] resolve(String host) throws UnknownHostException {
                 if (host.equalsIgnoreCase("sushi-shop.test")) {
                     return new InetAddress[]{InetAddress.getByName("127.0.0.1")};
                 } else {
