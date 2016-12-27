@@ -6,7 +6,6 @@ import rocks.bastion.Bastion;
 import rocks.bastion.core.FormUrlEncodedRequest;
 import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.json.JsonRequest;
-import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
@@ -99,6 +98,21 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
                         .addDataParameter("timestamp", "2017-02-10T19:00:00Z")
                         .overrideContentType(ContentType.APPLICATION_OCTET_STREAM)
         ).call();
+    }
+
+    @Test
+    public void globals() {
+        Bastion.globals()
+                .addHeader("Authorization", "BASIC a3lsZTpwdWxsaWNpbm8=")
+                .addQueryParam("diet", "vegetarian")
+                .addRouteParam("version", "v2");
+
+        Bastion.globals().clear();
+    }
+
+    @Test
+    public void clearGlobals() {
+        Bastion.globals().clear();
     }
 
 }
