@@ -262,10 +262,35 @@
                                 </phase>
                                 <configuration>
                                     <scriptFile>src/docs/kotlin/rocks/bastion/docs/CodeReplacement.kts</scriptFile>
-                                    <buildDirectory>${project.build.outputDirectory}/kotlin-build-scripts</buildDirectory>
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <version>1.5.3</version>
+                        <executions>
+                            <execution>
+                                <id>user-guide</id>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <backend>html5</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>${project.basedir}/target/generated-docs</sourceDirectory>
+                            <outputDirectory>${project.basedir}/docs</outputDirectory>
+                            <embedAssets>true</embedAssets>
+                            <attributes>
+                                <imagesdir>src/docs/asciidoc/images</imagesdir>
+                                <icons>font</icons>
+                                <bastion-version>${project.version}</bastion-version>
+                            </attributes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -287,32 +312,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.3</version>
-                <executions>
-                    <execution>
-                        <id>user-guide</id>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <backend>html5</backend>
-                    <sourceHighlighter>coderay</sourceHighlighter>
-                    <sourceDirectory>${project.basedir}/src/docs/asciidoc</sourceDirectory>
-                    <outputDirectory>${project.basedir}/docs</outputDirectory>
-                    <embedAssets>true</embedAssets>
-                    <attributes>
-                        <imagesdir>src/docs/asciidoc/images</imagesdir>
-                        <icons>font</icons>
-                        <bastion-version>${project.version}</bastion-version>
-                    </attributes>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>

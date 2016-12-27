@@ -536,10 +536,11 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#json-assertions">5.1. JSON Assertion</a></li>
 <li><a href="#json-schema-assertions">5.2. JSON Schema Assertion</a></li>
-<li><a href="#custom-assertions">5.3. Custom Assertions</a></li>
+<li><a href="#status-code-assertions">5.3. Status Code Assertions</a></li>
+<li><a href="#custom-assertions">5.4. Custom Assertions</a></li>
 </ul>
 </li>
-<li><a href="#_binding_a_model">6. Binding a Model</a></li>
+<li><a href="#model-binding">6. Binding a Model</a></li>
 <li><a href="#_executing_and_getting_data">7. Executing and Getting Data</a></li>
 <li><a href="#contribute">8. Contribute</a></li>
 </ul>
@@ -957,9 +958,9 @@ classpath).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/login</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/fixtures/login-request.json</span><span class="delimiter">&quot;</span></span>)
-).call();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Create Sushi</span><span class="delimiter">&quot;</span></span>, JsonRequest.postFromResource(BASE_URL, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonResponseAssertions.fromResource(<span class="integer">201</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_response.json</span><span class="delimiter">&quot;</span></span>).ignoreValuesForProperties(<span class="string"><span class="delimiter">&quot;</span><span class="content">/id</span><span class="delimiter">&quot;</span></span>))
+        .call();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1148,6 +1149,9 @@ useful, you can create your own <code>Assertions</code> subclass as explained in
 <li>
 <p><a href="#json-schema">JsonSchemaAssertions</a>: Asserts that a received response is in JSON format and that the received response data at least conforms to the given JSON schema.</p>
 </li>
+<li>
+<p><a href="#status-code-assertions">StatusCodeAssertions</a>: Asserts that a received response has any of the expected HTTP status codes.</p>
+</li>
 </ul>
 </div>
 <div class="sect2">
@@ -1172,7 +1176,7 @@ is different, the test will pass.</p>
 JSON.</p>
 </li>
 <li>
-<p><code>JsonResponseAssertions.fromResource()</code>: Allows you to create a <code>JsonResponseAssertions</code> expecting the given HTTP status code. The JSON data to send is loaded from the given file or classpath resource.</p>
+<p><code>JsonResponseAssertions.fromResource()</code>: Allows you to create a <code>JsonResponseAssertions</code> expecting the given HTTP status code. The JSON data to assert for is loaded from the given file or classpath resource.</p>
 </li>
 <li>
 <p><code>JsonResponseAssertions.fromTemplate()</code>: Like <code>fromResource()</code> but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map.
@@ -1215,18 +1219,130 @@ difference in its value.</p>
 </div>
 <div class="sect2">
 <h3 id="json-schema-assertions">5.2. JSON Schema Assertion</h3>
-
+<div class="paragraph">
+<p>This assertions object is similar to <a href="#json-assertions">JsonResponseAssertions</a> but takes a JSON schema as its input. The assertions object
+will check that the received response conforms to the given JSON schema. This is useful when you do not care about the actual content of the
+response (or perhaps you don&#8217;t know what it will be yet) but do care that it is always in a consistent format.</p>
+</div>
+<div class="paragraph">
+<p>First, you must initialise a <code>JsonSchemaAssertions</code> object using one of the two static factory methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>JsonSchemaAssertions.fromString()</code>: Allows you to create a <code>JsonSchemaAssertions</code> where the schema to test for is supplied as a string
+argument to this method.</p>
+</li>
+<li>
+<p><code>JsonSchemaAssertions.fromResource()</code>: Allows you to create a <code>JsonSchemaAssertions</code> where the schema to test for is loaded from the given file or classpath resource.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Examples go here</strong></p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="custom-assertions">5.3. Custom Assertions</h3>
-
+<h3 id="status-code-assertions">5.3. Status Code Assertions</h3>
+<div class="paragraph">
+<p>This is a simple assertions object which asserts that the HTTP status code of the response is as expected. You can supply multiple expected
+status codes and the assertion will pass if the status code matches any of the given expected status codes.</p>
+</div>
+<div class="paragraph">
+<p>To instantiate a <code>StatusCodeAssertions</code> object use the <code>StatusCodeAssertions.expecting()</code> static factory method. The static factory method
+takes any number of HTTP status codes which will all be considered as valid response codes.</p>
+</div>
+<div class="paragraph">
+<p><strong>Examples go here</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom-assertions">5.4. Custom Assertions</h3>
+<div class="paragraph">
+<p>Bastion gives you the option of developing your own assertions classes. This is useful if you notice that you are repeatedly
+using a particular assertion in your tests. For the sake of maintainability and better software design, you can avoid repeatedly
+initialising the same assertions, over and over again, by implementing your own assertions type.</p>
+</div>
+<div class="paragraph">
+<p>The relevant interface to implement is <code>Assertions</code>. This interface defines a single method which you need to implement: <code>execute()</code>.
+The <code>execute()</code> method takes the following parameters, which Bastion will provider when the test runs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>statusCode</code>: The HTTP status code of the response.</p>
+</li>
+<li>
+<p><code>response</code> (type: <code>ModelResponse</code>): The response object which represents the received response. This object will also contain
+the object that Bastion has <a href="#model-binding">bound</a> from the response.</p>
+</li>
+<li>
+<p><code>model</code>: The object that Bastion has <a href="#model-binding">bound</a> from the response. This is provided for convenience so that you don&#8217;t need to
+use <code>response.getModel()</code> every time.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Notice that <code>Assertions</code> takes a generic type parameter. This type parameter describes the type of response model that the <code>Assertions</code> object is
+expecting. By supplying a good generic type argument in your <code>Assertions</code> subclass, the user will always have to <code>bind()</code> that model type before
+using your <code>Assertions</code> object (see <a href="#model-binding">Binding a Model</a> section).</p>
+</div>
+<div class="paragraph">
+<p>Once you&#8217;ve implemented your own <code>Assertions</code>, you can then pass it, as if it was any other assertions object, to the <code>withAssertions()</code>
+method.</p>
+</div>
+<div class="paragraph">
+<p>The built-in <code>Assertions</code> implementations provided with Bastion are good examples.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you&#8217;ve developed an <code>Assertions</code> implementation which you think might be useful for the Bastion community and other users,
+please consider submitting a pull request to the main Bastion repository. See the <a href="#contribute">Contribute</a> section for more information.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_binding_a_model">6. Binding a Model</h2>
+<h2 id="model-binding">6. Binding a Model</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>Most of the time, you will want to extract the data received in an HTTP response, during a test, as a Java object. This lets you more easily
+perform assertions on the Java object itself or perhaps even use the information contained within for a future request inside the same test.</p>
+</div>
+<div class="paragraph">
+<p>The process for extracting a Java object from the HTTP response data is called <strong>Binding a Model</strong> and is achieved by using the <code>bind()</code> method
+after calling <code>Bastion.request()</code>. <code>bind()</code> takes a Java class type which you&#8217;d like to extract.</p>
+</div>
+<div class="paragraph">
+<p>For example, if the received data is a JSON-formatted string, you can extract a Java object representation of the JSON data by supplying the
+Java type which corresponds to whatever JSON you&#8217;re expecting.</p>
+</div>
+<div class="paragraph">
+<div class="title">Bound model in assertions</div>
+<p>Once you have bound a model type using <code>bind()</code>, the typed model object is available to whatever <code>Assertions</code> object you passed to the
+<code>withAssertions()</code> method.This is particularly useful if you supply a lambda expression to the <code>withAssertions()</code> method as the model object
+will be correctly typed and all the data will be directly available in Java.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example showing lambda expression goes here</strong></p>
+</div>
+<div class="paragraph">
+<div class="title">Binding JSON data to Java Objects</div>
+<p>When receiving <code>application/json</code> data, if you supply any Java object type to the <code>bind()</code> method, Bastion will use the Jackson library to
+deserialise the received JSON data to whatever object type you supplied. This means that you can modify the way data is deserialised in your
+data class using <a href="https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations">Jackson Annotations</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example binding JSON to Java object goes here</strong></p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1248,24 +1364,24 @@ or form, that help make Bastion better. Here are some things you can do to contr
 <p>Send a positive comment to the Bastion contributers. :)</p>
 </li>
 <li>
-<p>[Submit an issue](<a href="https://github.com/KPull/Bastion/issues" class="bare">https://github.com/KPull/Bastion/issues</a>) on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
+<p><a href="https://github.com/KPull/Bastion/issues">Submit an issue</a> on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
 submitting an issue to check that it has not been submitted earlier. When opening an issue, try to include as much detail as possible so that the
 community can more easily address your concern.</p>
 </li>
 <li>
-<p>Submit a pull request for any of our [open issues](<a href="https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue" class="bare">https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue</a>). Some issues are more easy to implement
+<p>Submit a pull request for any of our <a href="https://github.com/KPull/Bastion/issues?q=is%3Aopen+is%3Aissue">open issues</a>. Some issues are more easy to implement
 than others and, if you&#8217;re just starting out, these issues let you get used to the Bastion code structure. If you need any assistance, simply comment on
 the issue at hand and we&#8217;ll be glad to help. We ask that you adhere to a consistent code style and employ good programming practice but don&#8217;t worry if
 you&#8217;re unsure about anything: we&#8217;ll help you get your submission up to scratch as well.</p>
 </li>
 <li>
-<p>You can also [submit a pull request](<a href="https://github.com/KPull/Bastion/pulls" class="bare">https://github.com/KPull/Bastion/pulls</a>) which is not related to any of the issues currently on GitHub. If you have
+<p>You can also <a href="https://github.com/KPull/Bastion/pulls">submit a pull request</a> which is not related to any of the issues currently on GitHub. If you have
 developed your own <code>Request</code> or <code>Assertions</code> implementations, for example, and you believe they could be useful to the rest of the Bastion community,
 we will add them to the library for use in future versions of Bastion.</p>
 </li>
 <li>
 <p>Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,
-grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the <code>src/docs/md</code>
+grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the <code>src/docs/asciidoc</code>
 directory.</p>
 </li>
 <li>
@@ -1278,7 +1394,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-06 21:45:29 CET
+Last updated 2016-12-27 18:10:02 CET
 </div>
 </div>
 </body>
