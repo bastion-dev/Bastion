@@ -1,20 +1,15 @@
 package rocks.bastion.junit;
 
-import com.google.common.io.CharStreams;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import rocks.bastion.core.BastionBuilderImpl;
 import rocks.bastion.core.BastionFactory;
 import rocks.bastion.core.DefaultBastionFactory;
-import rocks.bastion.core.Response;
 import rocks.bastion.core.event.*;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,13 +24,6 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
 
     public BastionRunner(Class<?> testClass) throws InitializationError {
         super(testClass);
-        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory() {
-            @Override
-            protected void prepareBastion(BastionBuilderImpl<?> bastion) {
-                registerModelConverters(bastion);
-                bastion.registerListener(BastionRunner.this);
-            }
-        });
     }
 
     @Override
@@ -85,6 +73,7 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     protected void runChild(FrameworkMethod method, RunNotifier notifier) {
         runningTestCase = describeChild(method);
         currentNotifier = notifier;
+        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory());
         super.runChild(method, notifier);
     }
 
