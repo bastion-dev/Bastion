@@ -5,10 +5,14 @@ import org.junit.Test;
 import rocks.bastion.Bastion;
 import rocks.bastion.core.FormUrlEncodedRequest;
 import rocks.bastion.core.GeneralRequest;
+import rocks.bastion.core.StatusCodeAssertions;
 import rocks.bastion.core.json.JsonRequest;
+import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * These are all the code examples which appear in the User Guide. Some of the examples don't have an assertion because that's not the point.
@@ -75,7 +79,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
     @Test
     public void jsonRequest_postFromTemplate() {
         Bastion.request(
-                JsonRequest.postFromTemplate("http://sushi-shop.test/sushi", "classpath:/rocks/bastion/core/test-template-body.json",
+                JsonRequest.postFromTemplate("http://sushi-shop.test/sushi", "classpath:/rocks/bastion/core/request/test-template-body.json",
                         Collections.singletonMap("food", "Squid Nigiri"))
         ).call();
     }
@@ -113,6 +117,66 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
     @Test
     public void clearGlobals() {
         Bastion.globals().clear();
+    }
+
+    @Test
+    public void statusCodeAssertions() {
+        Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
+                .withAssertions(StatusCodeAssertions.expecting(200)).call();
+    }
+
+    @Test
+    public void statusCodeAssertions_multipleArgs() {
+        Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
+                .withAssertions(StatusCodeAssertions.expecting(new int[]{200, 201, 204})).call();
+    }
+
+    @Test
+    public void jsonResponseAssertions() {
+        Bastion.request(GeneralRequest.get("http://sushi-shop.test/reservation/1"))
+                .withAssertions(JsonResponseAssertions.fromString(200, "{ \"name\":\"John Doe\", \"timestamp\":\"2016-02-10T21:00:00Z\" }"))
+                .call();
+    }
+
+    @Test
+    public void jsonResponseAssertions_wrongValue() {
+        // Error output:
+        /*
+         * java.lang.AssertionError: Actual response body is not as expected.
+         * The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:
+         *   [{"op":"replace","path":"/price","value":"EUR 5.60"}]
+         */
+        assertThatThrownBy(() -> {
+            Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                    .withAssertions(JsonResponseAssertions.fromString(201, "{ " +
+                            "\"id\":5, " +
+                            "\"name\":\"sashimi\", " +
+                            "\"price\":\"EUR 5.60\", " +
+                            "\"type\":\"SASHIMI\" " +
+                            "}"
+                    ).ignoreValuesForProperties("id")).call();
+        }).isInstanceOf(AssertionError.class).hasMessageContaining("[{\"op\":\"replace\",\"path\":\"/price\",\"value\":\"EUR 5.60\"}]");
+    }
+
+    @Test
+    public void jsonResponseAssertions_ignoreField() {
+        Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                .withAssertions(JsonResponseAssertions.fromString(201, "{ " +
+                                "\"id\":5, " +
+                                "\"name\":\"sashimi\", " +
+                                "\"price\":5.60, " +
+                                "\"type\":\"SASHIMI\" " +
+                                "}"
+                        ).ignoreValuesForProperties("id")
+                ).call();
+    }
+
+    @Test
+    public void jsonResponseAssertions_fromResource() {
+        Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json")
+                        .ignoreValuesForProperties("id")
+                ).call();
     }
 
 }
