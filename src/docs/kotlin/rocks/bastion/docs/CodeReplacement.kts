@@ -29,12 +29,12 @@ class Library(val sources: File, val boundary: Regex = Regex("// docs:([a-zA-Z0-
 
 }
 
-class CodeReplacement(val source: File, val destination: File, val library: Library, val placeholder: Regex = Regex("\\[ex:([a-zA-Z0-9\\-_]+?)\\]")) {
+class ReplacementChain(val source: File, val destination: File, val replacements: List<(String) -> String>) {
 
     fun replace(): Unit {
         val text = source.readText()
-        val replacedText = placeholder.replace(text) {
-            library.expand(it.groupValues[1])!!
+        val replacedText = replacements.fold(text) { operand, replacement ->
+            replacement.invoke(operand)
         }
         destination.parentFile.mkdirs()
         destination.writeText(replacedText)
@@ -42,6 +42,15 @@ class CodeReplacement(val source: File, val destination: File, val library: Libr
 
 }
 
+fun replaceCodeExamples(library: Library, placeholder: Regex = Regex("\\[ex:([a-zA-Z0-9\\-_]+?)\\]")) =
+        fun(text: String) = placeholder.replace(text) {
+            library.expand(it.groupValues[1])!!
+        }
+
+fun replaceVersion(placeholder: Regex = Regex("\\{bastion-version\\}")) =
+        fun(text: String) = placeholder.replace(text, mojo.project.version)
+
 val library = Library(File(mojo.project.basedir, "src/test"))
-val codeReplacement = CodeReplacement(File(mojo.project.basedir, "src/docs/asciidoc/index.adoc"), File(mojo.project.basedir, "target/generated-docs/index.adoc"), library)
-codeReplacement.replace()
+val replacements = ReplacementChain(File(mojo.project.basedir, "src/docs/asciidoc/index.adoc"), File(mojo.project.basedir, "target/generated-docs/index.adoc"),
+        listOf(replaceCodeExamples(library), replaceVersion()))
+replacements.replace()

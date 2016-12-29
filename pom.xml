@@ -288,7 +288,6 @@
                             <attributes>
                                 <imagesdir>src/docs/asciidoc/images</imagesdir>
                                 <icons>font</icons>
-                                <bastion-version>${project.version}</bastion-version>
                             </attributes>
                         </configuration>
                     </plugin>
