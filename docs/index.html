@@ -631,43 +631,13 @@ import rocks.bastion.Bastion</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(BastionRunner.class)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">VatValidatorTest</span> {
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> callValidateVatNumber_returnsAmazonVatData() {
-        Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Validate Amazon's VAT Number</span><span class="delimiter">&quot;</span></span>, GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vatlayer.com/php_helper_scripts/vat_api.php</span><span class="delimiter">&quot;</span></span>)
-                .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">577b6fb6551df7f3532ecbd45ea07ddd</span><span class="delimiter">&quot;</span></span>)
-                .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">vat_number</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LU26375245</span><span class="delimiter">&quot;</span></span>)
-        ).withAssertions(JsonResponseAssertions.fromResource(<span class="integer">200</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/amazon_vat.json</span><span class="delimiter">&quot;</span></span>)).call();
-    }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
+<span class="directive">public</span> <span class="type">void</span> quickstart() {
+    Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Get the Restaurant's Name</span><span class="delimiter">&quot;</span></span>, GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:9876/restaurant</span><span class="delimiter">&quot;</span></span>))
+            .withAssertions((statusCode, response, model) -&gt; assertThat(model).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">The Sushi Parlour</span><span class="delimiter">&quot;</span></span>))
+            .call();
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>In this test, we make a simple <code>GET</code> request on the URL <code><a href="http://vatlayer.com/php_helper_scripts/vat_api.php" class="bare">http://vatlayer.com/php_helper_scripts/vat_api.php</a></code>. We add two query parameters
-to the request namely, <code>secret_key</code> and <code>vat_number</code>. We then expect a JSON response using a <code>JsonResponseAssertions</code> object. This assertions
-object will check that the status code is <code>200</code> (as specified by the user), and that the content-type header returned is indeed <code>application/json</code>.
-It will also check that the returned JSON content matches that found in the <code>json/amazon_vat.json</code> file.</p>
-</div>
-<div class="paragraph">
-<p>Notice that this JSON comparison is not a straight-up text equality comparison: instead, it structurally compares the actual received JSON to
-the expected JSON as if they were objects. Changing the order of properties in the response won&#8217;t matter. Even better, say the test fails, Bastion
-will tell you exactly what operations you need to perform to the response to get the expected outcome. Here is an example of an error output when
-the <code>JsonResponseAssertions</code> fail:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>java.lang.AssertionError: Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what
-operations you need to perform to transform the actual response body into the expected response body:
-  [{"op":"replace","path":"/country_code","value":"MT"}]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We can see how the error tells us to change the value in the <code>/country_code</code> property to <code>MT</code>.</p>
-</div>
-<div class="paragraph">
-<p>This is only a taste of what Bastion can do. In the rest of the sections in this user guide, we explain all the features
-of Bastion and how you can even extend the library to create your own requests and assertions depending on your domain.</p>
 </div>
 </div>
 </div>
@@ -776,8 +746,18 @@ as if the data was submitted using an HTML form.</p>
 </li>
 </ul>
 </div>
-<div id="request-attributes" class="paragraph">
+<div id="source" class="listingblock">
 <div class="title">Adding request attributes</div>
+<div class="content">
+<pre>Bastion.request(
+        GeneralRequest.get("http://sushi-shop.test/sushi/{id}")
+                .addRouteParam("id", "5")
+                .addQueryParam("amount", "6")
+                .addHeader("X-Caches", "disabled")
+).call();</pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Any <code>Request</code> supports the following attributes, some of which are standard to HTTP:</p>
 </div>
 <div class="ulist">
@@ -845,15 +825,7 @@ have any HTTP headers, query parameters or route parameters.</p>
 </div>
 <div class="paragraph">
 <p>Once you have an instance of <code>GeneralRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong>, <strong>Route Parameters</strong> as
-explained in section <a href="#request-attributes">Adding request attributes</a>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Get Sushi</span><span class="delimiter">&quot;</span></span>,
-    GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi.test/sushi/5</span><span class="delimiter">&quot;</span></span>)
-        .addHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-Table-Number</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">13</span><span class="delimiter">&quot;</span></span>)
-).call();</code></pre>
-</div>
+explained in section <a href="#request-attributes">[request-attributes]</a>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -868,6 +840,33 @@ to something else.
 </tr>
 </table>
 </div>
+<div class="listingblock">
+<div class="title">General Request Example (GET)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>)
+).call();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">General Request with Attributes Example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi/{id}</span><span class="delimiter">&quot;</span></span>)
+                .addRouteParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">5</span><span class="delimiter">&quot;</span></span>)
+                .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">amount</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">6</span><span class="delimiter">&quot;</span></span>)
+                .addHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-Caches</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">disabled</span><span class="delimiter">&quot;</span></span>)
+).call();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">General Request Example (POST)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(GeneralRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/greeting</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;b&gt;Hello, sushi lover!&lt;/b&gt;</span><span class="delimiter">&quot;</span></span>)
+        .setContentType(ContentType.TEXT_HTML)
+).call();</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="json-request">4.2. JSON Request</h3>
@@ -875,11 +874,20 @@ to something else.
 <p><code>JsonRequest</code> is a request object specially designed to handle JSON data. Unlike <code>GeneralRequest</code>, <code>JsonRequest</code> will set the appropriate content type header
 to indicate that the data being sent has mime-type <code>application/json</code>. The request object is initialised using a JSON string (or file) and will validate the
 given data to ensure that it is valid JSON (if you don&#8217;t want this validation, use <code>GeneralRequest</code> instead). To initialise a new <code>JsonRequest</code> use any of the
-following static factory methods, giving the URL you want to send the request on:
-this assertions object
-* <code>JsonRequest.fromString()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method (<code>GET</code>, <code>POST</code>, etc.) and the given JSON string.
-* <code>JsonRequest.fromResource()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
-* <code>JsonRequest.fromTemplate()</code>: Like <code>fromResource()</code> but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.</p>
+following static factory methods, giving the URL you want to send the request on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>JsonRequest.fromString()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method (<code>GET</code>, <code>POST</code>, etc.) and the given JSON string.</p>
+</li>
+<li>
+<p><code>JsonRequest.fromResource()</code>: Allows you to create a <code>JsonRequest</code> with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.</p>
+</li>
+<li>
+<p><code>JsonRequest.fromTemplate()</code>: Like <code>fromResource()</code> but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -918,23 +926,26 @@ The request object here will <strong>validate</strong> that the provided data is
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Once you have an instance of <code>JsonRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
-explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using <code>overrideContentType()</code>
-(by default, <code>application/json</code> is sent).</p>
-</div>
-<div class="paragraph">
+<div class="listingblock">
 <div class="title">JSON request from a string</div>
-<p>Use the <code>fromString()</code> family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
-your JSON request, as you would using an HTTP client, and Bastion will take care of all the other details related to JSON requests
-for you.</p>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        JsonRequest.postFromString(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">name</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">Salmon Nigiri</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">price</span><span class="char">\&quot;</span><span class="content">:5.85 }</span><span class="delimiter">&quot;</span></span>)
+).call();</code></pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.putFromString(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://test.test</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">key</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">value</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">array</span><span class="char">\&quot;</span><span class="content">:[ </span><span class="char">\&quot;</span><span class="content">1</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">test</span><span class="char">\&quot;</span><span class="content"> ] }</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        JsonRequest.patchFromString(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi/2</span><span class="delimiter">&quot;</span></span>,
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">op</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">replace</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">path</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">/name</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">value</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">Squid Nigiri</span><span class="char">\&quot;</span><span class="content"> }</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Use the <code>fromString()</code> family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
+your JSON request, as you would using an HTTP client, and Bastion will take care of all the other details related to JSON requests
+for you.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -950,32 +961,32 @@ you to avoid all the unnecessary escape characters.
 </tr>
 </table>
 </div>
-<div class="paragraph">
+<div class="listingblock">
 <div class="title">JSON request from a file</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>)
+).call();</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Use the <code>fromResource()</code> family of static factory methods to load a simple JSON file as the HTTP entity body. The <code>fromResource()</code>
 methods can take any URL including those beginning with the <code>classpath:</code> prefix (which loads a file from the
 classpath).</p>
 </div>
 <div class="listingblock">
+<div class="title">JSON request from a template</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">Create Sushi</span><span class="delimiter">&quot;</span></span>, JsonRequest.postFromResource(BASE_URL, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
-        .withAssertions(JsonResponseAssertions.fromResource(<span class="integer">201</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_response.json</span><span class="delimiter">&quot;</span></span>).ignoreValuesForProperties(<span class="string"><span class="delimiter">&quot;</span><span class="content">/id</span><span class="delimiter">&quot;</span></span>))
-        .call();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        JsonRequest.postFromTemplate(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/rocks/bastion/core/request/test-template-body.json</span><span class="delimiter">&quot;</span></span>,
+                <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">food</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Squid Nigiri</span><span class="delimiter">&quot;</span></span>))
+).call();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<div class="title">JSON request from a template</div>
 <p>The <code>fromTemplate()</code> family of static factory methods are similar to <code>fromResource()</code> but they also take any additional argument
 containing a map where the keys are variable names and the values are the replacement values for the variable placeholders in the
 template.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromTemplate(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://awesomewebsite.test</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/rocks/bastion/core/request/test-template-body.json</span><span class="delimiter">&quot;</span></span>,
-    <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">food</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">apples</span><span class="delimiter">&quot;</span></span>)
-).call();</code></pre>
-</div>
 </div>
 <div class="paragraph">
 <p>The template files must be Mustache templates. An example Mustache template is shown below:</p>
@@ -994,7 +1005,21 @@ template.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice the <code>food</code> variable in the template: this will get replaced by the value <code>apples</code> in the test.</p>
+<p>Notice the <code>food</code> variable in the template: this will get replaced by the value <code>apples</code> in the test above.</p>
+</div>
+<div class="listingblock">
+<div class="title">JSON Request with Attributes</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">Bastion.request(
+        JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>)
+                .overrideContentType(ContentType.APPLICATION_OCTET_STREAM)
+).call();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you have an instance of <code>JsonRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
+explained in section <a href="#request-attributes">Request Attributes</a>. You can also change the <strong>Content type</strong> header that is sent using <code>overrideContentType()</code>
+(by default, <code>application/json</code> is sent).</p>
 </div>
 </div>
 <div class="sect2">
@@ -1002,7 +1027,7 @@ template.</p>
 <div class="paragraph">
 <p><code>FormUrlEncodedRequest</code> is a request object that allows you send URL encoded data as part of the HTTP request. This request is equivalent to
 requests sent by HTML forms (hence the <code>Form</code> in the name). The request will automatically be configured to have the mime-type <code>application/x-www-form-urlencoded</code>.
-Unlike <code>JsonRequest</code>, after initialising a <code>ForumUrlEncodedRequest</code>, you will need to call additional method to fill in the request&#8217;s data.</p>
+Unlike <code>JsonRequest</code>, after initialising a <code>ForumUrlEncodedRequest</code>, you will need to call additional methods to fill in the request&#8217;s data.</p>
 </div>
 <div class="paragraph">
 <p>First, use any of the following static factory methods and specify the URL to send the request to:</p>
@@ -1040,22 +1065,35 @@ other standard factory methods are suitable for your test.
 </table>
 </div>
 <div class="paragraph">
-<p>Once you have an instance of <code>FormUrlEncodedRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
-explained in section <a href="#request-attributes">Adding request attributes</a>. You can also change the <strong>Content type</strong> header that is sent using <code>overrideContentType()</code> (by
-default, <code>application/x-www-form-urlencoded</code> is sent).</p>
-</div>
-<div class="paragraph">
-<p>More importantly, use the <code>addDataParameter()</code> or <code>addDataParameters()</code> methods to add the data
+<p>Use the <code>addDataParameter()</code> or <code>addDataParameters()</code> methods to add the data
 which will go into the request&#8217;s entity body. The <code>FormUrlEncodedRequest</code> will automatically format the data you supply, internally,
 into a URL encoded string. An example, using <code>FormUrlEncodedRequest</code> follows below,</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(FormUrlEncodedRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://awesomewebsite.test/submit.php</span><span class="delimiter">&quot;</span></span>)
-    .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>)
-    .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">country</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">MT</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        FormUrlEncodedRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>)
+                .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Squid Nigiri</span><span class="delimiter">&quot;</span></span>)
+                .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">price</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">5.85</span><span class="delimiter">&quot;</span></span>)
 ).call();</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="title">Form URL Encoded Request with Attributes</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(
+        FormUrlEncodedRequest.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/booking</span><span class="delimiter">&quot;</span></span>)
+                .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>)
+                .addDataParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">timestamp</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">2017-02-10T19:00:00Z</span><span class="delimiter">&quot;</span></span>)
+                .addHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-Manager</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alice</span><span class="delimiter">&quot;</span></span>)
+                .overrideContentType(ContentType.APPLICATION_OCTET_STREAM)
+).call();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you have an instance of <code>FormUrlEncodedRequest</code>, you can call methods to modify <strong>Headers</strong>, <strong>Query Parameters</strong> and <strong>Route Parameters</strong> as
+explained in section <a href="#request-attributes">Request Attributes</a>. You can also change the <strong>Content type</strong> header that is sent using
+<code>overrideContentType()</code> (by default, <code>application/x-www-form-urlencoded</code> is sent).</p>
 </div>
 </div>
 <div class="sect2">
@@ -1196,7 +1234,56 @@ The assertions object here will <strong>validate</strong> that the provided expe
 </tr>
 </table>
 </div>
+<div class="listingblock">
+<div class="title">JSON Response Assertions from String</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(GeneralRequest.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/reservation/1</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonResponseAssertions.fromString(<span class="integer">200</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">name</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">John Doe</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">timestamp</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">2016-02-10T21:00:00Z</span><span class="char">\&quot;</span><span class="content"> }</span><span class="delimiter">&quot;</span></span>))
+        .call();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">JSON Response Assertions from Resource</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonResponseAssertions.fromResource(<span class="integer">201</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_response.json</span><span class="delimiter">&quot;</span></span>)
+                .ignoreValuesForProperties(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>)
+        ).call();</code></pre>
+</div>
+</div>
 <div class="paragraph">
+<div class="title">JSON Response Assertions Failure</div>
+<p><code>JsonResponseAssertions</code> give some very useful insight into what your API under test is doing wrong. For example, the following test has been
+set up to fail.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonResponseAssertions.fromString(<span class="integer">201</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">id</span><span class="char">\&quot;</span><span class="content">:5, </span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">name</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">sashimi</span><span class="char">\&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">price</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">EUR 5.60</span><span class="char">\&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">type</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">SASHIMI</span><span class="char">\&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>
+        ).ignoreValuesForProperties(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>)).call();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since the expected and actual JSON is compared structurally, Bastion outputs a JSON patch which describes exactly how to transform the actual
+JSON into the received JSON. For the test above, for example, we get:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>java.lang.AssertionError: Actual response body is not as expected.
+The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:
+    [{"op":"replace","path":"/price","value":"EUR 5.60"}]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the above test to pass, we need to replace the <em>value</em> of the <code>price</code> property in the API with the value <code>EUR 5.60</code>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Additional operationso on JsonResponseAssertions</div>
 <p>Once you have a <code>JsonResponseAssertions</code> object, you can call the following methods on it, which will change the behaviour of the assertions
 Bastion performs:</p>
 </div>
@@ -1213,8 +1300,18 @@ difference in its value.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Examples go here</strong></p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonResponseAssertions.fromString(<span class="integer">201</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="delimiter">&quot;</span></span> +
+                        <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">id</span><span class="char">\&quot;</span><span class="content">:5, </span><span class="delimiter">&quot;</span></span> +
+                        <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">name</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">sashimi</span><span class="char">\&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
+                        <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">price</span><span class="char">\&quot;</span><span class="content">:5.60, </span><span class="delimiter">&quot;</span></span> +
+                        <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">type</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">SASHIMI</span><span class="char">\&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> +
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>
+                ).ignoreValuesForProperties(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>)
+        ).call();</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1394,7 +1491,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-29 20:14:11 CET
+Last updated 2016-12-29 21:29:54 CET
 </div>
 </div>
 </body>

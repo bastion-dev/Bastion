@@ -1,11 +1,15 @@
-= Bastion User Guide {bastion-version}
+= Bastion User Guide ({bastion-version})
 :icons:
 :data-uri:
 :toc:
 :numbered:
 :website: http://bastion.rocks/
 
-WARNING: Heyo! Fix all Bastion requests without descriptive text!
+////
+This file is process during compilation to produce the final version of the User Guide.
+To build and generate the user guide use the following command:
+     mvn generate-resources -Prelease
+////
 
 Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service
 but the library also provides built-in classes for testing endpoints validating responses containing various different content types including
@@ -63,38 +67,8 @@ Bastion makes it very easy to write simple API tests. Let us look at a test for 
 
 [source,java]
 --------------------------------------------
-@RunWith(BastionRunner.class)
-public class VatValidatorTest {
-    @Test
-    public void callValidateVatNumber_returnsAmazonVatData() {
-        Bastion.request("Validate Amazon's VAT Number", GeneralRequest.get("http://vatlayer.com/php_helper_scripts/vat_api.php")
-                .addQueryParam("secret_key", "577b6fb6551df7f3532ecbd45ea07ddd")
-                .addQueryParam("vat_number", "LU26375245")
-        ).withAssertions(JsonResponseAssertions.fromResource(200, "classpath:/json/amazon_vat.json")).call();
-    }
-}
+[ex:quickstart]
 --------------------------------------------
-
-In this test, we make a simple `GET` request on the URL `http://vatlayer.com/php_helper_scripts/vat_api.php`. We add two query parameters
-to the request namely, `secret_key` and `vat_number`. We then expect a JSON response using a `JsonResponseAssertions` object. This assertions
-object will check that the status code is `200` (as specified by the user), and that the content-type header returned is indeed `application/json`.
-It will also check that the returned JSON content matches that found in the `json/amazon_vat.json` file.
-
-Notice that this JSON comparison is not a straight-up text equality comparison: instead, it structurally compares the actual received JSON to
-the expected JSON as if they were objects. Changing the order of properties in the response won't matter. Even better, say the test fails, Bastion
-will tell you exactly what operations you need to perform to the response to get the expected outcome. Here is an example of an error output when
-the `JsonResponseAssertions` fail:
-
---------------------------------------------
-java.lang.AssertionError: Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what
-operations you need to perform to transform the actual response body into the expected response body:
-  [{"op":"replace","path":"/country_code","value":"MT"}]
---------------------------------------------
-
-We can see how the error tells us to change the value in the `/country_code` property to `MT`.
-
-This is only a taste of what Bastion can do. In the rest of the sections in this user guide, we explain all the features
-of Bastion and how you can even extend the library to create your own requests and assertions depending on your domain.
 
 Overview
 --------
@@ -154,6 +128,12 @@ as if the data was submitted using an HTML form.
 
 [[request-attributes]]
 .Adding request attributes
+
+[[source,java]]
+----
+[ex:general-request-get-with-attributes]
+----
+
 Any `Request` supports the following attributes, some of which are standard to HTTP:
 
 * *Headers*: Use the `addHeader()` method to add a header to a request.
@@ -190,16 +170,26 @@ have any HTTP headers, query parameters or route parameters.
 Once you have an instance of `GeneralRequest`, you can call methods to modify *Headers*, *Query Parameters*, *Route Parameters* as
 explained in section <<request-attributes>>.
 
-[source,java]
------
-Bastion.request("Get Sushi",
-    GeneralRequest.get("http://sushi.test/sushi/5")
-        .addHeader("X-Table-Number", "13")
-).call();
------
-
 TIP: By default, the `GeneralRequest` will have content type `text/plain`. Use `setContentType()` on the request to change the content type
 to something else.
+
+.General Request Example (GET)
+[source,java]
+-----
+[ex:general-request-get]
+-----
+
+.General Request with Attributes Example
+[source,java]
+----
+[ex:general-request-get-with-attributes]
+----
+
+.General Request Example (POST)
+[source,java]
+----
+[ex:general-request-post]
+----
 
 [[json-request]]
 JSON Request
@@ -209,7 +199,7 @@ JSON Request
 to indicate that the data being sent has mime-type `application/json`. The request object is initialised using a JSON string (or file) and will validate the
 given data to ensure that it is valid JSON (if you don't want this validation, use `GeneralRequest` instead). To initialise a new `JsonRequest` use any of the
 following static factory methods, giving the URL you want to send the request on:
-this assertions object
+
 * `JsonRequest.fromString()`: Allows you to create a `JsonRequest` with the given HTTP method (`GET`, `POST`, etc.) and the given JSON string.
 * `JsonRequest.fromResource()`: Allows you to create a `JsonRequest` with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
 * `JsonRequest.fromTemplate()`: Like `fromResource()` but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.
@@ -225,51 +215,45 @@ The factory methods above also have utility methods which do not take an `HttpMe
 * `JsonRequest.putFromResource()`
 * ... and so on.
 
-Once you have an instance of `JsonRequest`, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
-explained in section <<request-attributes>>. You can also change the *Content type* header that is sent using `overrideContentType()`
-(by default, `application/json` is sent).
-
 .JSON request from a string
+[source,java]
+-----
+[ex:json-request-post-from-string]
+-----
+
+[source,java]
+-----
+[ex:json-request-patch-from-string]
+-----
 
 Use the `fromString()` family of static factory methods to directly supply the JSON data to use in the test. You can simply type in
 your JSON request, as you would using an HTTP client, and Bastion will take care of all the other details related to JSON requests
 for you.
-
-[source,java]
------
-Bastion.request(JsonRequest.putFromString("http://test.test",
-    "{ \"key\":\"value\", \"array\":[ \"1\", \"test\" ] }")
-).call();
------
 
 TIP: In a language like Java, typing the request data directly in the test can quickly start becoming unwieldy due to all
 the extra escape characters you need. We recommend using a language like Groovy, which supports multi-line strings, allowing
 you to avoid all the unnecessary escape characters.
 
 .JSON request from a file
+[source,java]
+-----
+[ex:json-request-post-from-resource]
+-----
 
 Use the `fromResource()` family of static factory methods to load a simple JSON file as the HTTP entity body. The `fromResource()`
 methods can take any URL including those beginning with the `classpath:` prefix (which loads a file from the
 classpath).
 
+.JSON request from a template
+
 [source,java]
 -----
-[ex:load-from-file]
+[ex:json-request-post-from-template]
 -----
-
-.JSON request from a template
 
 The `fromTemplate()` family of static factory methods are similar to `fromResource()` but they also take any additional argument
 containing a map where the keys are variable names and the values are the replacement values for the variable placeholders in the
 template.
-
-[source,java]
------
-Bastion.request(JsonRequest.postFromTemplate("http://awesomewebsite.test",
-    "classpath:/rocks/bastion/core/request/test-template-body.json",
-    Collections.singletonMap("food", "apples")
-).call();
------
 
 The template files must be Mustache templates. An example Mustache template is shown below:
 
@@ -286,7 +270,19 @@ The template files must be Mustache templates. An example Mustache template is s
 }
 -----
 
-Notice the `food` variable in the template: this will get replaced by the value `apples` in the test.
+Notice the `food` variable in the template: this will get replaced by the value `apples` in the test above.
+
+.JSON Request with Attributes
+
+[source,javascript]
+-----
+[ex:json-request-post-from-resource-override]
+-----
+
+Once you have an instance of `JsonRequest`, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
+explained in section <<request-attributes, Request Attributes>>. You can also change the *Content type* header that is sent using `overrideContentType()`
+(by default, `application/json` is sent).
+
 
 [[form-url-encoded-request]]
 Form URL Encoded Data Request
@@ -294,7 +290,7 @@ Form URL Encoded Data Request
 
 `FormUrlEncodedRequest` is a request object that allows you send URL encoded data as part of the HTTP request. This request is equivalent to
 requests sent by HTML forms (hence the `Form` in the name). The request will automatically be configured to have the mime-type `application/x-www-form-urlencoded`.
-Unlike `JsonRequest`, after initialising a `ForumUrlEncodedRequest`, you will need to call additional method to fill in the request's data.
+Unlike `JsonRequest`, after initialising a `ForumUrlEncodedRequest`, you will need to call additional methods to fill in the request's data.
 
 First, use any of the following static factory methods and specify the URL to send the request to:
 
@@ -307,21 +303,25 @@ First, use any of the following static factory methods and specify the URL to se
 TIP: The `withMethod()` factory method allows you choose any HTTP method you want (including `GET`). Use it when none of the
 other standard factory methods are suitable for your test.
 
-Once you have an instance of `FormUrlEncodedRequest`, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
-explained in section <<request-attributes>>. You can also change the *Content type* header that is sent using `overrideContentType()` (by
-default, `application/x-www-form-urlencoded` is sent).
-
-More importantly, use the `addDataParameter()` or `addDataParameters()` methods to add the data
+Use the `addDataParameter()` or `addDataParameters()` methods to add the data
 which will go into the request's entity body. The `FormUrlEncodedRequest` will automatically format the data you supply, internally,
 into a URL encoded string. An example, using `FormUrlEncodedRequest` follows below,
 
 [source,java]
 -----
-Bastion.request(FormUrlEncodedRequest.post("http://awesomewebsite.test/submit.php")
-    .addDataParameter("name", "John Doe")
-    .addDataParameter("country", "MT")
-).call();
+[ex:form-url-encoded-request-post]
 -----
+
+.Form URL Encoded Request with Attributes
+
+[source,java]
+-----
+[ex:form-url-encoded-request-put-override-content-type]
+-----
+
+Once you have an instance of `FormUrlEncodedRequest`, you can call methods to modify *Headers*, *Query Parameters* and *Route Parameters* as
+explained in section <<request-attributes, Request Attributes>>. You can also change the *Content type* header that is sent using
+`overrideContentType()` (by default, `application/x-www-form-urlencoded` is sent).
 
 [[custom-requests]]
 Custom Requests
@@ -395,6 +395,41 @@ The resulting data is then used as the expected JSON entity for the assertions.
 
 WARNING: The assertions object here will *validate* that the provided expected JSON is valid.
 
+.JSON Response Assertions from String
+[source,java]
+----
+[ex:json-response-assertions]
+----
+
+.JSON Response Assertions from Resource
+[source,java]
+----
+[ex:json-response-assertions-from-resource]
+----
+
+.JSON Response Assertions Failure
+
+`JsonResponseAssertions` give some very useful insight into what your API under test is doing wrong. For example, the following test has been
+set up to fail.
+
+[source,java]
+----
+[ex:json-response-assertions-wrong-value]
+----
+
+Since the expected and actual JSON is compared structurally, Bastion outputs a JSON patch which describes exactly how to transform the actual
+JSON into the received JSON. For the test above, for example, we get:
+
+[source]
+----
+java.lang.AssertionError: Actual response body is not as expected.
+The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:
+    [{"op":"replace","path":"/price","value":"EUR 5.60"}]
+----
+
+For the above test to pass, we need to replace the _value_ of the `price` property in the API with the value `EUR 5.60`.
+
+.Additional operations on JsonResponseAssertions
 Once you have a `JsonResponseAssertions` object, you can call the following methods on it, which will change the behaviour of the assertions
 Bastion performs:
 
@@ -404,7 +439,10 @@ is `application/json` for the assertions to pass. You can change it using this m
 auto-generated ID in the response, for example. Bastion will still check that the property appears in the response but will ignore any
 difference in its value.
 
-*Examples go here*
+[source,java]
+-----
+[ex:json-response-assertions-ignore-field]
+-----
 
 [[json-schema-assertions]]
 JSON Schema Assertion
@@ -493,6 +531,9 @@ data class using https://github.com/FasterXML/jackson-annotations/wiki/Jackson-A
 
 Executing and Getting Data
 --------------------------
+
+Global Configuration
+--------------------
 
 [[contribute]]
 Contribute

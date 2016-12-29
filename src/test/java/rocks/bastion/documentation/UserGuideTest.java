@@ -12,6 +12,7 @@ import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
@@ -22,120 +23,159 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 public class UserGuideTest extends TestWithProxiedEmbeddedServer {
 
+    // docs:quickstart
+    @Test
+    public void quickstart() {
+        Bastion.request("Get the Restaurant's Name", GeneralRequest.get("http://localhost:9876/restaurant"))
+                .withAssertions((statusCode, response, model) -> assertThat(model).isEqualTo("The Sushi Parlour"))
+                .call();
+    }
+    // docs:quickstart
+
     @Test
     public void generalRequest_get() {
+        // docs:general-request-get
         Bastion.request(
                 GeneralRequest.get("http://sushi-shop.test/sushi")
         ).call();
+        // docs:general-request-get
     }
 
     @Test
     public void generalRequest_getWithAttributes() {
+        // docs:general-request-get-with-attributes
         Bastion.request(
                 GeneralRequest.get("http://sushi-shop.test/sushi/{id}")
                         .addRouteParam("id", "5")
                         .addQueryParam("amount", "6")
                         .addHeader("X-Caches", "disabled")
         ).call();
+        // docs:general-request-get-with-attributes
     }
 
     @Test
     public void generalRequest_post() {
+        // docs:general-request-post
         Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>")
                 .setContentType(ContentType.TEXT_HTML)
         ).call();
+        // docs:general-request-post
     }
 
     @Test
     public void jsonRequest_postFromString() {
+        // docs:json-request-post-from-string
         Bastion.request(
                 JsonRequest.postFromString("http://sushi-shop.test/sushi", "{ \"name\": \"Salmon Nigiri\", \"price\":5.85 }")
         ).call();
+        // docs:json-request-post-from-string
     }
 
     @Test
     public void jsonRequest_patchFromString() {
+        // docs:json-request-patch-from-string
         Bastion.request(
                 JsonRequest.patchFromString("http://sushi-shop.test/sushi/2",
                         "{ \"op\":\"replace\", \"path\":\"/name\", \"value\":\"Squid Nigiri\" }")
         ).call();
+        // docs:json-request-patch-from-string
     }
 
     @Test
     public void jsonRequest_postFromResource() {
+        // docs:json-request-post-from-resource
         Bastion.request(
                 JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json")
         ).call();
+        // docs:json-request-post-from-resource
     }
 
     @Test
     public void jsonRequest_postFromResource_overrideContentType() {
+        // docs:json-request-post-from-resource-override
         Bastion.request(
                 JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json")
                         .overrideContentType(ContentType.APPLICATION_OCTET_STREAM)
         ).call();
+        // docs:json-request-post-from-resource-override
     }
 
     @Test
     public void jsonRequest_postFromTemplate() {
+        // docs:json-request-post-from-template
         Bastion.request(
                 JsonRequest.postFromTemplate("http://sushi-shop.test/sushi", "classpath:/rocks/bastion/core/request/test-template-body.json",
                         Collections.singletonMap("food", "Squid Nigiri"))
         ).call();
+        // docs:json-request-post-from-template
     }
 
     @Test
     public void formUrlEncodedRequest_post() {
+        // docs:form-url-encoded-request-post
         Bastion.request(
                 FormUrlEncodedRequest.post("http://sushi-shop.test/sushi")
                         .addDataParameter("name", "Squid Nigiri")
                         .addDataParameter("price", "5.85")
-                        .addHeader("X-Manager", "John Doe")
         ).call();
+        // docs:form-url-encoded-request-post
     }
 
     @Test
     public void formUrlEncodedRequest_put_overrideContentType() {
+        // docs:form-url-encoded-request-put-override-content-type
         Bastion.request(
                 FormUrlEncodedRequest.put("http://sushi-shop.test/booking")
                         .addDataParameter("name", "John Doe")
                         .addDataParameter("timestamp", "2017-02-10T19:00:00Z")
+                        .addHeader("X-Manager", "Alice")
                         .overrideContentType(ContentType.APPLICATION_OCTET_STREAM)
         ).call();
+        // docs:form-url-encoded-request-put-override-content-type
     }
 
     @Test
     public void globals() {
+        // docs:globals
         Bastion.globals()
                 .addHeader("Authorization", "BASIC a3lsZTpwdWxsaWNpbm8=")
                 .addQueryParam("diet", "vegetarian")
                 .addRouteParam("version", "v2");
 
         Bastion.globals().clear();
+        // docs:globals
     }
 
     @Test
     public void clearGlobals() {
+        // docs:clear-globals
         Bastion.globals().clear();
+        // docs:clear-globals
     }
 
     @Test
     public void statusCodeAssertions() {
+        // docs:status-code-assertions
         Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
                 .withAssertions(StatusCodeAssertions.expecting(200)).call();
+        // docs:status-code-assertions
     }
 
     @Test
     public void statusCodeAssertions_multipleArgs() {
+        // docs:status-code-assertions-multiple-args
         Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
                 .withAssertions(StatusCodeAssertions.expecting(new int[]{200, 201, 204})).call();
+        // docs:status-code-assertions-multiple-args
     }
 
     @Test
     public void jsonResponseAssertions() {
+        // docs:json-response-assertions
         Bastion.request(GeneralRequest.get("http://sushi-shop.test/reservation/1"))
                 .withAssertions(JsonResponseAssertions.fromString(200, "{ \"name\":\"John Doe\", \"timestamp\":\"2016-02-10T21:00:00Z\" }"))
                 .call();
+        // docs:json-response-assertions
     }
 
     @Test
@@ -147,6 +187,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
          *   [{"op":"replace","path":"/price","value":"EUR 5.60"}]
          */
         assertThatThrownBy(() -> {
+            // docs:json-response-assertions-wrong-value
             Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
                     .withAssertions(JsonResponseAssertions.fromString(201, "{ " +
                             "\"id\":5, " +
@@ -155,11 +196,13 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
                             "\"type\":\"SASHIMI\" " +
                             "}"
                     ).ignoreValuesForProperties("id")).call();
+            // docs:json-response-assertions-wrong-value
         }).isInstanceOf(AssertionError.class).hasMessageContaining("[{\"op\":\"replace\",\"path\":\"/price\",\"value\":\"EUR 5.60\"}]");
     }
 
     @Test
     public void jsonResponseAssertions_ignoreField() {
+        // docs:json-response-assertions-ignore-field
         Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
                 .withAssertions(JsonResponseAssertions.fromString(201, "{ " +
                                 "\"id\":5, " +
@@ -169,14 +212,17 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
                                 "}"
                         ).ignoreValuesForProperties("id")
                 ).call();
+        // docs:json-response-assertions-ignore-field
     }
 
     @Test
     public void jsonResponseAssertions_fromResource() {
+        // docs:json-response-assertions-from-resource
         Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
                 .withAssertions(JsonResponseAssertions.fromResource(201, "classpath:/json/create_sushi_response.json")
                         .ignoreValuesForProperties("id")
                 ).call();
+        // docs:json-response-assertions-from-resource
     }
 
 }
