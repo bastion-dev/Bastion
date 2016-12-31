@@ -8,9 +8,11 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import rocks.bastion.core.Assertions;
 import rocks.bastion.core.ModelResponse;
+import rocks.bastion.core.Response;
 import rocks.bastion.core.resource.ResourceLoader;
 
 import java.io.IOException;
@@ -33,10 +35,12 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
     }
 
     private String expectedSchema;
+    private ContentType contentType;
 
     private JsonSchemaAssertions(String expectedSchema) {
         Objects.requireNonNull(expectedSchema);
         this.expectedSchema = expectedSchema;
+        contentType = ContentType.APPLICATION_JSON;
     }
 
     @Override
@@ -44,6 +48,7 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
                         ModelResponse<?> response,
                         Object model) throws AssertionError {
         try {
+            assertContentTypeHeader(response);
             JsonNode jsonNodeOfResponse = convertResponseToJsonNode(response);
             assertResponseConformsToSchema(jsonNodeOfResponse);
         } catch (IOException e) {
@@ -53,6 +58,12 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
         } catch (ProcessingException e) {
             throw new RuntimeException("An unknown error occurred while processing the JSON schema and API response", e);
         }
+    }
+
+    public JsonSchemaAssertions overrideContentType(ContentType contentType) {
+        Objects.requireNonNull(contentType);
+        this.contentType = contentType;
+        return this;
     }
 
     private JsonNode convertResponseToJsonNode(ModelResponse<?> response) throws IOException {
@@ -75,6 +86,11 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
     private JsonNode getExpectedSchema() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(expectedSchema);
+    }
+
+    private void assertContentTypeHeader(Response response) {
+        Assert.assertTrue("Content-type exists in response", response.getContentType().isPresent());
+        Assert.assertEquals("Content-type MIME type", contentType.getMimeType(), response.getContentType().get().getMimeType());
     }
 
 }
