@@ -6,6 +6,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import rocks.bastion.core.BastionBuilderImpl;
 import rocks.bastion.core.BastionFactory;
 import rocks.bastion.core.DefaultBastionFactory;
 import rocks.bastion.core.event.*;
@@ -73,8 +74,15 @@ public class BastionRunner extends BlockJUnit4ClassRunner implements BastionList
     protected void runChild(FrameworkMethod method, RunNotifier notifier) {
         runningTestCase = describeChild(method);
         currentNotifier = notifier;
-        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory());
+        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory() {
+            @Override
+            protected void prepareBastion(BastionBuilderImpl<?> bastion) {
+                registerModelConverters(bastion);
+                bastion.registerListener(BastionRunner.this);
+            }
+        });
         super.runChild(method, notifier);
+        BastionFactory.setDefaultBastionFactory(new DefaultBastionFactory());
     }
 
 }
