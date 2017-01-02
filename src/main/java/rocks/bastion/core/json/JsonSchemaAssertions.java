@@ -59,7 +59,15 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
             throw new RuntimeException("An unknown error occurred while processing the JSON schema and API response", e);
         }
     }
-
+    
+    /**
+     * The assertions object will initially check that the content-type header returned by the actual response is
+     * "application/json". This can be overriden to check for a different content-type header using this method. Despite
+     * this, this assertions object will still try to interpret the body as if it were JSON text.
+     *
+     * @param contentType The expected content-type header
+     * @return This object (for method chaining)
+     */
     public JsonSchemaAssertions overrideContentType(ContentType contentType) {
         Objects.requireNonNull(contentType);
         this.contentType = contentType;
