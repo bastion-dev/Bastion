@@ -6,7 +6,7 @@
 :website: http://bastion.rocks/
 
 ////
-This file is process during compilation to produce the final version of the User Guide.
+This file is processed during compilation to produce the final version of the User Guide.
 To build and generate the user guide use the following command:
      mvn generate-resources -Prelease
 ////
@@ -458,7 +458,24 @@ First, you must initialise a `JsonSchemaAssertions` object using one of the two 
 argument to this method.
 * `JsonSchemaAssertions.fromResource()`: Allows you to create a `JsonSchemaAssertions` where the schema to test for is loaded from the given file or classpath resource.
 
-*Examples go here*
+TIP: Just like `JsonResponseAssertions`, this assertions object supports calling `overrideContentType()` to change
+ the expected content-type header.
+
+.JSON Schema Assertions loaded from Resource
+[source,java]
+----
+[ex:json-schema-assertions-from-resource]
+----
+
+.JSON Schema Assertions loaded from String
+[source,java]
+----
+[ex:json-schema-assertions-from-string]
+----
+
+TIP: As you can see from the example above, JSON Schema quickly becomes very unwieldy to type out in a Java source file. We strongly
+recommend supplying the schema from an external resource or, if you really must type out the schema as a string, use an alternative
+JVM language which supports multiline strings (like Groovy).
 
 [[status-code-assertions]]
 Status Code Assertions
@@ -470,7 +487,19 @@ status codes and the assertion will pass if the status code matches any of the g
 To instantiate a `StatusCodeAssertions` object use the `StatusCodeAssertions.expecting()` static factory method. The static factory method
 takes any number of HTTP status codes which will all be considered as valid response codes.
 
-*Examples go here*
+.Single Status Code Assertions
+
+[source,java]
+----
+[ex:status-code-assertions]
+----
+
+.Multiple Status Code Assertions
+
+[source,java]
+----
+[ex:status-code-assertions-multiple-args]
+----
 
 [[custom-assertions]]
 Custom Assertions
@@ -500,6 +529,18 @@ The built-in `Assertions` implementations provided with Bastion are good example
 
 TIP: If you've developed an `Assertions` implementation which you think might be useful for the Bastion community and other users,
 please consider submitting a pull request to the main Bastion repository. See the <<contribute>> section for more information.
+
+[[lambda-assertions]]
+Lambda Assertions
+~~~~~~~~~~~~~~~~~
+
+Since the `Assertions` interface explained in <<custom-assertions,Custom Assertions>> contains only one method, it is a functional interface
+which you can implement using a lambda as shown in the next example (the example below contains AssertJ assertions):
+
+[source,java]
+-----
+[ex:lambda-assertions]
+-----
 
 [[model-binding]]
 Binding a Model

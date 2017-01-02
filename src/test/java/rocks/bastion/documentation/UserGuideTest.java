@@ -3,11 +3,13 @@ package rocks.bastion.documentation;
 import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import rocks.bastion.Bastion;
+import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.FormUrlEncodedRequest;
 import rocks.bastion.core.GeneralRequest;
 import rocks.bastion.core.StatusCodeAssertions;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
+import rocks.bastion.core.json.JsonSchemaAssertions;
 import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
@@ -223,6 +225,41 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
                         .ignoreValuesForProperties("id")
                 ).call();
         // docs:json-response-assertions-from-resource
+    }
+
+    public void jsonSchemaAssertions_fromResource() {
+        // docs:json-schema-assertions-from-resource
+        Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                .withAssertions(JsonSchemaAssertions.fromResource("classpath:/json/create_sushi_response_schema.json")).call();
+        // docs:json-schema-assertions-from-resource
+    }
+
+    public void jsonSchemaAssertions_fromString() {
+        // docs:json-schema-assertions-from-string
+        Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                .withAssertions(JsonSchemaAssertions.fromString("{" +
+                        "  \"$schema\": \"http://json-schema.org/draft-04/schema#\"," +
+                        "  \"type\": \"object\"," +
+                        "  \"properties\": {" +
+                        "    \"id\": {\n" +
+                        "      \"type\": \"integer\"" +
+                        "    }" +
+                        "  }," +
+                        "  \"required\": [" +
+                        "    \"id\"" +
+                        "  ]" +
+                        "}")).call();
+        // docs:json-schema-assertions-from-string
+    }
+
+    public void lambdaAssertions() {
+        // docs:lambda-assertions
+        Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
+                .withAssertions((statusCode, response, model) -> {
+                    assertThat(statusCode).describedAs("Response Status Code").isEqualTo(200);
+                    assertThat(response.getHeaders()).describedAs("Response Headers").contains(new ApiHeader("Author", "John Doe"));
+                }).call();
+        // docs:lambda-assertions
     }
 
 }

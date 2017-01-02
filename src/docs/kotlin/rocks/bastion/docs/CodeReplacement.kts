@@ -8,7 +8,7 @@ val mojo = ExecuteKotlinScriptMojo.INSTANCE
 
 class Library(val sources: File, val boundary: Regex = Regex("// docs:([a-zA-Z0-9\\-_]+)")) {
 
-    val snippets = sources.walk().filter { isJavaOrGroovyFile(it) }
+    private val snippets = sources.walk().filter { isJavaOrGroovyFile(it) }
             .map { toCodeExampleSnippets(it) }
             .reduce { left, right -> left + right }
 

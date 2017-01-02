@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Bastion User Guide 0.4-SNAPSHOT</title>
+<title>Bastion User Guide (0.4-SNAPSHOT)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -511,7 +511,7 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="article">
 <div id="header">
-<h1>Bastion User Guide 0.4-SNAPSHOT</h1>
+<h1>Bastion User Guide (0.4-SNAPSHOT)</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -538,29 +538,19 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#json-schema-assertions">5.2. JSON Schema Assertion</a></li>
 <li><a href="#status-code-assertions">5.3. Status Code Assertions</a></li>
 <li><a href="#custom-assertions">5.4. Custom Assertions</a></li>
+<li><a href="#lambda-assertions">5.5. Lambda Assertions</a></li>
 </ul>
 </li>
 <li><a href="#model-binding">6. Binding a Model</a></li>
 <li><a href="#_executing_and_getting_data">7. Executing and Getting Data</a></li>
-<li><a href="#contribute">8. Contribute</a></li>
+<li><a href="#_global_configuration">8. Global Configuration</a></li>
+<li><a href="#contribute">9. Contribute</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Heyo! Fix all Bastion requests without descriptive text!
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Bastion is a Java-based library for testing HTTP APIs and endpoints. Developers can use Bastion to test any type of HTTP service
 but the library also provides built-in classes for testing endpoints validating responses containing various different content types including
@@ -1283,7 +1273,7 @@ The following JSON Patch (as per RFC-6902) tells you what operations you need to
 <p>For the above test to pass, we need to replace the <em>value</em> of the <code>price</code> property in the API with the value <code>EUR 5.60</code>.</p>
 </div>
 <div class="paragraph">
-<div class="title">Additional operationso on JsonResponseAssertions</div>
+<div class="title">Additional operations on JsonResponseAssertions</div>
 <p>Once you have a <code>JsonResponseAssertions</code> object, you can call the following methods on it, which will change the behaviour of the assertions
 Bastion performs:</p>
 </div>
@@ -1335,8 +1325,57 @@ argument to this method.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Examples go here</strong></p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Just like <code>JsonResponseAssertions</code>, this assertions object supports calling <code>overrideContentType()</code> to change
+ the expected content-type header.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">JSON Schema Assertions loaded from Resource</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonSchemaAssertions.fromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_response_schema.json</span><span class="delimiter">&quot;</span></span>)).call();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">JSON Schema Assertions loaded from String</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(JsonSchemaAssertions.fromString(<span class="string"><span class="delimiter">&quot;</span><span class="content">{</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="char">\&quot;</span><span class="content">$schema</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">http://json-schema.org/draft-04/schema#</span><span class="char">\&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="char">\&quot;</span><span class="content">type</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">object</span><span class="char">\&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="char">\&quot;</span><span class="content">properties</span><span class="char">\&quot;</span><span class="content">: {</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">    </span><span class="char">\&quot;</span><span class="content">id</span><span class="char">\&quot;</span><span class="content">: {</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">      </span><span class="char">\&quot;</span><span class="content">type</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">integer</span><span class="char">\&quot;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">    }</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  },</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="char">\&quot;</span><span class="content">required</span><span class="char">\&quot;</span><span class="content">: [</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">    </span><span class="char">\&quot;</span><span class="content">id</span><span class="char">\&quot;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">  ]</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>)).call();</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+As you can see from the example above, JSON Schema quickly becomes very unwieldy to type out in a Java source file. We strongly
+recommend supplying the schema from an external resource or, if you really must type out the schema as a string, use an alternative
+JVM language which supports multiline strings (like Groovy).
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1349,8 +1388,19 @@ status codes and the assertion will pass if the status code matches any of the g
 <p>To instantiate a <code>StatusCodeAssertions</code> object use the <code>StatusCodeAssertions.expecting()</code> static factory method. The static factory method
 takes any number of HTTP status codes which will all be considered as valid response codes.</p>
 </div>
-<div class="paragraph">
-<p><strong>Examples go here</strong></p>
+<div class="listingblock">
+<div class="title">Single Status Code Assertions</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(GeneralRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/greeting</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;b&gt;Hello, sushi lover!&lt;/b&gt;</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(StatusCodeAssertions.expecting(<span class="integer">200</span>)).call();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Multiple Status Code Assertions</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(GeneralRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/greeting</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;b&gt;Hello, sushi lover!&lt;/b&gt;</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions(StatusCodeAssertions.expecting(<span class="keyword">new</span> <span class="type">int</span><span class="type">[]</span>{<span class="integer">200</span>, <span class="integer">201</span>, <span class="integer">204</span>})).call();</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1405,6 +1455,22 @@ please consider submitting a pull request to the main Bastion repository. See th
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="lambda-assertions">5.5. Lambda Assertions</h3>
+<div class="paragraph">
+<p>Since the <code>Assertions</code> interface explains in <a href="#custom-assertions">Custom Assertions</a> contains only one method, it is a function which you can
+implement using a lambda as shown in the next example (the example below contains AssertJ assertions):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(GeneralRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/greeting</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;b&gt;Hello, sushi lover!&lt;/b&gt;</span><span class="delimiter">&quot;</span></span>))
+        .withAssertions((statusCode, response, model) -&gt; {
+            assertThat(statusCode).describedAs(<span class="string"><span class="delimiter">&quot;</span><span class="content">Response Status Code</span><span class="delimiter">&quot;</span></span>).isEqualTo(<span class="integer">200</span>);
+            assertThat(response.getHeaders()).describedAs(<span class="string"><span class="delimiter">&quot;</span><span class="content">Response Headers</span><span class="delimiter">&quot;</span></span>).contains(<span class="keyword">new</span> ApiHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>));
+        }).call();</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1449,7 +1515,13 @@ data class using <a href="https://github.com/FasterXML/jackson-annotations/wiki/
 </div>
 </div>
 <div class="sect1">
-<h2 id="contribute">8. Contribute</h2>
+<h2 id="_global_configuration">8. Global Configuration</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="contribute">9. Contribute</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Bastion is an open-source project! Open-source means that we encourage you to contribute in any way you can. We will accept all contributions, in any shape
@@ -1491,7 +1563,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-29 21:29:54 CET
+Last updated 2017-01-02 21:20:39 CET
 </div>
 </div>
 </body>

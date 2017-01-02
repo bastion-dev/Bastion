@@ -283,7 +283,7 @@
                             <backend>html5</backend>
                             <sourceHighlighter>coderay</sourceHighlighter>
                             <sourceDirectory>${project.basedir}/target/generated-docs</sourceDirectory>
-                            <outputDirectory>${project.basedir}/docs</outputDirectory>
+                            <outputDirectory>${project.basedir}/docs/reference</outputDirectory>
                             <embedAssets>true</embedAssets>
                             <attributes>
                                 <imagesdir>src/docs/asciidoc/images</imagesdir>
