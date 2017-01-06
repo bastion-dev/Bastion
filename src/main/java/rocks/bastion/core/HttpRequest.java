@@ -100,7 +100,7 @@ public interface HttpRequest {
      * Tests exceeding these timeouts will throw an {@link AssertionError} and be marked as failed.
      * A value of {@literal 0} indicates no timeout - the test will wait indefinitely for a response.
      *
-     * If the request does not specify its own timeout, the globally configured timeout is used instead.
+     * By default, this returns the {@link HttpRequest#USE_GLOBAL_TIMEOUT} constant, which indicates that the globally configured timeout should be used.
      *
      * @return a number (in milliseconds) representing the longest a test should wait for each phase of a request
      */

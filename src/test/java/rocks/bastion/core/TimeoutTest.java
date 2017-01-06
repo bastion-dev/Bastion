@@ -1,5 +1,6 @@
 package rocks.bastion.core;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
@@ -24,6 +25,11 @@ public class TimeoutTest extends TestWithEmbeddedServer {
     public Stopwatch stopwatch = new Stopwatch() {
     };
 
+    @After
+    public void teardown() {
+        Bastion.globals().clear();
+    }
+
     @Test(timeout = 3000L)
     public void callSlowAPI_jsonRequestWithConfiguredTimeout_requestTimesOutAfterConfiguredTimeAndTestFails() {
         JsonRequest request = JsonRequest.fromString(HttpMethod.GET, "http://localhost:9876/chikuzen-ni", "");
@@ -34,14 +40,14 @@ public class TimeoutTest extends TestWithEmbeddedServer {
     @Test(timeout = 3000L)
     public void callSlowAPI_generalRequestWithConfiguredTimeout_requestTimesOutAfterConfiguredTimeAndTestFails() {
         GeneralRequest request = GeneralRequest.get("http://localhost:9876/chikuzen-ni");
-        request.setTimeout(1750L);
+        request.setTimeout(1600L);
         performRequestAndAssertTimeout(request, request.timeout());
     }
 
     @Test(timeout = 3000L)
     public void callSlowAPI_formUrlEncodedRequestWithConfiguredTimeout_requestTimesOutAfterConfiguredTimeAndTestFails() {
         FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.GET, "http://localhost:9876/chikuzen-ni");
-        request.setTimeout(2000L);
+        request.setTimeout(1700L);
         performRequestAndAssertTimeout(request, request.timeout());
     }
 
@@ -55,14 +61,14 @@ public class TimeoutTest extends TestWithEmbeddedServer {
     @Test(timeout = 3000L)
     public void callSlowAPI_generalRequestWithNoConfiguredTimeout_requestTimesOutAfterGlobalTimeoutAndTestFails() {
         GeneralRequest request = GeneralRequest.get("http://localhost:9876/chikuzen-ni");
-        Bastion.globals().timeout(1750L);
+        Bastion.globals().timeout(1600L);
         performRequestAndAssertTimeout(request, Bastion.globals().getGlobalRequestTimeout());
     }
 
     @Test(timeout = 3000L)
     public void callSlowAPI_formUrlEncodedRequestWithNoConfiguredTimeout_requestTimesOutAfterGlobalTimeoutAndTestFails() {
         FormUrlEncodedRequest request = FormUrlEncodedRequest.withMethod(HttpMethod.GET, "http://localhost:9876/chikuzen-ni");
-        Bastion.globals().timeout(2000L);
+        Bastion.globals().timeout(1700L);
         performRequestAndAssertTimeout(request, Bastion.globals().getGlobalRequestTimeout());
     }
 
