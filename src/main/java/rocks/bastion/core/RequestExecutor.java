@@ -62,7 +62,7 @@ public class RequestExecutor {
             return convertToRawResponse(httpResponse);
         } catch (UnirestException exception) {
             if (exception.getCause() instanceof SocketTimeoutException) {
-                throw new AssertionError(String.format("Failed to receive response before timeout of [%s] ms", bastionHttpRequest.timeout()));
+                throw new AssertionError(String.format("Failed to receive response before timeout of [%s] ms", resolveTimeoutOrFallbackToGlobal(bastionHttpRequest, configuration)));
             }
             throw new IllegalStateException("Failed executing request", exception);
         }
@@ -70,7 +70,8 @@ public class RequestExecutor {
 
     private com.mashape.unirest.request.HttpRequest prepareHttpRequest() {
 
-        Unirest.setTimeouts(bastionHttpRequest.timeout(), bastionHttpRequest.timeout());
+        long timeout = resolveTimeoutOrFallbackToGlobal(bastionHttpRequest, configuration);
+        Unirest.setTimeouts(timeout, timeout);
         com.mashape.unirest.request.HttpRequest request;
         switch (bastionHttpRequest.method().getValue()) {
             case "GET":
@@ -98,6 +99,14 @@ public class RequestExecutor {
                 throw new UnsupportedOperationException(String.format("We cannot perform a request of type %s.", bastionHttpRequest.method().getValue()));
         }
         return request;
+    }
+
+    private static long resolveTimeoutOrFallbackToGlobal(HttpRequest request, Configuration configuration) {
+        if (request.timeout() == HttpRequest.USE_GLOBAL_TIMEOUT) {
+            return configuration.getGlobalRequestAttributes().getGlobalRequestTimeout();
+        } else {
+            return request.timeout();
+        }
     }
 
     private void applyHeaders() {
