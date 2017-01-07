@@ -573,6 +573,18 @@ data class using https://github.com/FasterXML/jackson-annotations/wiki/Jackson-A
 Executing and Getting Data
 --------------------------
 
+Once you have configured a request and an assertions object for Bastion to execute, you can start the test using the `call()` method. Bastion
+will execute the request supplied in `request()`, bind the response to a model of the type specified in `bind()` and finally assert that the assertions
+given in `withAssertions()` hold true.
+
+Once executed, you can retrieve the response data as follows:
+
+* `getResponse()`: Returns a complete HTTP `Response` object containing all HTTP headers and the content body. It will also contain the
+model object which was bound by Bastion.
+* `getModel()`: Returns the model object which was bound by Bastion. This is a shortcut method for `getResponse().getModel()`.
+
+*Examples showing both methods go here*
+
 Global Configuration
 --------------------
 
