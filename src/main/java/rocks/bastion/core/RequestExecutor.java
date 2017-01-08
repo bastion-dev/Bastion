@@ -110,27 +110,25 @@ public class RequestExecutor {
     }
 
     private void applyHeaders() {
-        headers = new LinkedList<>();
-        ArrayList<ApiHeader> combinedHeaders = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
-        combinedHeaders.addAll(bastionHttpRequest.headers());
-        if (!combinedHeaders.stream().anyMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
+        headers = new LinkedList<>(configuration.getGlobalRequestAttributes().getGlobalHeaders());
+        headers.addAll(bastionHttpRequest.headers());
+        if (headers.stream().noneMatch(header -> header.getName().equalsIgnoreCase("content-type")) && bastionHttpRequest.contentType().isPresent()) {
             headers.add(new ApiHeader("Content-Type", bastionHttpRequest.contentType().get().toString()));
         }
-        combinedHeaders.stream().forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
-        headers.addAll(combinedHeaders);
+        headers.forEach(header -> executableHttpRequest.header(header.getName(), header.getValue()));
     }
 
     private void applyQueryParameters() {
         List<ApiQueryParam> apiQueryParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalQueryParams());
         apiQueryParams.addAll(bastionHttpRequest.queryParams());
-        apiQueryParams.stream().forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
+        apiQueryParams.forEach(queryParam -> executableHttpRequest.queryString(queryParam.getName(), queryParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();
     }
 
     private void applyRouteParameters() {
         List<RouteParam> routeParams = new ArrayList<>(configuration.getGlobalRequestAttributes().getGlobalRouteParams());
         routeParams.addAll(bastionHttpRequest.routeParams());
-        routeParams.stream().forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
+        routeParams.forEach(routeParam -> executableHttpRequest.routeParam(routeParam.getName(), routeParam.getValue()));
         resolvedUrl = executableHttpRequest.getUrl();
     }
 
