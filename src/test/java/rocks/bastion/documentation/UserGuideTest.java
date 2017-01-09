@@ -3,13 +3,11 @@ package rocks.bastion.documentation;
 import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import rocks.bastion.Bastion;
-import rocks.bastion.core.ApiHeader;
-import rocks.bastion.core.FormUrlEncodedRequest;
-import rocks.bastion.core.GeneralRequest;
-import rocks.bastion.core.StatusCodeAssertions;
+import rocks.bastion.core.*;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
 import rocks.bastion.core.json.JsonSchemaAssertions;
+import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
@@ -227,6 +225,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
         // docs:json-response-assertions-from-resource
     }
 
+    @Test
     public void jsonSchemaAssertions_fromResource() {
         // docs:json-schema-assertions-from-resource
         Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
@@ -234,6 +233,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
         // docs:json-schema-assertions-from-resource
     }
 
+    @Test
     public void jsonSchemaAssertions_fromString() {
         // docs:json-schema-assertions-from-string
         Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
@@ -252,6 +252,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
         // docs:json-schema-assertions-from-string
     }
 
+    @Test
     public void lambdaAssertions() {
         // docs:lambda-assertions
         Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
@@ -260,6 +261,47 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
                     assertThat(response.getHeaders()).describedAs("Response Headers").contains(new ApiHeader("Author", "John Doe"));
                 }).call();
         // docs:lambda-assertions
+    }
+
+    @Test
+    public void bindModel() {
+        // docs:bind-model
+        Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                .bind(Sushi.class)
+                .withAssertions((statusCode, response, model) -> {
+                    assertThat(statusCode).isEqualTo(201);
+                    assertThat(response.getContentType()).hasValueSatisfying(contentType ->
+                            assertThat(contentType.getMimeType()).isEqualToIgnoringCase("application/json")
+                    );
+                    assertThat(model.getName()).isEqualTo("sashimi");
+                }).call();
+        // docs:bind-model
+    }
+
+    @Test
+    public void getResponse() {
+        // docs:get-response
+        ModelResponse<? extends Sushi> response =
+                Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                        .bind(Sushi.class)
+                        .call()
+                        .getResponse();
+
+        System.out.println(response.getHeaders());
+        // docs:get-response
+    }
+
+    @Test
+    public void getModel() {
+        // docs:get-model
+        Sushi sushi =
+                Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                        .bind(Sushi.class)
+                        .call()
+                        .getModel();
+
+        System.out.println(sushi.getName());
+        // docs:get-model
     }
 
 }

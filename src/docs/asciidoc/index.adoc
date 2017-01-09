@@ -561,14 +561,15 @@ Once you have bound a model type using `bind()`, the typed model object is avail
 `withAssertions()` method.This is particularly useful if you supply a lambda expression to the `withAssertions()` method as the model object
 will be correctly typed and all the data will be directly available in Java.
 
-*Example showing lambda expression goes here*
-
 .Binding JSON data to Java Objects
 When receiving `application/json` data, if you supply any Java object type to the `bind()` method, Bastion will use the Jackson library to
 deserialise the received JSON data to whatever object type you supplied. This means that you can modify the way data is deserialised in your
 data class using https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations[Jackson Annotations].
 
-*Example binding JSON to Java object goes here*
+[source,java]
+-----
+[ex:bind-model]
+-----
 
 Executing and Getting Data
 --------------------------
@@ -583,10 +584,50 @@ Once executed, you can retrieve the response data as follows:
 model object which was bound by Bastion.
 * `getModel()`: Returns the model object which was bound by Bastion. This is a shortcut method for `getResponse().getModel()`.
 
-*Examples showing both methods go here*
+.Getting the entire HTTP response object
+
+[source,java]
+-----
+[ex:get-response]
+-----
+
+.Getting the model object from the response
+
+[source,java]
+-----
+[ex:get-model]
+-----
 
 Global Configuration
 --------------------
+
+Global configuration allows you to add <<request-attributes,request attributes>> to all requests that are performed by Bastion. This is extremely useful, for example,
+if you have to add an authorization header to your requests after logging in. You can access the following request attributes through `Bastion.globals`:
+
+* *Global Headers*: Use `addHeader()` or `removeHeader()` to modify the global HTTP headers which are appended to every HTTP request.
+* *Global Query Parameters*: Use `addQueryParam()` or `removeQueryParam()` to modify the global query parameters which are appended to every
+HTTP request.
+* *Global Route Parameters*: Use `addRouteParam()` or `removeRouteParam()` to modify the global route parameters which are appended to every
+HTTP request.
+* *Global Timeout*: Use `setTimeout()` to set the timeout value for all HTTP requests (unless otherwise specified differently for a particular
+request).
+
+[source,java]
+-----
+[ex:globals]
+-----
+
+.Clearing Globals
+
+To reset all globals back to their original state, use `Bastion.globals().clear()`.
+
+[source,java]
+-----
+[ex:clear-globals]
+-----
+
+IMPORTANT: In tests which set request globals, you will want to clear them afterwards using JUnit's `@After` annotation unless you want them
+to persist across multiple tests.
 
 [[contribute]]
 Contribute
