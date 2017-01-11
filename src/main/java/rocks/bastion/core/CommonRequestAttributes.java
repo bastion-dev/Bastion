@@ -36,6 +36,7 @@ public class CommonRequestAttributes {
     private Collection<ApiQueryParam> queryParams;
     private Collection<RouteParam> routeParams;
     private Object body;
+    private long timeout;
 
     /**
      * Constructs a new instance of this object containing the following initial defaults:
@@ -47,6 +48,7 @@ public class CommonRequestAttributes {
      * <li>Headers: Initialised to the empty collection of headers.</li>
      * <li>Query parameters: Initialised to the empty collection of query parameters.</li>
      * <li>Route parameters: Initialised to the empty collection of route parameters.</li>
+     * <li>Timeout: Falls back to globally configured timeout</li>
      * </ul>
      *
      * @param method The HTTP method to use for a request. Cannot be {@literal null}.
@@ -64,6 +66,7 @@ public class CommonRequestAttributes {
         headers = new LinkedList<>();
         queryParams = new LinkedList<>();
         routeParams = new LinkedList<>();
+        timeout = HttpRequest.USE_GLOBAL_TIMEOUT;
         setBody(body);
     }
 
@@ -226,4 +229,23 @@ public class CommonRequestAttributes {
         return body;
     }
 
+    /**
+     * See {@link HttpRequest#timeout()}.
+     *
+     * @return the timeout for all phases of a request
+     */
+    public long timeout() {
+        return timeout;
+    }
+
+
+    /**
+     * Set the timeout for all phases of a request.
+     * See {@link HttpRequest#timeout()} for more details.
+     *
+     * @param timeout the timeout (in milliseconds).
+     */
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
 }

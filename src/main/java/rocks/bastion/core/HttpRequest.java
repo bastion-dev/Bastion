@@ -11,6 +11,11 @@ import java.util.Optional;
 public interface HttpRequest {
 
     /**
+     * Constant to be returned by {@link #timeout()} if the globally configured timeout should be used when performing this request.
+     */
+    long USE_GLOBAL_TIMEOUT = -1;
+
+    /**
      * Returns a descriptive name for the contents of this request object.
      *
      * @return Description of this request
@@ -84,5 +89,23 @@ public interface HttpRequest {
      * @return An object that will serve as the content body for this request. May be {@literal null}.
      */
     Object body();
+
+    /**
+     * A timeout (in milliseconds) that will cause tests to cutoff if:
+     * <ul>
+     *  <li>the connection takes too long to be established</li>
+     *  <li>the response takes too long to arrive.</li>
+     * </ul>
+     * Note that these are 2 separate timeouts; the test might take (in the worst case) <b>twice</b> the value of the timeout, if the phases mentioned above take long enough.
+     * Tests exceeding these timeouts will throw an {@link AssertionError} and be marked as failed.
+     * A value of {@literal 0} indicates no timeout - the test will wait indefinitely for a response.
+     *
+     * By default, this returns the {@link HttpRequest#USE_GLOBAL_TIMEOUT} constant, which indicates that the globally configured timeout should be used.
+     *
+     * @return a number (in milliseconds) representing the longest a test should wait for each phase of a request
+     */
+    default long timeout() {
+        return USE_GLOBAL_TIMEOUT;
+    }
 
 }

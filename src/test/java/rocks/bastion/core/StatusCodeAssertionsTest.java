@@ -35,13 +35,14 @@ public class StatusCodeAssertionsTest {
     }
 
     @Test
-    public void init_emptyIntegersExpectation() throws Exception {
-        assertThatThrownBy(() -> StatusCodeAssertions.expecting(new Integer[0])).describedAs("Empty constructor").isInstanceOf(IllegalArgumentException.class);
+    public void init_emptyIterableExpectation() throws Exception {
+        assertThatThrownBy(() -> StatusCodeAssertions.expecting(Collections.emptyList())).describedAs("Empty constructor").isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void init_emptyIterableExpectation() throws Exception {
-        assertThatThrownBy(() -> StatusCodeAssertions.expecting(Collections.emptyList())).describedAs("Empty constructor").isInstanceOf(IllegalArgumentException.class);
+    public void initAndExecute_literalIntegersPassed_assertionCreatedCorrectly() throws Exception {
+        StatusCodeAssertions assertion = StatusCodeAssertions.expecting(401, 404);
+        assertion.execute(401, getResponseWithStatusCode(401), "Model");
     }
 
     private void testAssertion(int actual, int... expected) {
