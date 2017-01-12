@@ -16,7 +16,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.impl.conn.DefaultSchemePortResolver;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
-import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -29,7 +28,6 @@ public class TestWithProxiedEmbeddedServer extends TestWithEmbeddedServer {
 
     @BeforeClass
     public static void setupProxying() {
-        // Code taken from: http://stackoverflow.com/a/35327982s
         DnsResolver dnsResolver = prepareProxiedDnsResolver();
         DefaultSchemePortResolver schemePortResolver = prepareSchemePortResolver();
         BasicHttpClientConnectionManager connManager = prepareConnectionManager(dnsResolver, schemePortResolver);
@@ -38,7 +36,11 @@ public class TestWithProxiedEmbeddedServer extends TestWithEmbeddedServer {
         Unirest.setHttpClient(httpClient);
     }
 
-    @NotNull
+    @AfterClass
+    public static void cleanupProxying() {
+        Unirest.setHttpClient(originalHttpClient);
+    }
+
     private static DefaultSchemePortResolver prepareSchemePortResolver() {
         return new DefaultSchemePortResolver() {
             @Override
@@ -52,18 +54,12 @@ public class TestWithProxiedEmbeddedServer extends TestWithEmbeddedServer {
         };
     }
 
-    @AfterClass
-    public static void cleanupProxying() {
-        Unirest.setHttpClient(originalHttpClient);
-    }
-
     private static CloseableHttpClient prepareHttpClient(BasicHttpClientConnectionManager connManager) {
         return HttpClientBuilder.create()
                 .setConnectionManager(connManager)
                 .build();
     }
 
-    @NotNull
     private static BasicHttpClientConnectionManager prepareConnectionManager(DnsResolver dnsResolver, DefaultSchemePortResolver schemePortResolver) {
         return new BasicHttpClientConnectionManager(
                 RegistryBuilder.<ConnectionSocketFactory>create()
@@ -76,7 +72,6 @@ public class TestWithProxiedEmbeddedServer extends TestWithEmbeddedServer {
         );
     }
 
-    @NotNull
     private static DnsResolver prepareProxiedDnsResolver() {
         return new SystemDefaultDnsResolver() {
             @Override

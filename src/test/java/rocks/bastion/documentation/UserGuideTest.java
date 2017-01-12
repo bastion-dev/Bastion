@@ -165,7 +165,7 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
     public void statusCodeAssertions_multipleArgs() {
         // docs:status-code-assertions-multiple-args
         Bastion.request(GeneralRequest.post("http://sushi-shop.test/greeting", "<b>Hello, sushi lover!</b>"))
-                .withAssertions(StatusCodeAssertions.expecting(new int[]{200, 201, 204})).call();
+                .withAssertions(StatusCodeAssertions.expecting(200, 201, 204)).call();
         // docs:status-code-assertions-multiple-args
     }
 
