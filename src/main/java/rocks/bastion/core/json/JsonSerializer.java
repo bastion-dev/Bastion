@@ -6,12 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Serializes an {@link Object} into its String representation.
  */
-class JsonSerializer {
+final class JsonSerializer {
 
     private final Object source;
     private final ObjectMapper objectMapper;
 
-    JsonSerializer(Object source) {
+    public JsonSerializer(Object source) {
         this.source = source;
         this.objectMapper = new ObjectMapper();
     }
@@ -22,7 +22,7 @@ class JsonSerializer {
      * @return The JSON {@link String} representation of the source object.
      * @throws JsonSerializationException if an unexpected exception is thrown during serialization
      */
-    String serialize() throws JsonSerializationException {
+    public String serialize() throws JsonSerializationException {
         try {
             return objectMapper.writeValueAsString(source);
         } catch (JsonProcessingException e) {

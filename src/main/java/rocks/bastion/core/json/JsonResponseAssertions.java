@@ -121,7 +121,7 @@ public class JsonResponseAssertions implements Assertions<Object> {
      * @return An assertions object for use with the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)} method
      */
     public static JsonResponseAssertions fromModel(int expectedStatusCode, Object expectedModel) {
-        final String expectedJson = new JsonSerializer(expectedModel).serialize();
+        String expectedJson = new JsonSerializer(expectedModel).serialize();
         return fromString(expectedStatusCode, expectedJson);
     }
 

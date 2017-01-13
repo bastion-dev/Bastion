@@ -92,42 +92,42 @@ public class JsonRequestTest {
 
     @Test
     public void fromModel_validModel_shouldReturnARequest() throws Exception {
-        final Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
-        final JsonRequest jsonRequest = JsonRequest.fromModel(HttpMethod.POST, "http://test.test", model);
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        JsonRequest jsonRequest = JsonRequest.fromModel(HttpMethod.POST, "http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "POST http://test.test", HttpMethod.POST,
                 "{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"}");
     }
 
     @Test
     public void fromModel_parametrisedTypeModel_shouldReturnARequest() throws Exception {
-        final List<Sushi> model = new LinkedList<>();
+        List<Sushi> model = new LinkedList<>();
         model.add(Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build());
         model.add(Sushi.newSushi().id(29).name("Tuna Nigiri").price(20L).type(Sushi.Type.NIGIRI).build());
-        final JsonRequest jsonRequest = JsonRequest.fromModel(HttpMethod.POST, "http://test.test", model);
+        JsonRequest jsonRequest = JsonRequest.fromModel(HttpMethod.POST, "http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "POST http://test.test", HttpMethod.POST,
                 "[{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"},{\"id\":29,\"name\":\"Tuna Nigiri\",\"price\":20,\"type\":\"NIGIRI\"}]");
     }
 
     @Test
     public void postFromModel_validModel_shouldReturnARequest() throws Exception {
-        final Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
-        final JsonRequest jsonRequest = JsonRequest.postFromModel("http://test.test", model);
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        JsonRequest jsonRequest = JsonRequest.postFromModel("http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "POST http://test.test", HttpMethod.POST,
                 "{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"}");
     }
 
     @Test
     public void putFromModel_validModel_shouldReturnARequest() throws Exception {
-        final Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
-        final JsonRequest jsonRequest = JsonRequest.putFromModel("http://test.test", model);
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        JsonRequest jsonRequest = JsonRequest.putFromModel("http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "PUT http://test.test", HttpMethod.PUT,
                 "{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"}");
     }
 
     @Test
     public void patchFromModel_validModel_shouldReturnARequest() throws Exception {
-        final Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
-        final JsonRequest jsonRequest = JsonRequest.patchFromModel("http://test.test", model);
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        JsonRequest jsonRequest = JsonRequest.patchFromModel("http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "PATCH http://test.test", HttpMethod.PATCH,
                 "{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"}");
     }
@@ -135,8 +135,8 @@ public class JsonRequestTest {
 
     @Test
     public void deleteFromModel_validModel_shouldReturnARequest() throws Exception {
-        final Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
-        final JsonRequest jsonRequest = JsonRequest.deleteFromModel("http://test.test", model);
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        JsonRequest jsonRequest = JsonRequest.deleteFromModel("http://test.test", model);
         assertJsonRequestAttributes(jsonRequest, "DELETE http://test.test", HttpMethod.DELETE,
                 "{\"id\":19,\"name\":\"Salmon Nigiri\",\"price\":10,\"type\":\"NIGIRI\"}");
     }

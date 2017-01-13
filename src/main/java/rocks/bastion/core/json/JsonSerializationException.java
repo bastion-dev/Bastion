@@ -5,9 +5,9 @@ import static java.lang.String.format;
 /**
  * Indicates that an object could not be serialized due to an unforeseen error.
  */
-public class JsonSerializationException extends RuntimeException {
+public final class JsonSerializationException extends RuntimeException {
 
-    private Object object;
+    private final Object object;
 
     public JsonSerializationException(Object object){
         super(format("The provided object could not be serialized: %s", object));

@@ -1,6 +1,5 @@
 package rocks.bastion.core.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import org.apache.http.entity.ContentType;
@@ -20,7 +19,7 @@ import java.util.Optional;
  * contains valid JSON.
  *
  * Initially, the request is configured to send "application/json" as its Content-type header but this
- * can be overriden by the user by calling the {@link #overrideContentType(ContentType)} method.
+ * can be overridden by the user by calling the {@link #overrideContentType(ContentType)} method.
  */
 public class JsonRequest implements HttpRequest {
 
@@ -439,10 +438,10 @@ public class JsonRequest implements HttpRequest {
      * @param url    The URL to send this request on
      * @param model  The object to serialize into JSON text as the body content for this request
      * @return An HTTP request containing the serialized model as the JSON body text
-     * @throws JsonSerializationException Thrown if an unexpected exeption occurs during serialization
+     * @throws JsonSerializationException Thrown if an unexpected exception occurs during serialization
      */
-    public static JsonRequest fromModel(HttpMethod method, String url, Object model) throws JsonProcessingException {
-        final String jsonContent = new JsonSerializer(model).serialize();
+    public static JsonRequest fromModel(HttpMethod method, String url, Object model) throws JsonSerializationException {
+        String jsonContent = new JsonSerializer(model).serialize();
         return new JsonRequest(method, url, jsonContent);
     }
 
@@ -454,9 +453,9 @@ public class JsonRequest implements HttpRequest {
      * @param url    The URL to send this request on
      * @param model  The object to serialize into JSON text as the body content for this request
      * @return An HTTP request containing the serialized model as the JSON body text
-     * @throws JsonSerializationException Thrown if an unexpected exeption occurs during serialization
+     * @throws JsonSerializationException Thrown if an unexpected exception occurs during serialization
      */
-    public static JsonRequest postFromModel(String url, Object model) throws JsonProcessingException {
+    public static JsonRequest postFromModel(String url, Object model) throws JsonSerializationException {
         return fromModel(HttpMethod.POST, url, model);
     }
 
@@ -468,9 +467,9 @@ public class JsonRequest implements HttpRequest {
      * @param url    The URL to send this request on
      * @param model  The object to serialize into JSON text as the body content for this request
      * @return An HTTP request containing the serialized model as the JSON body text
-     * @throws JsonSerializationException Thrown if an unexpected exeption occurs during serialization
+     * @throws JsonSerializationException Thrown if an unexpected exception occurs during serialization
      */
-    public static JsonRequest putFromModel(String url, Object model) throws JsonProcessingException {
+    public static JsonRequest putFromModel(String url, Object model) throws JsonSerializationException {
         return fromModel(HttpMethod.PUT, url, model);
     }
 
@@ -482,9 +481,9 @@ public class JsonRequest implements HttpRequest {
      * @param url    The URL to send this request on
      * @param model  The object to serialize into JSON text as the body content for this request
      * @return An HTTP request containing the serialized model as the JSON body text
-     * @throws JsonSerializationException Thrown if an unexpected exeption occurs during serialization
+     * @throws JsonSerializationException Thrown if an unexpected exception occurs during serialization
      */
-    public static JsonRequest patchFromModel(String url, Object model) throws JsonProcessingException {
+    public static JsonRequest patchFromModel(String url, Object model) throws JsonSerializationException {
         return fromModel(HttpMethod.PATCH, url, model);
     }
 
@@ -496,9 +495,9 @@ public class JsonRequest implements HttpRequest {
      * @param url    The URL to send this request on
      * @param model  The object to serialize into JSON text as the body content for this request
      * @return An HTTP request containing the serialized model as the JSON body text
-     * @throws JsonSerializationException Thrown if an unexpected exeption occurs during serialization
+     * @throws JsonSerializationException Thrown if an unexpected exception occurs during serialization
      */
-    public static JsonRequest deleteFromModel(String url, Object model) throws JsonProcessingException {
+    public static JsonRequest deleteFromModel(String url, Object model) throws JsonSerializationException {
         return fromModel(HttpMethod.DELETE, url, model);
     }
 
