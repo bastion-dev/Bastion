@@ -1,11 +1,13 @@
 package rocks.bastion.core.assertions;
 
 import com.google.common.collect.Maps;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.json.InvalidJsonException;
 import rocks.bastion.core.json.JsonResponseAssertions;
+import rocks.bastion.support.embedded.Sushi;
 
 import java.util.HashMap;
 
@@ -13,6 +15,28 @@ import java.util.HashMap;
  * @author <a href="mailto:mail@kylepullicino.com">Kyle</a>
  */
 public class JsonResponseAssertionsTest {
+
+    @Test(expected = AssertionError.class)
+    public void fromModel_differentValue_assertShouldFail() {
+        try {
+            final Sushi expectedModel = Sushi.newSushi().id(999).name("Salmon Nigiri").type(Sushi.Type.NIGIRI).price(50L).build();
+            final ModelResponse<String> response = TestModelResponse.prepare("{\"id\":1,\"name\":\"Salmon Nigiri\",\"type\":\"NIGIRI\",\"price\":50}");
+            final JsonResponseAssertions assertions = JsonResponseAssertions.fromModel(200, expectedModel);
+            assertions.execute(200, response, response.getModel());
+        } catch(AssertionError assertionError) {
+            Assert.assertEquals("Assertions Failed Message", assertionError.getMessage(), "Actual response body is not as expected. The following JSON Patch (as per RFC-6902) tells you what operations you need to perform to transform the actual response body into the expected response body:\n" +
+                    " [{\"op\":\"replace\",\"path\":\"/id\",\"value\":999}]");
+            throw assertionError;
+        }
+    }
+
+    @Test
+    public void fromModel_sameAsExpectedModel_shouldAssertSuccessfully() {
+            final Sushi expectedModel = Sushi.newSushi().id(1).name("Salmon Nigiri").type(Sushi.Type.NIGIRI).price(50L).build();
+            final ModelResponse<String> response = TestModelResponse.prepare("{\"id\":1,\"name\":\"Salmon Nigiri\",\"type\":\"NIGIRI\",\"price\":50}");
+            final JsonResponseAssertions assertions = JsonResponseAssertions.fromModel(200, expectedModel);
+            assertions.execute(200, response, response.getModel());
+    }
 
     @Test(expected = InvalidJsonException.class)
     public void fromString_invalidJson_shouldThrowException() throws Exception {
