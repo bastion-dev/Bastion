@@ -1,6 +1,7 @@
 package rocks.bastion.documentation;
 
 import org.apache.http.entity.ContentType;
+import org.junit.Ignore;
 import org.junit.Test;
 import rocks.bastion.Bastion;
 import rocks.bastion.core.*;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * the tests showing Assertions) then the assertions should pass as well. For examples which show failing assertions, we wrap the test, and expect
  * an AssertionError.
  */
+@Ignore
 public class UserGuideTest extends TestWithProxiedEmbeddedServer {
 
     // docs:quickstart

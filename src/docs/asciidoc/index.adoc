@@ -147,6 +147,8 @@ http://reddit.com/r/{subreddit}
 * *Content Type*: The content type header describes the format for the data in the request's payload. The content type is expressed as a MIME
 type string. The content type _may change_ how Bastion formats the request's entity type body. See the particular request's section in this user
 guide for more information about how to set the content type.
+* *Timeout*: Set a maximum timeout, in milliseconds, for the request. If the response does not arrive within the specified number of seconds
+the test fails its assertions. Use the `setTimeout()` method to change the timeout.
 * *Entity Body*: Contains the payload data that is sent with the request. Each different type of request defines its own way of accepting a body
 object. `JsonRequest` for example accepts a file, JSON string or template and the accepted data will be sent as JSON in the request's body. You
 need to see the specific request's type documentation for more information about how to provide the entity body data.
@@ -190,6 +192,33 @@ to something else.
 ----
 [ex:general-request-post]
 ----
+
+[[file-request]]
+File Request
+~~~~~~~~~~~~
+
+If you want to load entity data from a file instead of typing it out in source code, use `FileRequest`. This is very similar to `GeneralRequest`,
+in that you are not restricted to the type of data you're sending. To initialise a new `FileRequest` use any of the following
+static factory methods, giving the URL you want to send the request on and a resource URL. Bastion will load the data from the specified URL
+and send it as the request data.
+
+* `FileRequest.post()`.
+* `FileRequest.delete()`.
+* `FileRequest.put()`.
+* `FileRequest.patch()`.
+* `FileRequest.withMethod()`: This factory method also accepts an HTTP method of your choice.
+
+Bastion will attempt to guess what should go into the `Content-type` header depending on the filename. If a MIME type could not be chosen,
+`plain/text` will be used as the MIME type.
+
+WARNING: A known issue currently exists on MacOS-based systems: a JDK bug prevents Bastion from guessing the file type in which case `plain/text`
+ will be used.
+
+.Send a POST request using a file
+[source,java]
+-----
+Example goes here
+-----
 
 [[json-request]]
 JSON Request
@@ -344,6 +373,8 @@ a content type, hence this method returns an `Optional` value.
 * `queryParams()`: Returns the possibly empty `Collection` of `ApiQueryParam` objects which are sent with the HTTP request.
 * `routeParams()`: Returns the values to use for filling in any route parameters in this request's URL. Route parameters are
 variables, enclosed within a pair of braces, in the requet's URL.
+* `timeout()`: Returns a number, in milliseconds, after which the request will timeout and the request fails. Return `HttpRequest.USE_GLOBAL_TIMEOUT`
+to use the configured default timeout. You do not need to implement this method if you want to use the default value.
 * `body()`: Returns the object to use for the HTTP entity body. Bastion will typically send the returned object's `toString()`
 value but this _might_ be depend on the request's content type.
 
