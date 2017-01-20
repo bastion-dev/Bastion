@@ -232,6 +232,7 @@ following static factory methods, giving the URL you want to send the request on
 * `JsonRequest.fromString()`: Allows you to create a `JsonRequest` with the given HTTP method (`GET`, `POST`, etc.) and the given JSON string.
 * `JsonRequest.fromResource()`: Allows you to create a `JsonRequest` with the given HTTP method. The JSON data to send is loaded from the given file or classpath resource.
 * `JsonRequest.fromTemplate()`: Like `fromResource()` but this method will also take a map of template variable names to replacement values as keys and a Mustache template file. The template data is loaded and the variables replaced by the values in the given map. The resulting data is then used as the JSON entity for the request.
+* `JsonRequest.fromModel()`: Allows you to create a `JsonRequest` with the given HTTP method. The provided object is serialized, using the Jackson library, into a JSON string.
 
 WARNING: The request object here will *validate* that the provided data is valid JSON, in all cases. If you want to send invalid JSON, see <<general-request>> instead.
 
@@ -300,6 +301,16 @@ The template files must be Mustache templates. An example Mustache template is s
 -----
 
 Notice the `food` variable in the template: this will get replaced by the value `apples` in the test above.
+
+.JSON Request from Model
+
+[source,javascript]
+-----
+[ex:json-request-post-from-model]
+-----
+
+Use the `fromModel()` family of static factory methods to send any Java object serialized as a JSON string. You can annotate your object's
+class with Jackson annotations to customise how the provided object is serialized.
 
 .JSON Request with Attributes
 

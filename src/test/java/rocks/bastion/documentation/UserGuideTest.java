@@ -113,6 +113,14 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
     }
 
     @Test
+    public void jsonRequest_postFromModel() {
+        // docs:json-request-post-from-model
+        Sushi model = Sushi.newSushi().id(19).name("Salmon Nigiri").price(10L).type(Sushi.Type.NIGIRI).build();
+        Bastion.request(JsonRequest.postFromModel("http://test.test", model)).call();
+        // docs:json-request-post-from-model
+    }
+
+    @Test
     public void formUrlEncodedRequest_post() {
         // docs:form-url-encoded-request-post
         Bastion.request(
