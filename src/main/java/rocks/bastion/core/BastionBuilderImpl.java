@@ -95,22 +95,23 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     @Override
     public PostExecutionBuilder<? extends MODEL> call() {
         modelResponse = null;
+        Response response = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(request));
-            Response response = new RequestExecutor(request, getConfiguration()).execute();
+            response = new RequestExecutor(request, getConfiguration()).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
             return this;
-        } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(request, modelResponse, e));
+        } catch (AssertionError error) {
+            notifyListenersCallFailed(new BastionFailureEvent(request, response, error));
             return this;
-        } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(request, modelResponse, t));
+        } catch (Throwable throwable) {
+            notifyListenersCallError(new BastionErrorEvent(request, response, throwable));
             return this;
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(request, modelResponse));
+            notifyListenersCallFinished(new BastionFinishedEvent(request, response));
         }
     }
 
