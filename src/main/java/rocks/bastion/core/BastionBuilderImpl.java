@@ -30,7 +30,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     private Class<MODEL> modelType;
     private boolean suppressAssertions;
     private Assertions<? super MODEL> assertions;
-    private Callback<? super MODEL> callback;
     private MODEL model;
     private ModelResponse<MODEL> modelResponse;
     private Configuration configuration;
@@ -45,7 +44,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         modelType = null;
         suppressAssertions = false;
         assertions = Assertions.noAssertions();
-        callback = Callback.noCallback();
     }
 
     public void addBastionListener(BastionListener newListener) {
@@ -102,7 +100,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
-            executeCallback(modelResponse);
             return this;
         } catch (AssertionError error) {
             notifyListenersCallFailed(new BastionFailureEvent(request, response, error));
@@ -125,16 +122,9 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     }
 
     @Override
-    public CallbackBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions) {
+    public ExecuteRequestBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions) {
         Objects.requireNonNull(assertions);
         this.assertions = assertions;
-        return this;
-    }
-
-    @Override
-    public ExecuteRequestBuilder<? extends MODEL> thenDo(Callback<? super MODEL> callback) {
-        Objects.requireNonNull(callback);
-        this.callback = callback;
         return this;
     }
 
@@ -160,10 +150,6 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         } else {
             return request.name() + " - " + message;
         }
-    }
-
-    private void executeCallback(ModelResponse<MODEL> modelResponse) {
-        callback.execute(modelResponse.getStatusCode(), modelResponse, modelResponse.getModel());
     }
 
     private void executeAssertions(ModelResponse<MODEL> modelResponse) {
