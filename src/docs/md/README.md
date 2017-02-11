@@ -1,3 +1,8 @@
+<!--
+The README.md file at the root of the repository is automatically generated from the file in 'src/docs/md/README.md'. If you want to submit
+a change to the readme, please submit the change by editing the file on `https://github.com/bastion-dev/Bastion/edit/master/src/docs/md/README.md`
+-->
+
 ![Bastion Logo](https://raw.githubusercontent.com/KPull/Bastion/master/src/docs/logo/bastion_logo.png)
 
 # Overview
@@ -78,8 +83,8 @@ or form, that help make Bastion better. Here are some things you can do to contr
 * You can also [submit a pull request](https://github.com/KPull/Bastion/pulls) which is not related to any of the issues currently on GitHub. If you have
   developed your own `Request` or `Assertions` implementations, for example, and you believe they could be useful to the rest of the Bastion community,
   we will add them to the library for use in future versions of Bastion.
-* Make our User Guide better. Our User Guide is very important to us and we strive to keep it as up to date as possible. If you spot any omissions, typos,
-  grammatical errors or have an idea of how it can be improved, please submit a pull request. The files for our user guide can be found in the `src/docs/md`
-  directory.
+* Help us make the front `README` better. If you feel like the `README` is missing information which you think should be there then open a pull request
+  with your suggested changes. You can also help us with typos, grammar or anything else you see fit. Note that the front `README`
+  file is auto-generated: to submit a change please [edit the `README` source file](https://github.com/bastion-dev/Bastion/edit/master/src/docs/md/README.md).
 * Spread the word. Tell your colleagues about Bastion or write a blog post about Bastion. The more people we can tell Bastion about, the better!
 
