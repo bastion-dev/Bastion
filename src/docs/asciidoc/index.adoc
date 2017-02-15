@@ -80,9 +80,8 @@ below, we show how all the methods of the builder would look like when executed 
 Bastion.request(...)        <1>
        .bind(...)           <2>
        .withAssertions(...) <3>
-       .thenDo(...)         <4>
-       .call()              <5>
-       .getModel()          <6>
+       .call()              <4>
+       .getModel()          <5>
 ---------------------------
 
 IMPORTANT: This shows the basic structure of a Bastion test. Each one of the methods listed above (except `request()` and `call()`) is optional but they still
@@ -101,9 +100,6 @@ for later on when calling the `withAssertions()`, `thenDo()`, `getModel()` and `
 Bastion provides a number of different built-in assertion objects for common verifications you might want to do (eg. `JsonResponseAssertions`) but you can also
 implement your own assertions. For a list of all built-in assertions see [Assertions](#assertions). The
 [Custom Assertions](#custom-assertions) section explains how to implement your own assertions.
-<4> `thenDo()`: Takes a _Callback_ object which will be executed when the response is received and the assertions pass. This is useful if you would
-like to perform specific actions after Bastion requests. This could be logging the response, for example, or saving authentication data for future
-Bastion requests.
 <5> `call()`: Executes the API request configured with the previous commands. Any assertions will be applied on the received response. The call operation
 will fail if Bastion is unable to bind the received response to a model or the assertions fail.
 <6> `getResponse()`: After the `call()` method is executed, you can get the HTTP response object received using the `getResponse()` method. The returned
