@@ -644,9 +644,8 @@ below, we show how all the methods of the builder would look like when executed 
 <pre>Bastion.request(...)        <i class="conum" data-value="1"></i><b>(1)</b>
        .bind(...)           <i class="conum" data-value="2"></i><b>(2)</b>
        .withAssertions(...) <i class="conum" data-value="3"></i><b>(3)</b>
-       .thenDo(...)         <i class="conum" data-value="4"></i><b>(4)</b>
-       .call()              <i class="conum" data-value="5"></i><b>(5)</b>
-       .getModel()          <i class="conum" data-value="6"></i><b>(6)</b></pre>
+       .call()              <i class="conum" data-value="4"></i><b>(4)</b>
+       .getModel()          <i class="conum" data-value="5"></i><b>(5)</b></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -688,22 +687,16 @@ implement your own assertions. For a list of all built-in assertions see [Assert
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td><code>thenDo()</code>: Takes a <em>Callback</em> object which will be executed when the response is received and the assertions pass. This is useful if you would
-like to perform specific actions after Bastion requests. This could be logging the response, for example, or saving authentication data for future
-Bastion requests.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td><code>call()</code>: Executes the API request configured with the previous commands. Any assertions will be applied on the received response. The call operation
 will fail if Bastion is unable to bind the received response to a model or the assertions fail.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td><code>getResponse()</code>: After the <code>call()</code> method is executed, you can get the HTTP response object received using the <code>getResponse()</code> method. The returned
 response object will contain the bound model obtained from the response data.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
 <td><code>getModel()</code>: After the <code>call()</code> method is executed, you can get the bound model obtained from the response data.</td>
 </tr>
 </table>
@@ -1740,7 +1733,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-01-20 20:33:05 CET
+Last updated 2017-02-16 19:45:30 CET
 </div>
 </div>
 </body>
