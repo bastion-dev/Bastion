@@ -210,6 +210,9 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
 
     private void transitionToState(State from, State to) {
         synchronized (this) {
+            if (currentState == to) {
+                throw new IllegalStateException("A Bastion method has been called twice in a row");
+            }
             if (currentState.ordinal() > from.ordinal()) {
                 throw new IllegalStateException("Bastion methods have been called out of order");
             }
