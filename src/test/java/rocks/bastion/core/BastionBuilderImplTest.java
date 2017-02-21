@@ -14,7 +14,7 @@ public class BastionBuilderImplTest {
         BastionBuilder<Object> builder = Bastion.request(GeneralRequest.get("http://test.test"));
         builder.withAssertions((statusCode, response, model) -> System.out.println("Hi there"));
         assertThatThrownBy(() -> builder.bind(Sushi.class)).isInstanceOf(IllegalStateException.class)
-                                                           .hasMessage("Bastion methods have been called out of order");
+                                                           .hasMessage("bind() must be called before withAssertions()");
     }
 
     @Test
@@ -22,7 +22,7 @@ public class BastionBuilderImplTest {
         BastionBuilder<Object> builder = Bastion.request(GeneralRequest.get("http://test.test"));
         builder.bind(Sushi.class);
         assertThatThrownBy(() -> builder.bind(Sushi.class)).isInstanceOf(IllegalStateException.class)
-                                                           .hasMessage("A Bastion method has been called twice in a row");
+                                                           .hasMessage("bind() has been called twice in a row");
     }
 
     @Test
@@ -31,6 +31,6 @@ public class BastionBuilderImplTest {
         builder.withAssertions((statusCode, response, model) -> System.out.println("Hi there"));
         assertThatThrownBy(() -> builder.withAssertions((statusCode, response, model) -> System.out.println("Hi there")))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("A Bastion method has been called twice in a row");
+                .hasMessage("withAssertions() has been called twice in a row");
     }
 }

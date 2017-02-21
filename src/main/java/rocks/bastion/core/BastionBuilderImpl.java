@@ -211,19 +211,30 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     private void transitionToState(State from, State to) {
         synchronized (this) {
             if (currentState == to) {
-                throw new IllegalStateException("A Bastion method has been called twice in a row");
+                throw new IllegalStateException(format("%s has been called twice in a row", to.getMethodName()));
             }
             if (currentState.ordinal() > from.ordinal()) {
-                throw new IllegalStateException("Bastion methods have been called out of order");
+                throw new IllegalStateException(format("%s must be called before %s", to.getMethodName(), currentState.getMethodName()));
             }
             currentState = to;
         }
     }
 
     private enum State {
-        INITIALISED,
-        BOUND,
-        ASSERTIONS,
-        EXECUTED;
+        INITIALISED("request()"),
+        BOUND("bind()"),
+        ASSERTIONS("withAssertions()"),
+        EXECUTED("call()");
+
+        private final String methodName;
+
+        State(String methodName) {
+            Objects.requireNonNull(methodName);
+            this.methodName = methodName;
+        }
+
+        public String getMethodName() {
+            return methodName;
+        }
     }
 }
