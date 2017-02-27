@@ -7,10 +7,8 @@ import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
 import rocks.bastion.core.builder.PostExecutionBuilder;
-import rocks.bastion.core.configuration.BastionConfigurationLoader;
 import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.configuration.GlobalRequestAttributes;
-import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.resource.ResourceLoader;
 
 import static java.util.Objects.requireNonNull;
@@ -33,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * <p>
  * Bastion is run as part of your standard testing framework. If you are using JUnit 4 or above, we recommend also using the
  * {@link rocks.bastion.junit.BastionRunner} test runner for additional diagnostic information when a test fails. For an
- * example of a Bastion test, see the <a href="https://bastion.rocks">Bastion User Guide</a>.
+ * example of a Bastion test, see the <a href="http://bastion-dev.github.io/Bastion/reference/index.html">Bastion User Guide</a>.
  * </p>
  * <p>
  * Inside your test method or test case, make a call to the {@link Bastion#request(String, HttpRequest)} method. This will
