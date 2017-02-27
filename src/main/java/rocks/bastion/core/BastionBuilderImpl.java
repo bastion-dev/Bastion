@@ -23,6 +23,7 @@ import static java.lang.String.format;
  */
 public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, ResponseDecodersRegistrar, BastionEventPublisher, PostExecutionBuilder<MODEL> {
 
+    private State currentState;
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
     private Collection<ResponseDecoder> modelConverters;
@@ -46,6 +47,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         suppressAssertions = false;
         assertions = Assertions.noAssertions();
         callback = Callback.noCallback();
+        currentState = State.INITIALISED;
     }
 
     public void addBastionListener(BastionListener newListener) {
@@ -94,23 +96,25 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
 
     @Override
     public PostExecutionBuilder<? extends MODEL> call() {
+        transitionToState(State.ASSERTIONS, State.EXECUTED);
         modelResponse = null;
+        Response response = null;
         try {
             notifyListenersCallStarted(new BastionStartedEvent(request));
-            Response response = new RequestExecutor(request, getConfiguration()).execute();
+            response = new RequestExecutor(request, getConfiguration()).execute();
             model = decodeModel(response);
             modelResponse = new ModelResponse<>(response, model);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
             return this;
-        } catch (AssertionError e) {
-            notifyListenersCallFailed(new BastionFailureEvent(request, modelResponse, e));
+        } catch (AssertionError error) {
+            notifyListenersCallFailed(new BastionFailureEvent(request, response, error));
             return this;
-        } catch (Throwable t) {
-            notifyListenersCallError(new BastionErrorEvent(request, modelResponse, t));
+        } catch (Throwable throwable) {
+            notifyListenersCallError(new BastionErrorEvent(request, response, throwable));
             return this;
         } finally {
-            notifyListenersCallFinished(new BastionFinishedEvent(request, modelResponse));
+            notifyListenersCallFinished(new BastionFinishedEvent(request, response));
         }
     }
 
@@ -118,6 +122,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     @SuppressWarnings("unchecked")
     public <T> AssertionsBuilder<? extends T> bind(Class<T> modelType) {
         Objects.requireNonNull(modelType);
+        transitionToState(State.INITIALISED, State.BOUND);
         BastionBuilderImpl<T> castedBuilder = (BastionBuilderImpl<T>) this;
         castedBuilder.modelType = modelType;
         return castedBuilder;
@@ -126,6 +131,7 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     @Override
     public CallbackBuilder<? extends MODEL> withAssertions(Assertions<? super MODEL> assertions) {
         Objects.requireNonNull(assertions);
+        transitionToState(State.BOUND, State.ASSERTIONS);
         this.assertions = assertions;
         return this;
     }
@@ -151,6 +157,14 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     public void registerModelConverter(ResponseDecoder decoder) {
         Objects.requireNonNull(decoder);
         modelConverters.add(decoder);
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     private String getDescriptiveText() {
@@ -194,11 +208,33 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         return (modelType == null) || ((decodedResponseModel != null) && modelType.isAssignableFrom(decodedResponseModel.getClass()));
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    private void transitionToState(State from, State to) {
+        synchronized (this) {
+            if (currentState == to) {
+                throw new IllegalStateException(format("%s has been called twice in a row", to.getMethodName()));
+            }
+            if (currentState.ordinal() > from.ordinal()) {
+                throw new IllegalStateException(format("%s must be called before %s", to.getMethodName(), currentState.getMethodName()));
+            }
+            currentState = to;
+        }
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
+    private enum State {
+        INITIALISED("request()"),
+        BOUND("bind()"),
+        ASSERTIONS("withAssertions()"),
+        EXECUTED("call()");
+
+        private final String methodName;
+
+        State(String methodName) {
+            Objects.requireNonNull(methodName);
+            this.methodName = methodName;
+        }
+
+        public String getMethodName() {
+            return methodName;
+        }
     }
 }

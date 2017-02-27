@@ -12,6 +12,10 @@ tests using Bastion based off of some sort of API specification. This API specif
 WADL file, RAML file or a JSON schema. A test engineer would prepare requests and responses based on these specifications 
 to test the overall process of calling these APIs.
 
+Reference guide can be found on: http://bastion.rocks/reference/index.html
+
+JavaDocs are available on: http://bastion.rocks/javadocs/index.html
+
 # Usage
 
 ## Test
@@ -114,7 +118,7 @@ dependency to your POM file:
 <dependency>
     <groupId>rocks.bastion</groupId>
     <artifactId>bastion</artifactId>
-    <version>0.5.1-BETA</version>
+    <version>0.6-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -122,7 +126,7 @@ dependency to your POM file:
 Alternatively, use Groovy Grapes to use Bastion in your Groovy tests/scripts:
 ```groovy
 @Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='0.5.1-BETA')
+    @Grab(group='rocks.bastion', module='bastion', version='0.6-SNAPSHOT')
 )
 ```
 
