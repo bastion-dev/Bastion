@@ -21,16 +21,9 @@ import static java.util.Objects.requireNonNull;
  * Bastion based off of some sort of API specification. This API specification can be anything like a WADL file, RAML file or a JSON schema.
  * A test engineer would prepare requests and responses based on these specifications to test the overall process of calling these APIs.
  * </p>
- * <p>
- * Bastion also contains tools that will help developers fix problems that occur as fast as possible. The JUnit 4 test runner,
- * {@link rocks.bastion.junit.BastionRunner}, for example, allows each individual HTTP request to appear in any test reports or UIs.
- * This is extremely useful as a developer will more easily understand which API or HTTP request failed when testing multi-step
- * processes.
- * </p>
  * <h1>Creating a Bastion Test</h1>
  * <p>
- * Bastion is run as part of your standard testing framework. If you are using JUnit 4 or above, we recommend also using the
- * {@link rocks.bastion.junit.BastionRunner} test runner for additional diagnostic information when a test fails. For an
+ * Bastion is run as part of your standard testing framework. For an
  * example of a Bastion test, see the <a href="http://bastion-dev.github.io/Bastion/reference/index.html">Bastion User Guide</a>.
  * </p>
  * <p>
