@@ -1,4 +1,4 @@
-package rocks.bastion.core.model;
+package rocks.bastion.core.view;
 
 import java.util.Optional;
 

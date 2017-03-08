@@ -3,6 +3,7 @@ package rocks.bastion.core.assertions;
 import rocks.bastion.core.ApiHeader;
 import rocks.bastion.core.ModelResponse;
 import rocks.bastion.core.RawResponse;
+import rocks.bastion.core.view.Bindings;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
@@ -32,7 +33,7 @@ class TestModelResponse {
         return new ModelResponse<>(new RawResponse(200,
                                                    "OK",
                                                    Collections.singletonList(new ApiHeader("Content-type", contentType)), new ByteArrayInputStream(jsonContent.getBytes())),
-                                                   jsonContent);
+                                   jsonContent, Bindings.single(String.class, jsonContent));
     }
 
 }

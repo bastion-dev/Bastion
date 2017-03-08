@@ -1,4 +1,4 @@
-package rocks.bastion.core.model;
+package rocks.bastion.core.view;
 
 import com.google.common.io.CharStreams;
 import org.apache.http.Consts;
@@ -8,7 +8,6 @@ import rocks.bastion.core.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Optional;
 
 /**
  * A {@link ResponseDecoder} which will take the HTTP response content-body and put it in to a {@link String}. This should be
@@ -19,12 +18,12 @@ import java.util.Optional;
 public class StringResponseDecoder implements ResponseDecoder {
 
     @Override
-    public Optional<?> decode(Response response, DecodingHints hints) {
+    public Bindings decode(Response response, DecodingHints hints) {
         try {
             Charset responseCharset = response.getContentType().map(ContentType::getCharset).orElse(Consts.ISO_8859_1);
-            return Optional.of(CharStreams.toString(new InputStreamReader(response.getBody(), responseCharset)));
+            return Bindings.hierarchy(String.class, CharStreams.toString(new InputStreamReader(response.getBody(), responseCharset)));
         } catch (IOException ignored) {
-            return Optional.empty();
+            return new Bindings();
         }
     }
 

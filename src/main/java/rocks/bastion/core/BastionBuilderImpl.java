@@ -4,13 +4,9 @@ import com.google.common.base.Strings;
 import rocks.bastion.core.builder.*;
 import rocks.bastion.core.configuration.Configuration;
 import rocks.bastion.core.event.*;
-import rocks.bastion.core.model.DecodingHints;
-import rocks.bastion.core.model.ResponseDecoder;
-import rocks.bastion.core.model.ResponseDecodersRegistrar;
+import rocks.bastion.core.view.*;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -26,13 +22,14 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     private State currentState;
     private String message;
     private Collection<BastionListener> bastionListenerCollection;
-    private Collection<ResponseDecoder> modelConverters;
+    private List<ResponseDecoder> modelConverters;
     private HttpRequest request;
     private Class<MODEL> modelType;
     private boolean suppressAssertions;
     private Assertions<? super MODEL> assertions;
     private Callback<? super MODEL> callback;
     private MODEL model;
+    private Bindings bindings;
     private ModelResponse<MODEL> modelResponse;
     private Configuration configuration;
 
@@ -44,6 +41,8 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         this.message = message;
         this.request = request;
         modelType = null;
+        model = null;
+        bindings = new Bindings();
         suppressAssertions = false;
         assertions = Assertions.noAssertions();
         callback = Callback.noCallback();
@@ -102,8 +101,9 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         try {
             notifyListenersCallStarted(new BastionStartedEvent(request));
             response = new RequestExecutor(request, getConfiguration()).execute();
-            model = decodeModel(response);
-            modelResponse = new ModelResponse<>(response, model);
+            bindings = decodeBindings(response);
+            model = extractModel();
+            modelResponse = new ModelResponse<>(response, model, bindings);
             executeAssertions(modelResponse);
             executeCallback(modelResponse);
             return this;
@@ -154,6 +154,11 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
     }
 
     @Override
+    public <T> Optional<T> getView(Class<T> viewType) {
+        return bindings.getViewForType(viewType);
+    }
+
+    @Override
     public void registerModelConverter(ResponseDecoder decoder) {
         Objects.requireNonNull(decoder);
         modelConverters.add(decoder);
@@ -185,23 +190,19 @@ public class BastionBuilderImpl<MODEL> implements BastionBuilder<MODEL>, Respons
         }
     }
 
-    private MODEL decodeModel(Response response) {
-        DecodingHints decodingHints = new DecodingHints(modelType);
-        Object decodedResponseModel = null;
-        for (ResponseDecoder converter : modelConverters) {
-            decodedResponseModel = converter.decode(response, decodingHints).orElse(null);
-            if (decodedResponseModel != null) {
-                break;
-            }
+    private Bindings decodeBindings(Response response) {
+        ViewBinder binder = new ViewBinder(response, modelConverters);
+        return binder.bind(new DecodingHints(modelType));
+    }
+
+    private MODEL extractModel() {
+        if (modelType == null) {
+            // By default, if no bind was supplied, use the String representation of the response as the model
+            return (MODEL) bindings.getViewForType(String.class).orElse(null);
         }
-        MODEL model;
-        if (isModelInstanceOfRequiredType(decodedResponseModel)) {
-            //noinspection unchecked
-            model = (MODEL) decodedResponseModel;
-        } else {
-            throw new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()));
-        }
-        return model;
+        return bindings.getViewForType(modelType).orElseThrow(() ->
+            new AssertionError(format("Could not parse response into model object of type %s", modelType.getName()))
+        );
     }
 
     private boolean isModelInstanceOfRequiredType(Object decodedResponseModel) {
