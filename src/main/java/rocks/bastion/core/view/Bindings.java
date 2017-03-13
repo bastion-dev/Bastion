@@ -18,6 +18,15 @@ public final class Bindings {
         return bindings;
     }
 
+    /**
+     * Creates a Bindings object containing the entire class hierarchy of the given view type. All extended classes and interfaces
+     * implemented by the given type will be bound to the specified view.
+     *
+     * @param viewType The class representing the type of view to bind
+     * @param view The view object to bind
+     * @param <T> The type of view to bind
+     * @return A bindings object
+     */
     @SuppressWarnings("unchecked")
     public static <T> Bindings hierarchy(Class<? super T> viewType, T view) {
         Bindings bindings = new Bindings();
