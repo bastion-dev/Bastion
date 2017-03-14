@@ -37,7 +37,7 @@ public interface PostExecutionBuilder<MODEL> {
     ModelResponse<? extends MODEL> getResponse();
 
     /**
-     * Gets a particular view of the received model. A view is a Java object which represents the data received in the response. This allows
+     * Gets a particular view of the response. A view is a Java object which represents the data received in the response. This allows
      * users to get a different type of object other than the one provided in the {@link BindBuilder#bind(Class) bind()} method. Note that
      * the model object returned by {@link #getModel()} would be one of the views of the response.
      *
