@@ -105,6 +105,7 @@ will fail if Bastion is unable to bind the received response to a model or the a
 <6> `getResponse()`: After the `call()` method is executed, you can get the HTTP response object received using the `getResponse()` method. The returned
 response object will contain the bound model obtained from the response data.
 <6> `getModel()`: After the `call()` method is executed, you can get the bound model obtained from the response data.
+<6> `getView()`: After the `call()` method is executed, you can get a specified Java object which represents the response data.
 
 Requests
 --------
@@ -213,7 +214,7 @@ WARNING: A known issue currently exists on MacOS-based systems: a JDK bug preven
 .Send a POST request using a file
 [source,java]
 -----
-Example goes here
+[ex:file-request-post]
 -----
 
 [[json-request]]
@@ -552,7 +553,8 @@ The `execute()` method takes the following parameters, which Bastion will provid
 
 * `statusCode`: The HTTP status code of the response.
 * `response` (type: `ModelResponse`): The response object which represents the received response. This object will also contain
-the object that Bastion has <<model-binding,bound>> from the response.
+the object that Bastion has <<model-binding,bound>> from the response. You can also obtain an alternate view of the response (which is not
+necessarily the model) using `getView()`.
 * `model`: The object that Bastion has <<model-binding,bound>> from the response. This is provided for convenience so that you don't need to
 use `response.getModel()` every time.
 
@@ -591,7 +593,8 @@ The process for extracting a Java object from the HTTP response data is called *
 after calling `Bastion.request()`. `bind()` takes a Java class type which you'd like to extract.
 
 For example, if the received data is a JSON-formatted string, you can extract a Java object representation of the JSON data by supplying the
-Java type which corresponds to whatever JSON you're expecting.
+Java type which corresponds to whatever JSON you're expecting. You can also get the JSON AST object bound by Jackson, by binding to `JsonNode`
+directly.
 
 .Bound model in assertions
 
@@ -613,14 +616,16 @@ Executing and Getting Data
 --------------------------
 
 Once you have configured a request and an assertions object for Bastion to execute, you can start the test using the `call()` method. Bastion
-will execute the request supplied in `request()`, bind the response to a model of the type specified in `bind()` and finally assert that the assertions
-given in `withAssertions()` hold true.
+will execute the request supplied in `request()`, bind the response to a applicable views (including a model of the type specified in `bind()`)
+and finally assert that the assertions given in `withAssertions()` hold true.
 
 Once executed, you can retrieve the response data as follows:
 
 * `getResponse()`: Returns a complete HTTP `Response` object containing all HTTP headers and the content body. It will also contain the
 model object which was bound by Bastion.
 * `getModel()`: Returns the model object which was bound by Bastion. This is a shortcut method for `getResponse().getModel()`.
+* `getView(...)`: Returns an alternative view object which was bound by Bastion. A view is a Java object which represents the response data
+which was decoded by Bastion. The model returned by `getModel()` is in fact one of the views of the response.
 
 .Getting the entire HTTP response object
 
@@ -634,6 +639,13 @@ model object which was bound by Bastion.
 [source,java]
 -----
 [ex:get-model]
+-----
+
+.Getting the JSON AST representation from the response
+
+[source,java]
+-----
+[ex:get-view]
 -----
 
 Global Configuration
