@@ -2,7 +2,6 @@ package rocks.bastion;
 
 import rocks.bastion.core.Assertions;
 import rocks.bastion.core.BastionFactory;
-import rocks.bastion.core.Callback;
 import rocks.bastion.core.HttpRequest;
 import rocks.bastion.core.builder.BastionBuilder;
 import rocks.bastion.core.builder.ExecuteRequestBuilder;
@@ -34,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * <p>
  * Inside your test method or test case, make a call to the {@link Bastion#request(String, HttpRequest)} method. This will
  * return a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent-builder style interface</a> that will allow you
- * to further specify the response model, assertions and callbacks on your test.
+ * to further specify the response model and assertions on your test.
  * </p>
  * <p>
  * The returned builder will allow you call any of the following methods:
@@ -44,14 +43,12 @@ import static java.util.Objects.requireNonNull;
  * interpret and decode the received response object into an instance of whatever type is supplied to this method.</li>
  * <li>{@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)}: Specify what test assertions to apply to the response. We recommend supplying the
  * assertions as a lambda or using one of the available subclass implementations of {@link Assertions}.</li>
- * <li>{@link rocks.bastion.core.builder.CallbackBuilder#thenDo(Callback)}: Specify a callback function to execute when the response is received and it passes its assertions. We
- * recommend supplying the {@link Callback} as a lambda function.</li>
  * <li>{@link ExecuteRequestBuilder#call()}: Starts the Bastion test by executing the HTTP request.</li>
  * </ul>
  * <p>
  * You cannot call any of the methods above before any of the methods listed before it. Therefore, in your test, you should call
  * the methods above one after each other as listed above: you can skip any of the methods and Bastion will assign defaults.
- * For example, if you want to make an HTTP request, apply some assertions without binding a model or using a callback, you would
+ * For example, if you want to make an HTTP request and apply some assertions without binding a model, you would
  * call the {@link #request(String, HttpRequest)} method first, followed by the {@link rocks.bastion.core.builder.AssertionsBuilder#withAssertions(Assertions)}
  * method to configure your assertions, followed by the {@link ExecuteRequestBuilder#call()} method to send the request
  * and start the test.
@@ -164,7 +161,7 @@ public final class Bastion {
      *
      * @param message A descriptive message for this Bastion test.
      * @param request The HTTP request that Bastion will execute for this test.
-     * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
+     * @return A fluent-builder object which will let you bind a model type, add assertions and execute the test.
      */
     public static BastionBuilder<Object> request(String message, HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion(message, request);
@@ -181,7 +178,7 @@ public final class Bastion {
      * </p>
      *
      * @param request The HTTP request that Bastion will execute for this test.
-     * @return A fluent-builder object which will let you bind a model type, add assertions, add callbacks and execute the test.
+     * @return A fluent-builder object which will let you bind a model type, add assertions and execute the test.
      */
     public static BastionBuilder<Object> request(HttpRequest request) {
         return BastionFactory.getDefaultBastionFactory().getBastion("", request);
