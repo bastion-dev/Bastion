@@ -1,7 +1,5 @@
 package rocks.bastion.core.builder;
 
-import rocks.bastion.junit.BastionRunner;
-
 /**
  * Specifies the operations available on a Bastion test builder before it has been executed.
  * At this point, a user can only perform the following operation:
@@ -15,9 +13,7 @@ public interface ExecuteRequestBuilder<MODEL> {
 
     /**
      * Instructs Bastion to perform the HTTP request, decode the response into a model, perform any assertions and execute
-     * the registered callback. If you are using the {@link BastionRunner}, the actual call will appear
-     * as a test in any test harness GUI you are using. This is true, even if the test fails in which case the singular
-     * Bastion request which failed will appear in the GUI.
+     * the registered callback.
      * <br><br>
      * If the call was successful, you can obtain the response received by Bastion by chaining further methods to this
      * method. Notably, the {@link PostExecutionBuilder#getModel()} will return the decoded model and {@link PostExecutionBuilder#getResponse()}
