@@ -1,17 +1,14 @@
 package rocks.bastion.support;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import rocks.bastion.Bastion;
 import rocks.bastion.core.json.JsonRequest;
 import rocks.bastion.core.json.JsonResponseAssertions;
-import rocks.bastion.junit.BastionRunner;
 import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithEmbeddedServer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(BastionRunner.class)
 public class CreateSushiTest extends TestWithEmbeddedServer {
 
     @Test
