@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Bastion User Guide (0.5.2-BETA)</title>
+<title>Bastion User Guide (0.6-BETA)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -511,7 +511,7 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="article">
 <div id="header">
-<h1>Bastion User Guide (0.5.2-BETA)</h1>
+<h1>Bastion User Guide (0.6-BETA)</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -580,7 +580,7 @@ it available for your project&#8217;s tests.</p>
 <pre>&lt;dependency&gt;
     &lt;groupId&gt;rocks.bastion&lt;/groupId&gt;
     &lt;artifactId&gt;bastion&lt;/artifactId&gt;
-    &lt;version&gt;0.5.2-BETA&lt;/version&gt;
+    &lt;version&gt;0.6-BETA&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;</pre>
 </div>
@@ -595,7 +595,7 @@ Add the following line to your <code>import</code> statement to download Bastion
 <div class="listingblock">
 <div class="content">
 <pre>@Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='0.5.2-BETA')
+    @Grab(group='rocks.bastion', module='bastion', version='0.6-BETA')
 )
 import rocks.bastion.Bastion</pre>
 </div>
@@ -608,7 +608,7 @@ import rocks.bastion.Bastion</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>testCompile group: 'rocks.bastion', name: 'bastion', version: '0.5.2-BETA'</pre>
+<pre>testCompile group: 'rocks.bastion', name: 'bastion', version: '0.6-BETA'</pre>
 </div>
 </div>
 </div>
@@ -698,6 +698,10 @@ response object will contain the bound model obtained from the response data.</t
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
 <td><code>getModel()</code>: After the <code>call()</code> method is executed, you can get the bound model obtained from the response data.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><code>getView()</code>: After the <code>call()</code> method is executed, you can get a specified Java object which represents the response data.</td>
 </tr>
 </table>
 </div>
@@ -903,7 +907,9 @@ A known issue currently exists on MacOS-based systems: a JDK bug prevents Bastio
 <div class="listingblock">
 <div class="title">Send a POST request using a file</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Example goes here</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Bastion.request(FileRequest.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/greeting</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:fixture/greeting.html</span><span class="delimiter">&quot;</span></span>)
+                    .setContentType(ContentType.TEXT_HTML)
+).call();</code></pre>
 </div>
 </div>
 </div>
@@ -1488,7 +1494,8 @@ The <code>execute()</code> method takes the following parameters, which Bastion 
 </li>
 <li>
 <p><code>response</code> (type: <code>ModelResponse</code>): The response object which represents the received response. This object will also contain
-the object that Bastion has <a href="#model-binding">bound</a> from the response.</p>
+the object that Bastion has <a href="#model-binding">bound</a> from the response. You can also obtain an alternate view of the response (which is not
+necessarily the model) using <code>getView()</code>.</p>
 </li>
 <li>
 <p><code>model</code>: The object that Bastion has <a href="#model-binding">bound</a> from the response. This is provided for convenience so that you don&#8217;t need to
@@ -1553,7 +1560,8 @@ after calling <code>Bastion.request()</code>. <code>bind()</code> takes a Java c
 </div>
 <div class="paragraph">
 <p>For example, if the received data is a JSON-formatted string, you can extract a Java object representation of the JSON data by supplying the
-Java type which corresponds to whatever JSON you&#8217;re expecting.</p>
+Java type which corresponds to whatever JSON you&#8217;re expecting. You can also get the JSON AST object bound by Jackson, by binding to <code>JsonNode</code>
+directly.</p>
 </div>
 <div class="paragraph">
 <div class="title">Bound model in assertions</div>
@@ -1587,8 +1595,8 @@ data class using <a href="https://github.com/FasterXML/jackson-annotations/wiki/
 <div class="sectionbody">
 <div class="paragraph">
 <p>Once you have configured a request and an assertions object for Bastion to execute, you can start the test using the <code>call()</code> method. Bastion
-will execute the request supplied in <code>request()</code>, bind the response to a model of the type specified in <code>bind()</code> and finally assert that the assertions
-given in <code>withAssertions()</code> hold true.</p>
+will execute the request supplied in <code>request()</code>, bind the response to a applicable views (including a model of the type specified in <code>bind()</code>)
+and finally assert that the assertions given in <code>withAssertions()</code> hold true.</p>
 </div>
 <div class="paragraph">
 <p>Once executed, you can retrieve the response data as follows:</p>
@@ -1601,6 +1609,10 @@ model object which was bound by Bastion.</p>
 </li>
 <li>
 <p><code>getModel()</code>: Returns the model object which was bound by Bastion. This is a shortcut method for <code>getResponse().getModel()</code>.</p>
+</li>
+<li>
+<p><code>getView(&#8230;&#8203;)</code>: Returns an alternative view object which was bound by Bastion. A view is a Java object which represents the response data
+which was decoded by Bastion. The model returned by <code>getModel()</code> is in fact one of the views of the response.</p>
 </li>
 </ul>
 </div>
@@ -1626,6 +1638,16 @@ model object which was bound by Bastion.</p>
                 .getModel();
 
 <span class="predefined-type">System</span>.out.println(sushi.getName());</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Getting the JSON AST representation from the response</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Optional&lt;JsonNode&gt; json =
+        Bastion.request(JsonRequest.postFromResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://sushi-shop.test/sushi</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/json/create_sushi_request.json</span><span class="delimiter">&quot;</span></span>))
+               .bind(Sushi.class)
+               .call()
+               .getView(JsonNode.class);</code></pre>
 </div>
 </div>
 </div>
@@ -1733,7 +1755,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-27 22:26:07 CET
+Last updated 2017-03-31 12:34:46 CEST
 </div>
 </div>
 </body>
