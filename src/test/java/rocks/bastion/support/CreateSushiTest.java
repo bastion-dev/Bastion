@@ -21,9 +21,6 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
                     assertThat(statusCode).isEqualTo(201);
                     assertThat(model.getName()).isEqualTo("happiness");
                 })
-                .thenDo((statusCode, response, model) -> {
-                    // do stuff
-                })
                 .call();
 
         Bastion.request("SUCCESS (Again)", new CreateSushiRequest())
@@ -33,9 +30,6 @@ public class CreateSushiTest extends TestWithEmbeddedServer {
                     assertThat(response.getContentType().get().getMimeType()).isEqualToIgnoringCase("application/json");
                     assertThat(statusCode).isEqualTo(201);
                     assertThat(model.getName()).isEqualTo("happiness");
-                })
-                .thenDo((statusCode, response, model) -> {
-                    // do stuff
                 })
                 .call();
     }

@@ -12,12 +12,12 @@ package rocks.bastion.core.builder;
 public interface ExecuteRequestBuilder<MODEL> {
 
     /**
-     * Instructs Bastion to perform the HTTP request, decode the response into a model, perform any assertions and execute
-     * the registered callback.
+     * Instructs Bastion to perform the HTTP request, decode the response into a model and perform any assertions.
      * <br><br>
      * If the call was successful, you can obtain the response received by Bastion by chaining further methods to this
-     * method. Notably, the {@link PostExecutionBuilder#getModel()} will return the decoded model and {@link PostExecutionBuilder#getResponse()}
-     * will return the complete response object (including the model) which represents the HTTP information.
+     * method. Notably, the {@link PostExecutionBuilder#getModel()} method will return the decoded model and
+     * {@link PostExecutionBuilder#getResponse()} will return the complete response object (including the model) which represents the
+     * HTTP information.
      *
      * @return A Bastion fluent-builder which allows you to retrieve the HTTP response and the decoded model
      */
