@@ -1,6 +1,7 @@
 package rocks.bastion.core;
 
 import org.junit.Test;
+import rocks.bastion.core.view.Bindings;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
@@ -51,6 +52,9 @@ public class StatusCodeAssertionsTest {
     }
 
     private ModelResponse<String> getResponseWithStatusCode(int statusCode) {
-        return new ModelResponse<>(new RawResponse(statusCode, "Status Code", Collections.emptyList(), new ByteArrayInputStream(new byte[0])), "Model");
+        String data = "Model";
+        return new ModelResponse<>(new RawResponse(statusCode, "Status Code", Collections.emptyList(), new ByteArrayInputStream(new byte[0])),
+                                   data,
+                                   Bindings.single(String.class, data));
     }
 }

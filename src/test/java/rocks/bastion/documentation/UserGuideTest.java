@@ -1,5 +1,6 @@
 package rocks.bastion.documentation;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.entity.ContentType;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import rocks.bastion.support.embedded.Sushi;
 import rocks.bastion.support.embedded.TestWithProxiedEmbeddedServer;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -63,6 +65,16 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
         ).call();
         // docs:general-request-post
     }
+
+    @Test
+    public void fileRequest_post() {
+        // docs:file-request-post
+        Bastion.request(FileRequest.post("http://sushi-shop.test/greeting", "classpath:fixture/greeting.html")
+                            .setContentType(ContentType.TEXT_HTML)
+        ).call();
+        // docs:file-request-post
+    }
+
 
     @Test
     public void jsonRequest_postFromString() {
@@ -312,6 +324,17 @@ public class UserGuideTest extends TestWithProxiedEmbeddedServer {
 
         System.out.println(sushi.getName());
         // docs:get-model
+    }
+
+    @Test
+    public void getView() {
+        // docs:get-view
+        Optional<JsonNode> json =
+                Bastion.request(JsonRequest.postFromResource("http://sushi-shop.test/sushi", "classpath:/json/create_sushi_request.json"))
+                       .bind(Sushi.class)
+                       .call()
+                       .getView(JsonNode.class);
+        // docs:get-view
     }
 
 }

@@ -1,4 +1,4 @@
-package rocks.bastion.core.model;
+package rocks.bastion.core.view;
 
 /**
  * Responsible for registering {@link ResponseDecoder}s with Bastion instances.

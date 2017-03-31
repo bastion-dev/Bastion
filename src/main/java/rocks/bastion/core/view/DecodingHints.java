@@ -1,4 +1,4 @@
-package rocks.bastion.core.model;
+package rocks.bastion.core.view;
 
 import java.util.Optional;
 
@@ -7,9 +7,9 @@ import java.util.Optional;
  * that was requested by the user, if any, so that a {@link ResponseDecoder} can decode the response into a specific model
  * as requested by the user.
  */
-public class DecodingHints {
+public final class DecodingHints {
 
-    private Class<?> modelType;
+    private final Class<?> modelType;
 
     public DecodingHints(Class<?> modelType) {
         this.modelType = modelType;
