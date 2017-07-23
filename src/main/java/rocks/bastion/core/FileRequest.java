@@ -19,7 +19,7 @@ import static java.lang.String.format;
  * <p>
  * By default, this request will contain no headers (except for the content-type) and no query parameters. Use the {@link #addHeader(String, String)}
  * and {@link #addQueryParam(String, String)}} to add them. Also, initially, Bastion will attempt to guess the MIME type to send as part of the
- * "Content-type" header by looking at the given file. If no MIME type could be chosen, the request will have the "text/plain" content-type MIME
+ * "Content-type" header by looking at the given file. If no MIME type could be chosen, the request will have the "application/octet-stream" content-type MIME
  * (which is automatically added to the HTTP headers by Bastion): you can change this content-type by calling the {@link #setContentType(ContentType)}
  * method.
  */
@@ -272,7 +272,7 @@ public class FileRequest implements HttpRequest {
         if (mimeType != null) {
             generalRequest.setContentType(ContentType.create(mimeType));
         } else {
-            LOG.warning(format("Could not determine %s MIME type. Creating request with text/plain MIME type. Use setContentType() to change MIME type.", resource));
+            LOG.warning(format("Could not determine %s MIME type. Creating request with application/octet-stream MIME type. Use setContentType() to change MIME type.", resource));
         }
     }
 }
