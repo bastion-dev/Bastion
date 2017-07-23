@@ -10,8 +10,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static java.lang.String.format;
-
 /**
  * An HTTP request which takes any arbitrary file/resource, using the data within as its content body. The {@linkplain FileRequest} will not perform
  * any conversions or validation on any user-supplied body content. Use the static factory methods, such as {@link #post(String, String)}
@@ -269,10 +267,12 @@ public class FileRequest implements HttpRequest {
 
     private void guessResourceMimeType(String resource) {
         String mimeType = new Tika().detect(resource);
-        if (mimeType != null) {
-            generalRequest.setContentType(ContentType.create(mimeType));
-        } else {
-            LOG.warning(format("Could not determine %s MIME type. Use setContentType() to change MIME type.", resource));
+
+        if (mimeType.equals("application/octet-stream")) {
+            LOG.warning("Bastion might not have been able to determine the MIME type and is using" +
+                    " [application/octet-stream] for this request. Use setContentType() to change the MIME type.");
         }
+
+        generalRequest.setContentType(ContentType.create(mimeType));
     }
 }
