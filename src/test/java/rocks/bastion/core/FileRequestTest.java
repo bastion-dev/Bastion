@@ -107,9 +107,9 @@ public class FileRequestTest extends TestWithEmbeddedServer {
     }
 
     @Test
-    public void contentType_unknownFileType_contentTypeShouldBePlainText() throws Exception {
+    public void contentType_unknownFileType_contentTypeShouldBeOctetStream() throws Exception {
         FileRequest request = FileRequest.post("http://localhost:9876/sushi", "classpath:/rocks/bastion/core/request/unknown.unk");
-        assertThat(request.contentType().get().getMimeType()).describedAs("Request content-type").isEqualTo("text/plain");
+        assertThat(request.contentType().get().getMimeType()).describedAs("Request content-type").isEqualTo("application/octet-stream");
     }
 
     @Test

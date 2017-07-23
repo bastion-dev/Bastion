@@ -1,13 +1,11 @@
 package rocks.bastion.core;
 
 import org.apache.http.entity.ContentType;
+import org.apache.tika.Tika;
 import rocks.bastion.core.resource.ResourceLoader;
 import rocks.bastion.core.resource.ResourceNotFoundException;
 import rocks.bastion.core.resource.UnreadableResourceException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -214,7 +212,7 @@ public class FileRequest implements HttpRequest {
 
     /**
      * Sets the timeout, in milliseconds, that will cause the test to fail if no response response is received within the specified timeout.
-     *
+     * <p>
      * A value of {@literal 0} indicates no timeout; the test will wait indefinitely for a response.
      *
      * @return a number (in milliseconds) representing this requests's timeout
@@ -270,14 +268,10 @@ public class FileRequest implements HttpRequest {
     }
 
     private void guessResourceMimeType(String resource) {
-        try {
-            String mimeType = Files.probeContentType(Paths.get(resource));
-            if (mimeType != null) {
-                generalRequest.setContentType(ContentType.create(mimeType));
-            } else {
-                LOG.warning(format("Could not determine %s MIME type. Creating request with text/plain MIME type. Use setContentType() to change MIME type.", resource));
-            }
-        } catch (IOException e) {
+        String mimeType = new Tika().detect(resource);
+        if (mimeType != null) {
+            generalRequest.setContentType(ContentType.create(mimeType));
+        } else {
             LOG.warning(format("Could not determine %s MIME type. Creating request with text/plain MIME type. Use setContentType() to change MIME type.", resource));
         }
     }
