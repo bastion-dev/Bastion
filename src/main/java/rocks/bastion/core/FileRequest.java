@@ -272,7 +272,7 @@ public class FileRequest implements HttpRequest {
         if (mimeType != null) {
             generalRequest.setContentType(ContentType.create(mimeType));
         } else {
-            LOG.warning(format("Could not determine %s MIME type. Creating request with application/octet-stream MIME type. Use setContentType() to change MIME type.", resource));
+            LOG.warning(format("Could not determine %s MIME type. Use setContentType() to change MIME type.", resource));
         }
     }
 }
