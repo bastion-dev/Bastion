@@ -1,18 +1,14 @@
 package rocks.bastion.core;
 
 import org.apache.http.entity.ContentType;
+import org.apache.tika.Tika;
 import rocks.bastion.core.resource.ResourceLoader;
 import rocks.bastion.core.resource.ResourceNotFoundException;
 import rocks.bastion.core.resource.UnreadableResourceException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
-
-import static java.lang.String.format;
 
 /**
  * An HTTP request which takes any arbitrary file/resource, using the data within as its content body. The {@linkplain FileRequest} will not perform
@@ -21,7 +17,7 @@ import static java.lang.String.format;
  * <p>
  * By default, this request will contain no headers (except for the content-type) and no query parameters. Use the {@link #addHeader(String, String)}
  * and {@link #addQueryParam(String, String)}} to add them. Also, initially, Bastion will attempt to guess the MIME type to send as part of the
- * "Content-type" header by looking at the given file. If no MIME type could be chosen, the request will have the "text/plain" content-type MIME
+ * "Content-type" header by looking at the given file. If no MIME type could be chosen, the request will have the "application/octet-stream" content-type MIME
  * (which is automatically added to the HTTP headers by Bastion): you can change this content-type by calling the {@link #setContentType(ContentType)}
  * method.
  */
@@ -214,7 +210,7 @@ public class FileRequest implements HttpRequest {
 
     /**
      * Sets the timeout, in milliseconds, that will cause the test to fail if no response response is received within the specified timeout.
-     *
+     * <p>
      * A value of {@literal 0} indicates no timeout; the test will wait indefinitely for a response.
      *
      * @return a number (in milliseconds) representing this requests's timeout
@@ -270,15 +266,13 @@ public class FileRequest implements HttpRequest {
     }
 
     private void guessResourceMimeType(String resource) {
-        try {
-            String mimeType = Files.probeContentType(Paths.get(resource));
-            if (mimeType != null) {
-                generalRequest.setContentType(ContentType.create(mimeType));
-            } else {
-                LOG.warning(format("Could not determine %s MIME type. Creating request with text/plain MIME type. Use setContentType() to change MIME type.", resource));
-            }
-        } catch (IOException e) {
-            LOG.warning(format("Could not determine %s MIME type. Creating request with text/plain MIME type. Use setContentType() to change MIME type.", resource));
+        String mimeType = new Tika().detect(resource);
+
+        if (mimeType.equals("application/octet-stream")) {
+            LOG.warning("Bastion might not have been able to determine the MIME type and is using" +
+                    " [application/octet-stream] for this request. Use setContentType() to change the MIME type.");
         }
+
+        generalRequest.setContentType(ContentType.create(mimeType));
     }
 }
