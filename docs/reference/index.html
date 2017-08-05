@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Bastion User Guide (0.6-BETA)</title>
+<title>Bastion User Guide (0.7-BETA)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -511,7 +511,7 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="article">
 <div id="header">
-<h1>Bastion User Guide (0.6-BETA)</h1>
+<h1>Bastion User Guide (0.7-BETA)</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -580,7 +580,7 @@ it available for your project&#8217;s tests.</p>
 <pre>&lt;dependency&gt;
     &lt;groupId&gt;rocks.bastion&lt;/groupId&gt;
     &lt;artifactId&gt;bastion&lt;/artifactId&gt;
-    &lt;version&gt;0.6-BETA&lt;/version&gt;
+    &lt;version&gt;0.7-BETA&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;</pre>
 </div>
@@ -595,7 +595,7 @@ Add the following line to your <code>import</code> statement to download Bastion
 <div class="listingblock">
 <div class="content">
 <pre>@Grapes(
-    @Grab(group='rocks.bastion', module='bastion', version='0.6-BETA')
+    @Grab(group='rocks.bastion', module='bastion', version='0.7-BETA')
 )
 import rocks.bastion.Bastion</pre>
 </div>
@@ -608,7 +608,7 @@ import rocks.bastion.Bastion</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>testCompile group: 'rocks.bastion', name: 'bastion', version: '0.6-BETA'</pre>
+<pre>testCompile group: 'rocks.bastion', name: 'bastion', version: '0.7-BETA'</pre>
 </div>
 </div>
 </div>
@@ -889,20 +889,7 @@ and send it as the request data.</p>
 </div>
 <div class="paragraph">
 <p>Bastion will attempt to guess what should go into the <code>Content-type</code> header depending on the filename. If a MIME type could not be chosen,
-<code>plain/text</code> will be used as the MIME type.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-A known issue currently exists on MacOS-based systems: a JDK bug prevents Bastion from guessing the file type in which case <code>plain/text</code>
- will be used.
-</td>
-</tr>
-</table>
+<code>application/octet-stream</code> will be used as the MIME type.</p>
 </div>
 <div class="listingblock">
 <div class="title">Send a POST request using a file</div>
@@ -1755,7 +1742,7 @@ directory.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-31 12:34:46 CEST
+Last updated 2017-08-05 19:57:29 CEST
 </div>
 </div>
 </body>
