@@ -206,10 +206,7 @@ and send it as the request data.
 * `FileRequest.withMethod()`: This factory method also accepts an HTTP method of your choice.
 
 Bastion will attempt to guess what should go into the `Content-type` header depending on the filename. If a MIME type could not be chosen,
-`plain/text` will be used as the MIME type.
-
-WARNING: A known issue currently exists on MacOS-based systems: a JDK bug prevents Bastion from guessing the file type in which case `plain/text`
- will be used.
+`application/octet-stream` will be used as the MIME type.
 
 .Send a POST request using a file
 [source,java]
