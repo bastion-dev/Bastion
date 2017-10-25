@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * and {@link #addAllVariableAssignments(Map)} to assign actual values to the variables declared in the template.
  * The {@link #getContent()} method then returns a fully resolved template with all variables resolved to their given values.
  * <p>
- * See the <a href="https://mustache.github.io/mustache.5.html">Mustache man page</a> for an explaination of how to write Mustache
+ * See the <a href="https://mustache.github.io/mustache.5.html">Mustache man page</a> for an explanation of how to write Mustache
  * templates that can be interpreted by this class.
  */
 public class TemplateContentCompiler {
@@ -24,7 +24,7 @@ public class TemplateContentCompiler {
     private Map<String, Object> variableAssignments;
 
     /**
-     * Construct a new template compiler object for the given Mustache template source text. The variable delimeters for this
+     * Construct a new template compiler object for the given Mustache template source text. The variable delimiters for this
      * template are double opening/closing braces.
      *
      * @param template The Mustache template source text. Cannot be {@literal null}.

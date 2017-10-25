@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * methods. The data will automatically be used to generate a URL encoded string which is used as the body content.
  * <p>
  * Initially, the request is configured to send "application/x-www-form-urlencoded" as its Content-type header but this
- * can be overriden by the user by calling the {@link #overrideContentType(ContentType)} method.
+ * can be overridden by the user by calling the {@link #overrideContentType(ContentType)} method.
  */
 public class FormUrlEncodedRequest implements HttpRequest {
 
