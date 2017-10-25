@@ -76,7 +76,7 @@ use the following command to build and test the source code.
 Bastion is an open-source project! Open-source means that we encourage you to contribute in any way you can. We will accept all contributions, in any shape
 or form, that help make Bastion better. Here are some things you can do to contribute:
 
-* Send a positive comment to the Bastion contributers. :)
+* Send a positive comment to the Bastion contributors. :)
 * [Submit an issue](https://github.com/KPull/Bastion/issues) on GitHub containing a bug report or suggestion. We ask you to spend a couple minutes before
   submitting an issue to check that it has not been submitted earlier. When opening an issue, try to include as much detail as possible so that the
   community can more easily address your concern.

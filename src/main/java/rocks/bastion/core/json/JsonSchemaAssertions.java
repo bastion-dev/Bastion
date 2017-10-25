@@ -62,7 +62,7 @@ public final class JsonSchemaAssertions implements Assertions<Object> {
     
     /**
      * The assertions object will initially check that the content-type header returned by the actual response is
-     * "application/json". This can be overriden to check for a different content-type header using this method. Despite
+     * "application/json". This can be overridden to check for a different content-type header using this method. Despite
      * this, this assertions object will still try to interpret the body as if it were JSON text.
      *
      * @param contentType The expected content-type header

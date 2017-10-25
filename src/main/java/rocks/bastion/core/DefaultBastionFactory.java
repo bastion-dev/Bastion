@@ -17,7 +17,7 @@ import rocks.bastion.core.view.StringResponseDecoder;
  * inside the HTTP response.
  * <li>{@link JsonResponseDecoder} - Binds an HTTP response with content-type {@code application/json} to
  * a Java-based object using the
- * <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.0.0/com/fasterxml/jackson/databind/ObjectMapper.html">Jackson Object Mappe</a>.</li>
+ * <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.0.0/com/fasterxml/jackson/databind/ObjectMapper.html">Jackson Object Mapper</a>.</li>
  * </ul>
  */
 public class DefaultBastionFactory extends BastionFactory implements BastionListener {
