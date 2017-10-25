@@ -204,6 +204,12 @@ public final class Bastion {
      * <p>
      * Starts building or modifying the configuration of the {@link GlobalRequestAttributes} for Bastion.
      * </p>
+     * <p>
+     * Global attributes could be used in cases where multiple subsequent requests require the same attributes, such as
+     * authentication headers or route parameters. Once {@link GlobalRequestAttributes} are set, they are applied to
+     * every single subsequent Bastion API call. The global attributes can be reset to their default values if needed
+     * using {@link GlobalRequestAttributes#clear()}.
+     * </p>
      *
      * @return The configured global request attributes.
      */
