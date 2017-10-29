@@ -112,7 +112,9 @@ public class GlobalRequestAttributes {
      * @see HttpRequest#timeout()
      */
     public GlobalRequestAttributes setGlobalRequestTimeout(long globalRequestTimeout) {
-        requireNonNull(globalRequestTimeout, "globalRequestTimeout should not be null.");
+        if (globalRequestTimeout < 0) {
+            throw new IllegalArgumentException("globalRequestTimeout should be equal to or greater than 0, with 0 indicating no timeout.");
+        }
         this.globalRequestTimeout = globalRequestTimeout;
         return this;
     }
@@ -195,7 +197,9 @@ public class GlobalRequestAttributes {
      * @see HttpRequest#timeout()
      */
     public GlobalRequestAttributes timeout(long timeout) {
-        requireNonNull(timeout, "timeout should not be null.");
+        if (globalRequestTimeout < 0) {
+            throw new IllegalArgumentException("timeout should be equal to or greater than 0, with 0 indicating no timeout.");
+        }
         globalRequestTimeout = timeout;
         return this;
     }
