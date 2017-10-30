@@ -129,7 +129,7 @@ import static java.util.Objects.requireNonNull;
  * you to add global {@link GlobalRequestAttributes#addQueryParam(String, String) query parameters},
  * {@link GlobalRequestAttributes#addHeader(String, String) headers} and
  * {@link GlobalRequestAttributes#addRouteParam(String, String) route parameters} to all requests you make using Bastion. You can also
- * {@link GlobalRequestAttributes#setGlobalRequestTimeout(long) configure the timeout} which applies to requests.
+ * {@link GlobalRequestAttributes#timeout(long)}  configure the timeout} which applies to requests.
  * </p>
  * <h1>Groovy Tests</h1>
  * <p>
