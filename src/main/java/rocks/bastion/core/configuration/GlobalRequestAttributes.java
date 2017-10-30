@@ -197,7 +197,7 @@ public class GlobalRequestAttributes {
      * @see HttpRequest#timeout()
      */
     public GlobalRequestAttributes timeout(long timeout) {
-        if (globalRequestTimeout < 0) {
+        if (timeout < 0) {
             throw new IllegalArgumentException("timeout should be equal to or greater than 0, with 0 indicating no timeout.");
         }
         globalRequestTimeout = timeout;
