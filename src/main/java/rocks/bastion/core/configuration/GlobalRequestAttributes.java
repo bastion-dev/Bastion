@@ -110,7 +110,9 @@ public class GlobalRequestAttributes {
      * Sets the timeout (in milliseconds) for all Bastion requests. A value of 0 indicates no timeout.
      *
      * @see HttpRequest#timeout()
+     * @deprecated use {@link #timeout(long)} instead
      */
+    @Deprecated
     public GlobalRequestAttributes setGlobalRequestTimeout(long globalRequestTimeout) {
         if (globalRequestTimeout < 0) {
             throw new IllegalArgumentException("globalRequestTimeout should be equal to or greater than 0, with 0 indicating no timeout.");
